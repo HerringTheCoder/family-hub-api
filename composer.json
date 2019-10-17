@@ -1,0 +1,5 @@
+{
+    "require": {
+        "hyn/multi-tenant": "^5.5"
+    }
+}

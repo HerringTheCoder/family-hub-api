@@ -2,9 +2,11 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 use App\User;
 use App\Notifications\SignupActivate;
+
 
 class AuthController extends Controller
 {
@@ -19,14 +21,25 @@ class AuthController extends Controller
      */
     public function signup(Request $request)
     {
-        $request->validate([
+       
+        $validator = Validator::make($request->all(), [
             'email' => 'required|string|email|unique:users',
             'password' => 'required|string|confirmed'
         ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                    'message' => 'Ups, something gone wrong!'
+                ], 400);
+            
+        }
+        if (!$validate->fails()) {    
+            return response()->json($validator->messages(), 200);
+        }
         $user = new User([
             'email' => $request->email,
             'password' => bcrypt($request->password),
-            'activation_token' => '123456789'
+            'activation_token' => Str::random(80)
         ]);
         $user->save();
         $user->notify(new SignupActivate($user));

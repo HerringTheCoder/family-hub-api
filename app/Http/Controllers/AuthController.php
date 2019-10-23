@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 use App\User;
 use App\Notifications\SignupActivate;
+use App\Http\Requests\StoreUser;
 
 
 class AuthController extends Controller
@@ -20,20 +21,8 @@ class AuthController extends Controller
      * @param  [string] password_confirmation
      * @return [string] message
      */
-    public function signup(Request $request)
+    public function signup(StoreUser $request)
     {
-       
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|string|email|unique:users',
-            'password' => 'required|string|confirmed'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                    'message' => 'Ups, something gone wrong!'
-                ], 400);
-            
-        }
         $user = new User([
             'email' => $request->email,
             'password' => bcrypt($request->password),
@@ -45,7 +34,7 @@ class AuthController extends Controller
             'message' => 'Successfully created user!'
         ], 201);
     }
-  
+
     /**
      * Login user and create token
      *
@@ -84,7 +73,7 @@ class AuthController extends Controller
             )->toDateTimeString()
         ]);
     }
-  
+
     /**
      * Logout user (Revoke the token)
      *
@@ -97,7 +86,7 @@ class AuthController extends Controller
             'message' => 'Successfully logged out'
         ]);
     }
-  
+
     /**
      * Get the authenticated User
      *

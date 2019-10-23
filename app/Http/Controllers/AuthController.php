@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
@@ -32,9 +33,6 @@ class AuthController extends Controller
                     'message' => 'Ups, something gone wrong!'
                 ], 400);
             
-        }
-        if (!$validate->fails()) {    
-            return response()->json($validator->messages(), 200);
         }
         $user = new User([
             'email' => $request->email,

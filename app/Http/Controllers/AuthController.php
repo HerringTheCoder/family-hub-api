@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use App\User;
 use App\Notifications\SignupActivate;
 use App\Http\Requests\StoreUser;
+use App\Http\Requests\LoginUser;
 
 
 class AuthController extends Controller
@@ -45,13 +46,8 @@ class AuthController extends Controller
      * @return [string] token_type
      * @return [string] expires_at
      */
-    public function login(Request $request)
+    public function login(LoginUser $request)
     {
-        $request->validate([
-            'email' => 'required|string|email',
-            'password' => 'required|string',
-            'remember_me' => 'boolean'
-        ]);
         $credentials = request(['email', 'password']);
         $credentials['active'] = 1;
         $credentials['deleted_at'] = null;

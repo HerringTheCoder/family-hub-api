@@ -6,9 +6,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 use App\User;
+use App\Family;
 use App\Notifications\SignupActivate;
 use App\Http\Requests\StoreUser;
-use App\Http\Requests\LoginUser;
+use App\Services\TableService;
 
 
 class AuthController extends Controller
@@ -31,6 +32,13 @@ class AuthController extends Controller
         ]);
         $user->save();
         $user->notify(new SignupActivate($user));
+        $family = new Family([
+            'name' => $request->name,
+            'founder_id' => $user->id
+        ]);
+        $family->save();
+        $service = new TableService();
+        $service->addTables($request->name);
         return response()->json([
             'message' => 'Successfully created user!'
         ], 201);
@@ -46,8 +54,9 @@ class AuthController extends Controller
      * @return [string] token_type
      * @return [string] expires_at
      */
-    public function login(LoginUser $request)
+    public function login(Request $request)
     {
+        
         $credentials = request(['email', 'password']);
         $credentials['active'] = 1;
         $credentials['deleted_at'] = null;
@@ -105,6 +114,8 @@ class AuthController extends Controller
         $user->active = true;
         $user->activation_token = '';
         $user->save();
+        $service = new TableService();
+        $service->addTable();
         return $user;
     }
 }

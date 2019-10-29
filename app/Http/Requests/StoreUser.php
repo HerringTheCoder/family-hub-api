@@ -25,7 +25,8 @@ class StoreUser extends FormRequest
     {
         return [
            'email' => 'required|string|email|unique:users',
-            'password' => 'required|string|confirmed'
+            'password' => 'required|string|confirmed',
+            'name' => 'required|string|unique:families'
         ];
     }
 
@@ -35,7 +36,8 @@ class StoreUser extends FormRequest
         return [
             'email.required' => 'Email is required!',
             'password.required' => 'Password is required!',
-            'password.confirmed' => 'Password is not confirm!'
+            'password.confirmed' => 'Password is not confirm!',
+            'name.required' => 'Name of family is required!'
 
         ];
     }

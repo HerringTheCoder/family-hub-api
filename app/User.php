@@ -40,4 +40,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function prefix()
+    {
+        $prefix = $this->belongsTo('App/Member')->$table();
+        $pattern='/_members';
+        $replacement ='';
+        preg_replace($pattern, $replacement, $string);
+    }
 }

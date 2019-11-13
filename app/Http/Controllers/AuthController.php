@@ -40,7 +40,7 @@ class AuthController extends Controller
         $service = new TableService();
         $service->addTables($request->name);
         return response()->json([
-            'message' => 'Successfully created user!'
+            'message' => 'Successfully created user and family!'
         ], 201);
     }
 
@@ -114,8 +114,6 @@ class AuthController extends Controller
         $user->active = true;
         $user->activation_token = '';
         $user->save();
-        $service = new TableService();
-        $service->addTable();
         return $user;
     }
 }

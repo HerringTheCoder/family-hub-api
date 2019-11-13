@@ -6,10 +6,12 @@ Route::group([
     Route::post('login', 'AuthController@login');
     Route::post('signup', 'AuthController@signup');
     Route::get('signup/activate/{token}', 'AuthController@signupActivate');
+    Route::get('signup/activate/member/{token}', 'UserController@activate');
   
     Route::group([
         'middleware' => 'auth:api'
     ], function() {
+        Route::post('member/add', 'UserController@store');
         Route::get('logout', 'AuthController@logout');
         Route::get('user', 'AuthController@user');
     });

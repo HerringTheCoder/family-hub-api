@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 use App\User;
 use App\Family;
+use App\Member;
 use App\Notifications\UserInvite;
 use App\Http\Requests\StoreMember;
 use App\Notifications\PasswordResetRequest;
@@ -27,9 +28,17 @@ class UserController extends Controller
             'activation_token' => Str::random(80)
         ]);
         $user->save();
-        $user->notify(new UserInvite($user));
 
+        $adminUser = Auth::user();
+        //dd(Auth::user()->id);
+        $member = new Member([
+            'user_id' => $user->id,
+            'family_id' => $adminUser->family->id
+        ]);
+        $member->setTable('members');
+        $member->save();
        
+        $user->notify(new UserInvite($user));
         return response()->json([
             'message' => 'Success'], 201);
     }

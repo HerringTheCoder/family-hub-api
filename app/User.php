@@ -44,8 +44,8 @@ class User extends Authenticatable
     public function prefix()
     {
         $prefix = $this->belongsTo('App/Member')->$table();
-        $pattern='/_members';
+        $pattern='/_members/';
         $replacement ='';
-        preg_replace($pattern, $replacement, $string);
+        return preg_replace($pattern, $replacement, $prefix);
     }
 }

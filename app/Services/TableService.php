@@ -15,9 +15,9 @@ class TableService
 {
    
 
-    public function addTables($request) : void
+    public function addTables($name) : void
     {
-        Schema::create($request->name.'_members', function (Blueprint $table) {
+        Schema::create($name.'_members', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');
@@ -31,7 +31,7 @@ class TableService
             $table->timestamps();
         });
 
-        Schema::create($request->name.'_news', function (Blueprint $table) {
+        Schema::create($name.'_news', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('author_id')->unsigned();
             $table->foreign('author_id')->references('id')->on('users');

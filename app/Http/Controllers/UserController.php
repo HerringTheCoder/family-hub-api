@@ -10,7 +10,7 @@ use Carbon\Carbon;
 use App\User;
 use App\Family;
 use App\Notifications\UserInvite;
-use App\Http\Requests\StoreUser;
+use App\Http\Requests\StoreMember;
 use App\Notifications\PasswordResetRequest;
 use App\Notifications\PasswordResetSuccess;
 use App\PasswordReset;
@@ -18,7 +18,7 @@ use App\PasswordReset;
 class UserController extends Controller
 {
 
-    public function store(Request $request)
+    public function store(StoreMember $request)
     {
         $password = Str::random(10);
         $user = new User([

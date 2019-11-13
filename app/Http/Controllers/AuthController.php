@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 use App\User;
 use App\Family;
+use App\Member;
 use App\Notifications\SignupActivate;
 use App\Http\Requests\StoreUser;
 use App\Services\TableService;
@@ -32,13 +33,23 @@ class AuthController extends Controller
         ]);
         $user->save();
         $user->notify(new SignupActivate($user));
+
         $family = new Family([
             'name' => $request->name,
             'founder_id' => $user->id
         ]);
         $family->save();
+
         $service = new TableService();
         $service->addTables($request->name);
+        
+        $member = new Member([
+            'user_id' => $user->id,
+            'family_id' => $family->id
+        ]);
+        $member->setTable($request->name.'_members');
+        $member->save();
+        
         return response()->json([
             'message' => 'Successfully created user and family!'
         ], 201);

@@ -15,6 +15,9 @@ class Family extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
-
+    public function founder()
+    {
+        return $this->belongsTo('App\User', 'founder_id');
+    }
     
 }

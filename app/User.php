@@ -41,16 +41,25 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function family(){
-
-        return $this->belongsTo('App\Family', 'founder_id');
+    public function family()
+    {
+        return $this->hasOne('App\Family', 'founder_id');
     }
+
+    public function member()
+    {
+        return $this->hasOne('App\Member');
+    }
+
 
     public function prefix()
     {
-        $prefix = $this->belongsTo('App\Member')->$table();
+        $prefix = $this->member;
+        //dd($prefix);
         $pattern='/_members/';
         $replacement ='';
         return preg_replace($pattern, $replacement, $prefix);
     }
 }
+
+

@@ -33,7 +33,6 @@ class StoreMember extends FormRequest
     {
         return [
             'email.required' => 'Email is required!'
-
         ];
     }
 }

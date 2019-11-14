@@ -29,13 +29,13 @@ class UserController extends Controller
         ]);
         $user->save();
 
-        $adminUser = Auth::user();
-        //dd(Auth::user()->id);
+        $founderUser = Auth::User();
+        //dd($adminUser->family());
         $member = new Member([
             'user_id' => $user->id,
-            'family_id' => $adminUser->family->id
+            'family_id' => $founderUser->family->id
         ]);
-        $member->setTable('members');
+        $member->setTable($founderUser->family->name.'_members');
         $member->save();
        
         $user->notify(new UserInvite($user));

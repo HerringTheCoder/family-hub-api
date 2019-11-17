@@ -18,7 +18,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'email', 'password','active', 'activation_token',
+        'email', 'password','active', 'activation_token','prefix',
     ];
 
     protected $dates = ['deleted_at'];
@@ -40,4 +40,26 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function family()
+    {
+        return $this->hasOne('App\Family', 'founder_id');
+    }
+
+    public function member()
+    {
+        return $this->hasOne('App\Member');
+    }
+
+
+    public function prefix()
+    {
+        $prefix = $this->member;
+        //dd($prefix);
+        $pattern='/_members/';
+        $replacement ='';
+        return preg_replace($pattern, $replacement, $prefix);
+    }
 }
+
+

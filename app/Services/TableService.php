@@ -15,23 +15,23 @@ class TableService
 {
    
 
-    public function addTables($request) : void
+    public function addTables($name) : void
     {
-        Schema::create($request->name.'_members', function (Blueprint $table) {
+        Schema::create($name.'_members', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');
             $table->bigInteger('family_id')->unsigned();
             $table->foreign('family_id')->references('id')->on('families'); 
-            $table->string('first_name');
-            $table->string('middle_name');
-            $table->string('last_name');
-            $table->date('day_of_birth');
-            $table->date('day_of_death');
+            $table->string('first_name')->default('');
+            $table->string('middle_name')->default('');
+            $table->string('last_name')->default('');
+            $table->date('day_of_birth')->nullable()->default(null);
+            $table->date('day_of_death')->nullable()->default(null);
             $table->timestamps();
         });
 
-        Schema::create($request->name.'_news', function (Blueprint $table) {
+        Schema::create($name.'_news', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('author_id')->unsigned();
             $table->foreign('author_id')->references('id')->on('users');

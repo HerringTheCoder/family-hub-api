@@ -4,20 +4,17 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Family extends Model
+class Member extends Model
 {
     protected $fillable = [
-       'name','founder_id',
+        'user_id', 'family_id','first_name', 'middle_name', 'last_name', 'day_of_birth', 'day_of_death', 'created_at', 'updated_at',
     ];
-
-
+    
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
-    public function founder()
-    {
-        return $this->belongsTo('App\User', 'founder_id');
-    }
+
+
     
 }

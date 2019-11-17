@@ -1,0 +1,40 @@
+version: "3.1"
+services:
+
+    redis:
+      image: redis:alpine
+      container_name: family-hub-api-redis
+
+    mysql:
+      image: mysql:5.6
+      container_name: family-hub-api-mysql
+      working_dir: /application
+      volumes:
+        - .:/application
+      environment:
+        - MYSQL_ROOT_PASSWORD=secret
+        - MYSQL_DATABASE=family-hub
+        - MYSQL_USER=root
+        - MYSQL_PASSWORD=secret
+      ports:
+        - "14352:3306"
+
+    webserver:
+      image: nginx:alpine
+      container_name: family-hub-api-webserver
+      working_dir: /application
+      volumes:
+          - .:/application
+          - ./phpdocker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      ports:
+       - "14350:80"
+
+    php-fpm:
+      build: phpdocker/php-fpm
+      container_name: family-hub-api-php-fpm
+      working_dir: /application
+      volumes:
+        - .:/application
+        - ./phpdocker/php-fpm/php-ini-overrides.ini:/etc/php/7.3/fpm/conf.d/99-overrides.ini
+
+

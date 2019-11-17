@@ -12,22 +12,20 @@ class LoginTest extends TestCase
     
     use RefreshDatabase, WithFaker;
       
-
 public function test_login_with_proper_credentials()
 {
    $this->withoutExceptionHandling();
-
+   
    \Artisan::call('passport:install'); //creating personal access client
                                         //needed to create token in AuthController line 68
-
-   factory(\App\User::class)->create([
+   
+    factory(\App\User::class)->create([
      'email' => 'email@example.com',
      'password' => \Hash::make('secret'),
      'active' => 1,
     'deleted_at' => null
      
    ]);                          //creating user for testing
-
  
    $response = $this->json('POST', '/api/auth/login/', [
      
@@ -36,7 +34,6 @@ public function test_login_with_proper_credentials()
     'active' => 1,
     'deleted_at' => null
    ]);                          //login symulation
-
    
    $response->assertSuccessful()
    ->assertJsonStructure([
@@ -54,7 +51,6 @@ $this->withoutExceptionHandling();
 
    \Artisan::call('passport:install'); //creating personal access client
                                         //needed to create token in AuthController line 68
-
    factory(\App\User::class)->create([
      'email' => 'email@example.com',
      'password' => \Hash::make('secret'),
@@ -62,7 +58,6 @@ $this->withoutExceptionHandling();
     'deleted_at' => null
      
    ]);                          //creating user for testing
-
  
    $response = $this->json('POST', '/api/auth/login/', [
      
@@ -71,13 +66,10 @@ $this->withoutExceptionHandling();
     'active' => 1,
     'deleted_at' => null
    ]);                          //login symulation
-
-
    $response->assertUnauthorized()
    ->assertJsonStructure([
     'message'
    ]);
-
 }
 
 public function test_login_with_wrong_email(){
@@ -112,7 +104,6 @@ public function test_login_with_wrong_email(){
     
     }
 
-
     public function test_login_with_unactivated_account(){
 
         $this->withoutExceptionHandling();
@@ -144,13 +135,7 @@ public function test_login_with_wrong_email(){
            ]);
         
         }
-
         
-
     
-
 }
    
-   
-
-

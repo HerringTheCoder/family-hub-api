@@ -71,7 +71,7 @@ class MemberController extends Controller
     }
 
 
-    public function update(Request $request)
+    public function update(UpdateMember $request)
     {   
         $member = new Member();
           

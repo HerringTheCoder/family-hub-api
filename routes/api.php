@@ -11,10 +11,16 @@ Route::group([
     Route::group([
         'middleware' => 'auth:api'
     ], function() {
-        Route::post('member/add', 'MemberController@store');
+        //Route::post('member/add', 'MemberController@store');
         Route::post('member/update', 'MemberController@update');
         Route::get('logout', 'AuthController@logout');
         Route::get('user', 'AuthController@user');
+    });
+
+    Route::group([
+        'middleware' => ['auth:api','required']
+    ], function() {
+        Route::post('member/add', 'MemberController@store');
     });
 
     Route::group([    

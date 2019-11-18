@@ -24,8 +24,10 @@ class UpdateMember extends FormRequest
     public function rules()
     {
         return [
-           'email' => 'required|string|email|unique:users',
-           'day_of_birth' => 'date|date_format:Y-m-d|before:day_of_death'
+           'first_name' => 'string',
+           'middle_name' => 'string',
+           'last_name' => 'string',
+           'day_of_birth' => 'date|date_format:Y-m-d'
         ];
     }
 

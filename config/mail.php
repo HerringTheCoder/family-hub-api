@@ -1,13 +1,14 @@
 <?php
 return [
-  "driver" => "smtp",
-  "host" => "smtp.mailtrap.io",
-  "port" => 2525,
+  "driver" => env('MAIL_DRIVER'),
+  "host" => env('MAIL_HOST'),
+  "port" => env('MAIL_PORT'),
   "from" => array(
       "address" => "from@example.com",
       "name" => "Example"
   ),
-  "username" => "f75f8508ccb316",
-  "password" => "2ec70cbabb7c84",
+  "username" => env('MAIL_USERNAME'),
+  "password" => env('MAIL_PASSWORD'),
   "sendmail" => "/usr/sbin/sendmail -bs"
+
 ];

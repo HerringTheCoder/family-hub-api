@@ -15,7 +15,7 @@ class NewsController extends Controller
     {
         $news = new News();
         $news->setTable(Auth::User()->prefix.'_news');
-        $news = News::all();
+        $news = $news->get();
 
         return response()->json([
             'message' => 'Success',
@@ -27,6 +27,7 @@ class NewsController extends Controller
     public function store(NewsRequest $request)
     {
         $news = new News([
+            'author_id' => Auth::User()->id,
             'title' => $request->title,
             'description' => $request->description
         ]);
@@ -43,7 +44,7 @@ class NewsController extends Controller
         
         $news = new News();
         $news->setTable(Auth::User()->prefix.'_news');
-        $news = News::find($id);
+        $news = $news->get()->where('id',$id);
         return response()->json([
             'message' => 'Success, found data!',
             'data' => $news
@@ -55,7 +56,7 @@ class NewsController extends Controller
         $news = new News();
           
         $news->setTable(Auth::User()->prefix.'_news');
-        $news->where('author_id',Auth::User()->id)
+        $news->where('id',$id)
                 ->update([
                 'title' => $request->title,
                 'description' => $request->description

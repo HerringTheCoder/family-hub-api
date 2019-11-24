@@ -6,7 +6,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 use App\Gallery;
+use App\Http\Requests\StoreGallery;
+use App\Http\Requests\UpdateGallery;
 
 class GalleryController extends Controller
 {
@@ -14,7 +18,7 @@ class GalleryController extends Controller
     {
         $gallery = new Gallery();
         $gallery->setTable(Auth::User()->prefix.'_gallery');
-        $gallery = Gallery::all();
+        $gallery = $gallery->get();
 
         return response()->json([
             'message' => 'Success',
@@ -23,7 +27,7 @@ class GalleryController extends Controller
         
     }
 
-    public function store(StoreGallery $request)
+    public function store(Request $request)
     {
         $photo = $request->file('photo_input');
         $extension = $photo->getClientOriginalExtension();
@@ -31,6 +35,7 @@ class GalleryController extends Controller
         $filename = $photo->getFilename().'.'.$extension;
 
         $gallery = new Gallery([
+            'author_id' => Auth::User()->id,
             'mime' => $photo->getClientMimeType(),
             'original_filename' => $photo->getClientOriginalName(),
             'filename' => $photo->getFilename().'.'.$extension,
@@ -49,16 +54,17 @@ class GalleryController extends Controller
         
         $gallery = new Gallery();
         $gallery->setTable(Auth::User()->prefix.'_gallery');
-        $gallery = Gallery::find($id);
+        $gallery = $gallery->get()->where('id',$id);
         return response()->json([
             'message' => 'Success, found data!',
             'data' => $gallery
         ], 201);  
     }
 
-    public function update(UpdateGallery $request, $id)
+    public function update(Request $request, $id)
     {
         $photo = $request->file('photo_input');
+        
         if($photo){
             $extension = $photo->getClientOriginalExtension();
             Storage::disk('public')->put($photo->getFilename().'.'.$extension,  File::get($photo));
@@ -75,7 +81,7 @@ class GalleryController extends Controller
         $gallery = new Gallery();
           
         $gallery->setTable(Auth::User()->prefix.'_gallery');
-        $gallery->where('author_id',Auth::User()->id)
+        $gallery->where('id',$id)
                 ->update([
                 'mime' => $mime,
                 'original_filename' => $original_filename,

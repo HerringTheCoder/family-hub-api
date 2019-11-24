@@ -21,7 +21,7 @@ Route::group([
 
         Route::post('gallery/add', 'GalleryController@store');
         Route::get('gallery/edit/{id}', 'GalleryController@edit');
-        Route::put('gallery/update/{id}', 'GalleryController@update');
+        Route::post('gallery/update/{id}', 'GalleryController@update');
 
         Route::get('logout', 'AuthController@logout');
         Route::get('user', 'AuthController@user');

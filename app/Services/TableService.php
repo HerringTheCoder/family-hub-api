@@ -45,9 +45,9 @@ class TableService
             $table->bigIncrements('id');
             $table->bigInteger('author_id')->unsigned();
             $table->foreign('author_id')->references('id')->on('users');
-            $table->string('filename')->nullable();
-            $table->string('mime')->nullable();
-            $table->string('original_filename')->nullable();
+            $table->string('filename');
+            $table->string('mime');
+            $table->string('original_filename');
             $table->string('description');
             $table->timestamps();
         });

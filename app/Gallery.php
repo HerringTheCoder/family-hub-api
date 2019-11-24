@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Gallery extends Model
 {
     protected $fillable = [
-        'author_id', 'photo','description',
+        'author_id', 'filename','description','mime','original_filename',
     ];
 
     

@@ -29,7 +29,7 @@ class SignupActivate extends Notification
      */
     public function via($notifiable)
     {
-        return ['email'];
+        return ['mail'];
     }
 
     /**

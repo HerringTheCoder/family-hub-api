@@ -20,6 +20,19 @@ use App\PasswordReset;
 class MemberController extends Controller
 {
 
+    public function index()
+    {
+        $member = new Member();
+        $member->setTable(Auth::User()->prefix.'_members');
+        $member = Member::all();
+
+        return response()->json([
+            'message' => 'Success',
+            'data' => $member
+        ], 201); 
+        
+    }
+
     public function store(StoreMember $request)
     {
         $password = Str::random(10);

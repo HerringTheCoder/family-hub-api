@@ -13,6 +13,16 @@ Route::group([
     ], function() {
         //Route::post('member/add', 'MemberController@store');
         Route::post('member/update', 'MemberController@update');
+        Route::get('member/all', 'MemberController@index');
+
+        Route::post('news/add', 'NewsController@store');
+        Route::get('news/edit/{id}', 'NewsController@edit');
+        Route::put('news/update/{id}', 'NewsController@update');
+
+        Route::post('gallery/add', 'GalleryController@store');
+        Route::get('gallery/edit/{id}', 'GalleryController@edit');
+        Route::put('gallery/update/{id}', 'GalleryController@update');
+
         Route::get('logout', 'AuthController@logout');
         Route::get('user', 'AuthController@user');
     });

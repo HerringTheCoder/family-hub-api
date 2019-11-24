@@ -40,5 +40,28 @@ class TableService
             $table->timestamps();
         });
 
+        
+        Schema::create($name.'_gallery', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->bigInteger('author_id')->unsigned();
+            $table->foreign('author_id')->references('id')->on('users');
+            $table->string('filename')->nullable();
+            $table->string('mime')->nullable();
+            $table->string('original_filename')->nullable();
+            $table->string('description');
+            $table->timestamps();
+        });
+
+        Schema::create($name.'_affinities', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->bigInteger('first_user_id')->unsigned();
+            $table->foreign('first_user_id')->references('id')->on('users');
+            $table->bigInteger('second_user_id')->unsigned();
+            $table->foreign('second_user_id')->references('id')->on('users');
+            $table->bigInteger('relation_id')->unsigned();
+            $table->foreign('relation_id')->references('id')->on('relations');
+            $table->timestamps();
+        });
+
     }
 }

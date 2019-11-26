@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -11,69 +10,56 @@ use App\Http\Requests\NewsRequest;
 
 class NewsController extends Controller
 {
+
+    public function __construct(News $news)
+    {
+        $this->news = $news;
+    }
+
     public function index()
     {
-        $news = new News();
-        $news->setTable(Auth::User()->prefix.'_news');
-        $news = $news->get();
+        $this->news->setTable(Auth::User()->prefix.'_news');
+        $news = $this->news->get();
 
         return response()->json([
             'message' => 'Success',
             'data' => $news
         ], 201); 
-        
     }
 
     public function store(NewsRequest $request)
     {
-        $news = new News([
-            'author_id' => Auth::User()->id,
-            'title' => $request->title,
-            'description' => $request->description
-        ]);
-        $news->setTable(Auth::User()->prefix.'_news');
-        $news->save();
+        $this->news->setTable(Auth::User()->prefix.'_news');
+        $this->news->create(['author_id' => Auth::User()->id] + $request->validated());
         return response()->json([
             'message' => 'Success, data inserted!'
         ], 201);  
-        
     }
 
-    public function edit($id)
+    public function edit(Request $request)
     {
-        
-        $news = new News();
-        $news->setTable(Auth::User()->prefix.'_news');
-        $news = $news->get()->where('id',$id);
+        $this->news->setTable(Auth::User()->prefix.'_news');
+        $news = $this->news->get()->where('id',$request->id);
         return response()->json([
             'message' => 'Success, found data!',
             'data' => $news
         ], 201);  
     }
 
-    public function update(NewsRequest $request, $id)
+    public function update(NewsRequest $request)
     {
-        $news = new News();
-          
-        $news->setTable(Auth::User()->prefix.'_news');
-        $news->where('id',$id)
-                ->update([
-                'title' => $request->title,
-                'description' => $request->description
-                ]);
+        $this->news->setTable(Auth::User()->prefix.'_news');
+        $this->news->where('id',$request->id)->update($request->validated());
 
         return response()->json([
             'message' => 'Success, data updated!'], 201);
-        
     }
 
-    public function delete($id)
+    public function delete(Request $request)
     {
-        $news = new News();
-        $news->setTable(Auth::User()->prefix.'_news');
-        $news->delete();
+        $this->news->setTable(Auth::User()->prefix.'_news');
+        $this->news->where('id',$request->id)->delete();
         return response()->json([
             'message' => 'Success, data deleted'], 201);
-        
     }
 }

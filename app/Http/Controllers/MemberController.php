@@ -13,6 +13,7 @@ use App\Member;
 use App\Notifications\UserInvite;
 use App\Http\Requests\StoreMember;
 use App\Http\Requests\UpdateMember;
+use App\Http\Requests\StoreDeceased;
 use App\Notifications\PasswordResetRequest;
 use App\Notifications\PasswordResetSuccess;
 use App\PasswordReset;
@@ -59,6 +60,37 @@ class MemberController extends Controller
     }
 
 
+    public function storeDeceased(StoreDeceased $request)
+    {
+        $password = Str::random(10);
+        $prefix = Auth::User()->prefix;
+        $user = new User([
+            'email' => $password.'@nomail.example',
+            'password' => bcrypt($password),
+            'activation_token' => "",
+            'active' => 1,
+            'prefix' => $prefix
+        ]);
+        $user->save();
+
+        $founderUser = Auth::User();
+        $member = new Member([
+            'user_id' => $user->id,
+            'family_id' => $founderUser->family->id,
+            'first_name' => $request->first_name,
+            'middle_name' => $request->middle_name,
+            'last_name' => $request->last_name,
+            'day_of_birth' => $request->day_of_birth,
+            'day_of_death' => $request->day_of_death
+        ]);
+        $member->setTable(Auth::User()->prefix.'_members');
+        $member->save();
+        
+        return response()->json([
+            'message' => 'Success'], 201);
+    }
+
+
     public function activate($token)
     {
         $user = User::where('activation_token', $token)->first();
@@ -83,6 +115,18 @@ class MemberController extends Controller
             'email' => $user->email], 201);
     }
 
+    public function edit(Request $request)
+    {
+        
+        $member = new Member();
+        $member->setTable(Auth::User()->prefix.'_members');
+        $member = $member->get()->where('id',$request->id);
+        return response()->json([
+            'message' => 'Success, found data!',
+            'data' => $member
+        ], 201);  
+    }
+
 
     public function update(UpdateMember $request)
     {   
@@ -99,6 +143,16 @@ class MemberController extends Controller
 
         return response()->json([
             'message' => 'Success, data updated!'], 201);
+    }
+
+    public function delete(Request $request)
+    {
+        $member = new Member();
+        $member->setTable(Auth::User()->prefix.'_members');
+        $member->where('id',$request->id)->delete();
+        return response()->json([
+            'message' => 'Success, data deleted'], 201);
+        
     }
 
 }

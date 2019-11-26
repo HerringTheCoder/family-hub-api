@@ -11,6 +11,8 @@ use App\Member;
 use App\Notifications\SignupActivate;
 use App\Http\Requests\StoreUser;
 use App\Services\TableService;
+use App\Services\SpamChecker;
+use App\Services\SignupService;
 
 
 class AuthController extends Controller
@@ -24,36 +26,19 @@ class AuthController extends Controller
      * @param  [string] password_confirmation
      * @return [string] message
      */
-    public function signup(StoreUser $request)
+    public function signup(StoreUser $request,SignupService $singup)
     {
-        $user = new User([
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
-            'activation_token' => Str::random(80),
-            'prefix' => $request->name
-        ]);
-        $user->save();
-        $user->notify(new SignupActivate($user));
-
-        $family = new Family([
-            'name' => $request->name,
-            'founder_id' => $user->id
-        ]);
-        $family->save();
-
-        $service = new TableService();
-        $service->addTables($request->name);
+        if($singup->register($request)){
+            return response()->json([
+                'message' => 'Successfully created user and family!'
+            ], 201);
+        }else{
+            
+            return response()->json([
+                'message' => 'Something gone wrong!'
+            ], 400);
+        }
         
-        $member = new Member([
-            'user_id' => $user->id,
-            'family_id' => $family->id
-        ]);
-        $member->setTable($request->name.'_members');
-        $member->save();
-        
-        return response()->json([
-            'message' => 'Successfully created user and family!'
-        ], 201);
     }
 
     /**
@@ -112,6 +97,17 @@ class AuthController extends Controller
     public function user(Request $request)
     {
         return response()->json($request->user());
+    }
+
+
+    
+    public function spamChecker(SpamChecker $service)
+    {   
+        $service = $service->check();
+
+        return response()->json([
+            'message' => 'Scan done, '.$service.' users deleted!',
+        ], 201);
     }
 
 

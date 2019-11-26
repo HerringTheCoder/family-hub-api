@@ -49,56 +49,56 @@ class GalleryController extends Controller
         
     }
 
-    public function edit($id)
-    {
+    // public function edit($id)
+    // {
         
-        $gallery = new Gallery();
-        $gallery->setTable(Auth::User()->prefix.'_gallery');
-        $gallery = $gallery->get()->where('id',$id);
-        return response()->json([
-            'message' => 'Success, found data!',
-            'data' => $gallery
-        ], 201);  
-    }
+    //     $gallery = new Gallery();
+    //     $gallery->setTable(Auth::User()->prefix.'_gallery');
+    //     $gallery = $gallery->get()->where('id',$id);
+    //     return response()->json([
+    //         'message' => 'Success, found data!',
+    //         'data' => $gallery
+    //     ], 201);  
+    // }
 
-    public function update(Request $request, $id)
-    {
-        $photo = $request->file('photo_input');
+    // public function update(Request $request, $id)
+    // {
+    //     $photo = $request->file('photo_input');
         
-        if($photo){
-            $extension = $photo->getClientOriginalExtension();
-            Storage::disk('public')->put($photo->getFilename().'.'.$extension,  File::get($photo));
+    //     if($photo){
+    //         $extension = $photo->getClientOriginalExtension();
+    //         Storage::disk('public')->put($photo->getFilename().'.'.$extension,  File::get($photo));
 
-            $filename = $photo->getFilename().'.'.$extension;
-            $mime = $photo->getClientMimeType();
-            $original_filename = $photo->getClientOriginalName();
-        }else{
-            $filename = $request->photo;
-            $mime = $request->mime;
-            $original_filename = $request->original_filename;
-        }
+    //         $filename = $photo->getFilename().'.'.$extension;
+    //         $mime = $photo->getClientMimeType();
+    //         $original_filename = $photo->getClientOriginalName();
+    //     }else{
+    //         $filename = $request->photo;
+    //         $mime = $request->mime;
+    //         $original_filename = $request->original_filename;
+    //     }
 
-        $gallery = new Gallery();
+    //     $gallery = new Gallery();
           
-        $gallery->setTable(Auth::User()->prefix.'_gallery');
-        $gallery->where('id',$id)
-                ->update([
-                'mime' => $mime,
-                'original_filename' => $original_filename,
-                'filename' => $filename,
-                'description' => $request->description
-                ]);
+    //     $gallery->setTable(Auth::User()->prefix.'_gallery');
+    //     $gallery->where('id',$id)
+    //             ->update([
+    //             'mime' => $mime,
+    //             'original_filename' => $original_filename,
+    //             'filename' => $filename,
+    //             'description' => $request->description
+    //             ]);
 
-        return response()->json([
-            'message' => 'Success, data updated!'], 201);
+    //     return response()->json([
+    //         'message' => 'Success, data updated!'], 201);
         
-    }
+    // }
 
-    public function delete($id)
+    public function delete(Request $request)
     {
         $gallery = new Gallery();
         $gallery->setTable(Auth::User()->prefix.'_gallery');
-        $gallery->delete();
+        $gallery->where('id',$request->id)->delete();
         return response()->json([
             'message' => 'Success, data deleted'], 201);
         

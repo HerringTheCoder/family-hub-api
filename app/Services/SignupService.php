@@ -15,7 +15,7 @@ use App\Notifications\SignupActivate;
 
 class SignupService
 {
-    public function register($request) : int
+    public function register($request) : void
     {
         $user = new User([
             'email' => $request->email,
@@ -41,8 +41,6 @@ class SignupService
         ]);
         $member->setTable($request->name.'_members');
         $member->save();
-
-        return false;
 
     }
 

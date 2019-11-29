@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateMember extends FormRequest
+class StoreGallery extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,21 +24,15 @@ class UpdateMember extends FormRequest
     public function rules()
     {
         return [
-           'first_name' => 'string|required',
-           'middle_name' => 'string',
-           'last_name' => 'string|required',
-           'day_of_birth' => 'required|date_format:Y-m-d'
-        ];
+            'photo_input' => 'mimes:jpeg,jpg,png,gif,svg|max:10000'
+         ];
     }
-
 
     public function messages()
     {
         return [
-            'day_of_birth.required' => 'Day of birth is required!',
-            'last_name.required' => 'Last name is required!',
-            'first_name.required' => 'First name is required!',
-            
+            'photo_input.mimes' => 'Photo mime type is incorrect!',
+            'photo_input.max' => 'Photo size is too big!'
         ];
     }
 }

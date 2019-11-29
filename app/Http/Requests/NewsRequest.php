@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateMember extends FormRequest
+class NewsRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,21 +24,18 @@ class UpdateMember extends FormRequest
     public function rules()
     {
         return [
-           'first_name' => 'string|required',
-           'middle_name' => 'string',
-           'last_name' => 'string|required',
-           'day_of_birth' => 'required|date_format:Y-m-d'
-        ];
+            'title' => 'required|string',
+            'description' => 'required|string'
+         ];
     }
-
 
     public function messages()
     {
         return [
-            'day_of_birth.required' => 'Day of birth is required!',
-            'last_name.required' => 'Last name is required!',
-            'first_name.required' => 'First name is required!',
-            
+            'title.required' => 'Title is required!',
+            'description.required' => 'Title is required!',
+            'title.string' => 'Title must be a string!',
+            'description.string' => 'Description must be a string!'
         ];
     }
 }

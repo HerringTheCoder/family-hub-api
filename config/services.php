@@ -13,8 +13,10 @@ return [
     | a conventional file to locate the various service credentials.
     |
     */
+    'driver' => env('MAIL_DRIVER', 'smtp'),
 
     'mailgun' => [
+        'driver' => env('MAIL_DRIVER', 'smtp'),
         'domain' => env('MAILGUN_DOMAIN'),
         'secret' => env('MAILGUN_SECRET'),
         'endpoint' => env('MAILGUN_ENDPOINT', 'api.mailgun.net'),

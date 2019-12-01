@@ -6,29 +6,26 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use App\User;
 
 class UserController extends Controller
 {
-    public function delete($id)
+    public function __construct(User $user)
     {
-        $user = new User();
-          
-        $user->where('id',Auth::User()->id)
-                ->update([
-                'active' => 0]);
+        $this->user = $user;
+    }
+
+    public function delete(Request $request)
+    {
+        $this->user->where('id',$request->id)->update(['active' => 0]);
 
         return response()->json([
             'message' => 'Success, user deactivated!'], 201);
     }
 
-
-    public function active($id)
+    public function active(Request $request)
     {
-        $user = new User();
-          
-        $user->where('id',Auth::User()->id)
-                ->update([
-                'active' => 1]);
+        $this->user->where('id',$request->id)->update(['active' => 1]);
 
         return response()->json([
             'message' => 'Success, user activated!'], 201);

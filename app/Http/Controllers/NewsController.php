@@ -18,9 +18,10 @@ class NewsController extends Controller
 
     public function index()
     {
+        //Auth::User()->prefix = $request->prefix;
         $this->news->setTable(Auth::User()->prefix.'_news');
         $news = $this->news->get();
-
+     
         return response()->json([
             'message' => 'Success',
             'data' => $news

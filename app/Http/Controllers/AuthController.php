@@ -95,9 +95,6 @@ class AuthController extends Controller
         $user->active = true;
         $user->activation_token = '';
         $user->save();
-        return response()->json([
-            'message' => 'Activated!',
-            'data' => $user
-        ], 201);
+        return response()->json(['message' => 'Activated!','data' => $user], 201);
     }
 }

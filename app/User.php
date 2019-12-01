@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class User extends Authenticatable
 {
     use HasApiTokens, Notifiable;
+    const ADMIN_TYPE = 'admin';
+    const DEFAULT_TYPE = 'default';
 
     /**
      * The attributes that are mass assignable.
@@ -18,7 +20,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'email', 'password','active', 'activation_token','prefix',
+        'email', 'password','active', 'activation_token','prefix','type',
     ];
 
     protected $dates = ['deleted_at'];
@@ -49,6 +51,10 @@ class User extends Authenticatable
     public function member()
     {
         return $this->hasOne('App\Member');
+    }
+
+    public function isAdmin()    {        
+        return $this->type === self::ADMIN_TYPE;    
     }
 
 

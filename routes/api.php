@@ -36,11 +36,18 @@ Route::group([
         Route::get('user', 'AuthController@user');
     });
 
-    // Route::group([
-    //     'middleware' => ['auth:api','required']
-    // ], function() {
-    //     Route::post('member/add', 'MemberController@store');
-    // });
+     Route::group([
+         'middleware' => ['auth:api','is_admin','prefix','check_prefix']
+     ], function() {
+         Route::post('news/all', 'NewsController@index');
+     });
+
+     Route::group([
+        'middleware' => ['auth:api','is_admin']
+    ], function() {
+        Route::post('user/active', 'UserController@active');
+        Route::post('user/deactive', 'UserController@delete');
+    });
 
     Route::group([    
         'namespace' => 'Auth',    

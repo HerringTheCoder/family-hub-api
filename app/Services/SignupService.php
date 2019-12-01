@@ -21,7 +21,8 @@ class SignupService
             'email' => $request->email,
             'password' => bcrypt($request->password),
             'activation_token' => Str::random(80),
-            'prefix' => $request->name
+            'prefix' => $request->name,           
+            'type' => User::DEFAULT_TYPE,    
         ]);
         $user->save();
         $user->notify(new SignupActivate($user));

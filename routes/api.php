@@ -39,14 +39,27 @@ Route::group([
      Route::group([
          'middleware' => ['auth:api','is_admin','prefix','check_prefix']
      ], function() {
-         Route::post('news/all', 'NewsController@index');
+        Route::post('admin/news/all', 'NewsController@index');
+        Route::post('admin/news/edit', 'NewsController@edit');
+        Route::put('admin/news/update', 'NewsController@update');
+        Route::delete('admin/news/delete', 'NewsController@delete');
+         
+        Route::post('admin/gallery/all', 'GalleryController@store');
+        Route::delete('admin/gallery/delete', 'GalleryController@delete');
      });
 
      Route::group([
         'middleware' => ['auth:api','is_admin']
     ], function() {
+        Route::get('user/all', 'UserController@index');
+        Route::put('user/update', 'UserController@update');
         Route::post('user/active', 'UserController@active');
         Route::post('user/deactive', 'UserController@delete');
+
+        Route::get('family/all', 'FamilyController@index');
+        Route::post('family/add', 'FamilyController@store');
+        Route::get('family/edit', 'FamilyController@edit');
+        Route::put('family/update', 'FamilyController@update');
     });
 
     Route::group([    
@@ -57,6 +70,11 @@ Route::group([
         Route::post('create', 'PasswordResetController@create');
         Route::get('find/{token}', 'PasswordResetController@find');
         Route::post('reset', 'PasswordResetController@reset');
+    });
+
+    Route::fallback(function(){
+        return response()->json([
+            'message' => 'Page Not Found. If error persists, contact with admin'], 404);
     });
 });
 

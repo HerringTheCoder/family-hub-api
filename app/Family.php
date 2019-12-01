@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Family extends Model
 {
     protected $fillable = [
-       'name','founder_id',
+       'founder_id',
     ];
 
 

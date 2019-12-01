@@ -9,7 +9,7 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Foundation\Http\FormRequest as LaravelFormRequest;
 
-class UpdateMember extends FormRequest
+class UpdateUser extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -29,10 +29,7 @@ class UpdateMember extends FormRequest
     public function rules()
     {
         return [
-           'first_name' => 'string|required',
-           'middle_name' => 'string',
-           'last_name' => 'string|required',
-           'day_of_birth' => 'required|date_format:Y-m-d'
+           'email' => 'required|string|email|unique:users'
         ];
     }
 
@@ -40,12 +37,12 @@ class UpdateMember extends FormRequest
     public function messages()
     {
         return [
-            'day_of_birth.required' => 'Day of birth is required!',
-            'last_name.required' => 'Last name is required!',
-            'first_name.required' => 'First name is required!',
-            
+            'email.required' => 'Email is required!',
+            'email.unique' => 'Email is already used!',
+
         ];
     }
+
 
     protected function failedValidation(Validator $validator)
     {

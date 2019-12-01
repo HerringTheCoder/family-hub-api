@@ -28,6 +28,7 @@ class SpamChecker
                     SpamChecker::deleteMember($key->id, $key->prefix);
                     SpamChecker::deleteUser($key->id, $key->prefix);
                     $number++;
+                    //dodać sprawdzanie czy jest founderem jak TAK to ma usuwać tabele rodzinne i rodzine
                 }
             }
         }

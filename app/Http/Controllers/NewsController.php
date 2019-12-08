@@ -6,7 +6,9 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\News;
-use App\Http\Requests\NewsRequest;
+use App\Http\Requests\StoreNews;
+use App\Http\Requests\UpdateNews;
+use App\Services\PivotService;
 
 class NewsController extends Controller
 {
@@ -16,22 +18,26 @@ class NewsController extends Controller
         $this->news = $news;
     }
 
-    public function index()
+    public function index(PivotService $pivot)
     {
         //Auth::User()->prefix = $request->prefix;
         $this->news->setTable(Auth::User()->prefix.'_news');
         $news = $this->news->get();
-     
+        $pivot->delete();
+        
         return response()->json([
             'message' => 'Success',
             'data' => $news
         ], 201); 
     }
 
-    public function store(NewsRequest $request)
+    public function store(StoreNews $request, PivotService $pivot)
     {
         $this->news->setTable(Auth::User()->prefix.'_news');
         $this->news->create(['author_id' => Auth::User()->id] + $request->validated());
+        
+        $pivot->store();
+
         return response()->json([
             'message' => 'Success, data inserted!'
         ], 201);  
@@ -47,8 +53,9 @@ class NewsController extends Controller
         ], 201);  
     }
 
-    public function update(NewsRequest $request)
-    {
+    public function update(UpdateNews $request)
+    {   
+
         $this->news->setTable(Auth::User()->prefix.'_news');
         $this->news->where('id',$request->id)->update($request->validated());
 

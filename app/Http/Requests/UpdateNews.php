@@ -2,16 +2,17 @@
 
 namespace App\Http\Requests;
 
+use App\News;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Foundation\Http\FormRequest as LaravelFormRequest;
 
-class UpdateGallery extends FormRequest
+class UpdateNews extends FormRequest
 {
-    
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -22,21 +23,26 @@ class UpdateGallery extends FormRequest
         return true;
     }
 
-    
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
     public function rules()
     {
         return [
-            'photo' => 'required',
-            'photo_input' => 'mimes:jpeg,jpg,png,gif,svg|max:1000'
+            'title' => 'required|string',
+            'description' => 'required|string'
          ];
     }
 
     public function messages()
     {
         return [
-            'photo.required' => 'Photo is required!',
-            'photo_input.mimes' => 'Photo mime type is incorrect!',
-            'photo_input.max' => 'Photo size is too big!'
+            'title.required' => 'Title is required!',
+            'description.required' => 'Title is required!',
+            'title.string' => 'Title must be a string!',
+            'description.string' => 'Description must be a string!'
         ];
     }
 

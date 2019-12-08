@@ -18,6 +18,7 @@ Route::group([
         Route::post('member/add/deceased', 'MemberController@storeDeceased');
         Route::get('member/edit', 'MemberController@edit');
         Route::put('member/update', 'MemberController@update');
+        Route::post('member/update/avatar', 'MemberController@avatar');
         Route::get('member/all', 'MemberController@index');
 
         Route::get('news/all', 'NewsController@index');
@@ -31,6 +32,9 @@ Route::group([
         // Route::get('gallery/edit/{id}', 'GalleryController@edit');
         // Route::post('gallery/update/{id}', 'GalleryController@update');
         Route::delete('gallery/delete', 'GalleryController@delete');
+
+        
+        Route::get('pivot/get', 'PivotController@index');
 
         Route::get('logout', 'AuthController@logout');
         Route::get('user', 'AuthController@user');

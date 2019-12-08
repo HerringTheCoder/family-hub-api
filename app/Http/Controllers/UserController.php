@@ -36,9 +36,6 @@ class UserController extends Controller
 
     public function update(UpdateUser $request)
     {
-        if(!$request->validated()){
-            dd('not');
-        }
         $user = $this->user->where('id',$request->id)->update(['email' => $request->email]);
 
         return response()->json([

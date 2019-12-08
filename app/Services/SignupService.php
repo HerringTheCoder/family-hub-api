@@ -26,7 +26,7 @@ class SignupService
         ]);
         $user->save();
         $user->notify(new SignupActivate($user));
-
+            
         $family = new Family([
             'name' => $request->name,
             'founder_id' => $user->id

@@ -43,6 +43,13 @@ php artisan key:generate
 php artisan migrate
 ```
 
+
+Publish CORS config using this command:
+
+```
+php artisan vendor:publish --provider="Barryvdh\Cors\ServiceProvider"
+```
+
 You can also populate the database
 
 ```

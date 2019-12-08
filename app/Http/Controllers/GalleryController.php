@@ -38,7 +38,7 @@ class GalleryController extends Controller
             'author_id' => Auth::User()->id,
             'mime' => $photo->getClientMimeType(),
             'original_filename' => $photo->getClientOriginalName(),
-            'filename' => $photo->getFilename().'.'.$extension,
+            'filename' => $filename,
             'description' => $request->description
         ]);
         $gallery->setTable(Auth::User()->prefix.'_gallery');

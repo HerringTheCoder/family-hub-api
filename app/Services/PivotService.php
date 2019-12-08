@@ -3,7 +3,7 @@ namespace App\Services;
 
 use App\Member;
 use App\Pivot;
-
+use DB;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,9 +18,13 @@ class PivotService
 {
     public function store() : void
     {
-        $members = new Member();
-        $members->setTable(Auth::User()->prefix.'_members');
-        $members = $members->where('user_id','!=',Auth::user()->id)->get();
+        //$members = new Member();
+        //$members->setTable(Auth::User()->prefix.'_members');
+        //$members = $members->where('user_id','!=',Auth::user()->id)->get();
+        
+        $members = DB::table(Auth::User()->prefix.'_members')
+        ->where('user_id','!=', Auth::user()->id)
+        ->get();
 
         foreach ($members as $member) {
             $pivot = new Pivot([
@@ -34,8 +38,9 @@ class PivotService
 
     public function delete() : void
     {
-        $pivot = new Pivot();
-        $pivot->setTable(Auth::User()->prefix.'_pivot');
-        $pivot->where('user_id',Auth::User()->id)->delete();
+        $pivot = DB::table(Auth::User()->prefix.'_pivot')
+        ->where('user_id', Auth::user()->id)
+        ->delete();
+        
     }
 }

@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+
 use Laravel\Passport\Passport;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Auth\Access\Response;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -14,7 +16,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        'App\Model' => 'App\Policies\ModelPolicy',
+        \App\News::class => \App\Policies\NewsPolicy::class,
     ];
 
     /**
@@ -25,6 +27,23 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
+        
+    /**
+     * News actions, grants
+     *
+     * 
+     */
+        Gate::define('edit-news', function ($user, $news) {
+            return $user->id == $news->author_id;
+            });
+
+        Gate::define('update-news', function ($user, $news) {
+            return $user->id == $news->author_id;
+            });
+
+        Gate::define('delete-news', function ($user, $news) {
+              return $user->id == $news->author_id;
+            });
 
         Passport::routes();
     }

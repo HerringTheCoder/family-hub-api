@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\News;
 use Illuminate\Foundation\Http\FormRequest;
+use DB;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Contracts\Validation\Validator;
@@ -20,7 +21,7 @@ class UpdateNews extends FormRequest
      */
     public function authorize()
     {
-        return true;
+            return true;
     }
 
     /**

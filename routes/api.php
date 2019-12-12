@@ -61,7 +61,7 @@ Route::group([
         Route::post('user/deactive', 'UserController@delete');
 
         Route::get('family/all', 'FamilyController@index');
-        Route::post('family/add', 'FamilyController@store');
+        //Route::post('family/add', 'FamilyController@store');
         Route::get('family/edit', 'FamilyController@edit');
         Route::put('family/update', 'FamilyController@update');
     });

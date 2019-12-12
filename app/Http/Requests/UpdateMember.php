@@ -30,7 +30,6 @@ class UpdateMember extends FormRequest
     {
         return [
            'first_name' => 'string|required',
-           'middle_name' => 'string',
            'last_name' => 'string|required',
            'day_of_birth' => 'required|date_format:Y-m-d'
         ];

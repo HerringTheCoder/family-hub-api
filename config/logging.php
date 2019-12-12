@@ -36,9 +36,26 @@ return [
 
     'channels' => [
         'stack' => [
+            'name' => 'Log stack',
             'driver' => 'stack',
-            'channels' => ['daily'],
+            'channels' => ['database', 'mongodb'],
             'ignore_exceptions' => false,
+        ],
+
+        'database' => [
+            'driver' => 'custom',
+            'via' => danielme85\LaravelLogToDB\LogToDbHandler::class,
+            'level' => env('APP_LOG_LEVEL', 'debug'),
+            'name' => 'My DB Log',
+            'connection' => 'default',
+            'collection' => 'logs',
+            'detailed' => true,
+            'queue' => true,
+            'queue_name' => '',
+            'queue_connection' => '',
+            'processors' => [
+                  //Monolog\Processor\HostnameProcessor::class
+             ]
         ],
 
         'single' => [

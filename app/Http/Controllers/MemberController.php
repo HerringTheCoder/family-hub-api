@@ -70,7 +70,7 @@ class MemberController extends Controller
     public function edit(Request $request)
     {
         $this->member->setTable(Auth::User()->prefix.'_members');
-        $member = $this->member->get()->where('id',$request->id);
+        $member = $this->member->get()->where('user_id',Auth::user()->id);
         return response()->json([
             'message' => 'Success, found data!','data' => $member], 201);  
     }

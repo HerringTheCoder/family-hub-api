@@ -9,7 +9,7 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Foundation\Http\FormRequest as LaravelFormRequest;
 
-class StoreMember extends FormRequest
+class StoreRelation extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -29,17 +29,15 @@ class StoreMember extends FormRequest
     public function rules()
     {
         return [
-           'email' => 'required|string|email|unique:users',
-           'first_name' => 'required|string'
-        ];
+            'partner_1_id' => 'required'
+         ];
     }
 
-
+    
     public function messages()
     {
         return [
-            'email.required' => 'Email is required!',
-            'first_name.required' => 'First name is required!'
+            'partner_1_id.required' => 'Partner 1 ID is required!'
         ];
     }
 

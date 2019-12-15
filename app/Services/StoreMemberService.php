@@ -31,7 +31,8 @@ class StoreMemberService
         $founderUser = Auth::User();
         $member = new Member([
             'user_id' => $user->id,
-            'family_id' => $founderUser->family->id
+            'family_id' => $founderUser->family->id,
+            'first_name' => $request->first_name
         ]);
         $member->setTable(Auth::User()->prefix.'_members');
         $member->save();

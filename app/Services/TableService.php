@@ -26,6 +26,7 @@ class TableService
             $table->string('first_name')->default('');
             $table->string('middle_name')->default('');
             $table->string('last_name')->default('');
+            $table->string('avatar')->default('');
             $table->date('day_of_birth')->nullable()->default(null);
             $table->date('day_of_death')->nullable()->default(null);
             $table->timestamps();
@@ -52,18 +53,21 @@ class TableService
             $table->timestamps();
         });
 
-        Schema::create($name.'_affinities', function (Blueprint $table) {
+        Schema::create($name.'_relations', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('first_user_id')->unsigned();
-            $table->foreign('first_user_id')->references('id')->on('users');
-            $table->bigInteger('second_user_id')->unsigned();
-            $table->foreign('second_user_id')->references('id')->on('users');
-            $table->bigInteger('relation_id')->unsigned();
-            $table->foreign('relation_id')->references('id')->on('relations');
+            $table->bigInteger('partner_1_id')->unsigned()->nullable();
+            $table->foreign('partner_1_id')->references('id')->on('users');
+            $table->bigInteger('partner_2_id')->unsigned()->nullable();
+            $table->foreign('partner_2_id')->references('id')->on('users');
+            $table->bigInteger('parent_id')->unsigned()->nullable();
             $table->timestamps();
         });
+        
+        Schema::table($name.'_relations', function (Blueprint $table) use ($name) {
+            $table->foreign('parent_id')->references('id')->on($name.'_relations');
+        });
 
-        Schema::create($name.'_pivot', function (Blueprint $table) {
+        Schema::create($name.'_pivot', function (Blueprint $table)  {
             $table->bigIncrements('id');
             $table->bigInteger('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');

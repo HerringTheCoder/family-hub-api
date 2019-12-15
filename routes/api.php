@@ -33,7 +33,13 @@ Route::group([
         // Route::post('gallery/update/{id}', 'GalleryController@update');
         Route::delete('gallery/delete', 'GalleryController@delete');
 
-        
+        Route::get('relation/all', 'RelationController@index');
+        Route::get('tree', 'RelationController@tree');
+        Route::post('relation/add', 'RelationController@store');
+        Route::get('relation/edit', 'RelationController@edit');
+        Route::put('relation/update', 'RelationController@update');
+        Route::delete('relation/delete', 'RelationController@delete');
+
         Route::get('pivot/get', 'PivotController@index');
 
         Route::get('logout', 'AuthController@logout');

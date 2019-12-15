@@ -21,6 +21,7 @@ class CreateMembersTable extends Migration
             $table->string('first_name');
             $table->string('middle_name');
             $table->string('last_name');
+            $table->string('avatar');
             $table->date('day_of_birth');
             $table->date('day_of_death');
             $table->timestamps();

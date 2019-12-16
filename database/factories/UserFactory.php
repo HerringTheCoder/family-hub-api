@@ -28,6 +28,6 @@ $factory->define(User::class, function (Faker $faker) {
         added 'activation_token' because of the error:
 Field 'activation_token' doesn't have a default value (SQL: insert into `users` (`email`, `email_verified_at`, `password`, `remember_token`, `active`, `deleted_at`, `updated_at`, `created_at`)
         */
-        'prefix' => $faker->name,
+        'prefix' => Str::random(10),
     ];
 });

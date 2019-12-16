@@ -24,7 +24,7 @@ class CreateMembersTable extends Migration
             $table->string('middle_name');
             $table->string('last_name');
             $table->date('day_of_birth');
-            $table->date('day_of_death');
+            $table->date('day_of_death')->nullable(); //nullable added because of the error General error: 1364 Field 'day_of_death' doesn't have a default value
             $table->timestamps();
         });
     }

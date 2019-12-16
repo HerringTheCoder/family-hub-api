@@ -102,7 +102,7 @@ public function test_login_with_wrong_email(){
        ]);                          //login symulation
     
     
-       $response->assertStatus(401) // it's returning 201 code, but it shouldn't... hm
+       $response->assertStatus(401) 
        ->assertJsonFragment([[
          'message' => 'Unauthorized'
        ]]);
@@ -142,6 +142,35 @@ public function test_login_with_wrong_email(){
 
            dump($response->getContent());
         
+        }
+
+        public function test_user_can_logout()
+        {
+         \Artisan::call('passport:install'); 
+
+         $user = factory(\App\User::class)->create([
+            'email' => 'email@example.com',
+            'password' => \Hash::make('secret'),
+            'active' => 1,
+           'deleted_at' => null
+            
+          ]);
+
+         
+         $this->be($user); //symulating login
+
+         $token = \Auth::user()->createToken('abc')->accessToken; //creating personal access token
+         $headers = ['Authorization' => "Bearer $token"]; //in header we will give the token of user which should logout
+
+          $response = $this->json('GET', 'api/auth/logout', [], $headers)
+          ->assertJsonStructure([
+            'message'
+         ])
+          ->assertStatus(200);
+
+           dump($response->getContent());
+
+           
         }
         
     

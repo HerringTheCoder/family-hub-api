@@ -32,10 +32,13 @@ class SignupTest extends TestCase
           dump($response->getContent()); //showing a message for my use
           $response->assertSuccessful();
 
+          
+    $user = \App\User::where('email','email@example.com') -> first();
+
          
         $response = $this->assertDatabaseHas('users', ['email' => 'email@example.com'])
                         ->assertDatabaseHas('families', ['name' => 'Kowalscy'])
-                        ->assertDatabaseHas('Kowalscy_members', ['user_id' => '1']);             
+                        ->assertDatabaseHas('Kowalscy_members', ['user_id' => $user['id']]);             
         
         Notification::assertSentTo(\App\User::where('email','email@example.com') -> first(), \App\Notifications\SignupActivate::class);      
         

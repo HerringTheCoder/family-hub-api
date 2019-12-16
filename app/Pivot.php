@@ -4,12 +4,13 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Relations extends Model
+class Pivot extends Model
 {
     protected $fillable = [
-        'type', 'stream_direction',
+        'user_id',
     ];
 
+    
     protected $dates = ['created_at','updated_at'];
     
     protected $casts = [

@@ -2,14 +2,17 @@
 
 namespace App\Http\Requests;
 
+use App\News;
 use Illuminate\Foundation\Http\FormRequest;
+use DB;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Foundation\Http\FormRequest as LaravelFormRequest;
 
-class StoreMember extends FormRequest
+class UpdateNews extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -18,7 +21,7 @@ class StoreMember extends FormRequest
      */
     public function authorize()
     {
-        return true;
+            return true;
     }
 
     /**
@@ -29,17 +32,18 @@ class StoreMember extends FormRequest
     public function rules()
     {
         return [
-           'email' => 'required|string|email|unique:users',
-           'first_name' => 'required|string'
-        ];
+            'title' => 'required|string',
+            'description' => 'required|string'
+         ];
     }
-
 
     public function messages()
     {
         return [
-            'email.required' => 'Email is required!',
-            'first_name.required' => 'First name is required!'
+            'title.required' => 'Title is required!',
+            'description.required' => 'Title is required!',
+            'title.string' => 'Title must be a string!',
+            'description.string' => 'Description must be a string!'
         ];
     }
 

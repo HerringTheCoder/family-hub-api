@@ -4,6 +4,7 @@ namespace App\Services;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use App\User;
 use App\Family;
@@ -26,7 +27,7 @@ class SignupService
         ]);
         $user->save();
         $user->notify(new SignupActivate($user));
-
+            
         $family = new Family([
             'name' => $request->name,
             'founder_id' => $user->id
@@ -42,6 +43,11 @@ class SignupService
         ]);
         $member->setTable($request->name.'_members');
         $member->save();
+        
+        Log::channel()->notice("User created - id : ".$user->id);
+        Log::channel()->notice("Member created - id : ".$member->id);
+        Log::channel()->notice("Family created - id : ".$family->id);
+
 
     }
 

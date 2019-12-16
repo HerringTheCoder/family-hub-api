@@ -9,40 +9,29 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Foundation\Http\FormRequest as LaravelFormRequest;
 
-class StoreMember extends FormRequest
+class UpdateAvatar extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize()
-    {
-        return true;
-    }
-
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules()
     {
         return [
-           'email' => 'required|string|email|unique:users',
-           'first_name' => 'required|string'
-        ];
+            'avatar' => 'mimes:jpeg,jpg,png,gif,svg|max:1000'
+         ];
     }
-
 
     public function messages()
     {
         return [
-            'email.required' => 'Email is required!',
-            'first_name.required' => 'First name is required!'
+            'avatar.mimes' => 'Photo mime type is incorrect!',
+            'avatar.max' => 'Photo size is too big!'
         ];
     }
 
+    
     protected function failedValidation(Validator $validator)
     {
         $errors = (new ValidationException($validator))->errors();

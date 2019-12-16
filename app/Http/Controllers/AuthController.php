@@ -49,7 +49,7 @@ class AuthController extends Controller
     public function login(LoginUser $request,SigninService $singin)
     {
         $data = $singin->login($request);
-        return response()->json([$data],201);
+        return $data;
     }
 
     /**

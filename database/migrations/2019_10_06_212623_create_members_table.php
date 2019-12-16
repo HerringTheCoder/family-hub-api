@@ -1,9 +1,7 @@
 <?php
-
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-
 //this is example of one of many multitenant schemas (familyname_memmbers)
 class CreateMembersTable extends Migration
 {
@@ -23,12 +21,12 @@ class CreateMembersTable extends Migration
             $table->string('first_name');
             $table->string('middle_name');
             $table->string('last_name');
+            $table->string('avatar');
             $table->date('day_of_birth');
             $table->date('day_of_death')->nullable(); //nullable added because of the error General error: 1364 Field 'day_of_death' doesn't have a default value
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      *

@@ -5,6 +5,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 use Carbon\Carbon;
 use App\User;
 use App\Family;
@@ -12,6 +14,7 @@ use App\Member;
 use App\Notifications\UserInvite;
 use App\Http\Requests\StoreMember;
 use App\Http\Requests\UpdateMember;
+use App\Http\Requests\UpdateAvatar;
 use App\Http\Requests\StoreDeceased;
 use App\Notifications\PasswordResetRequest;
 use App\Notifications\PasswordResetSuccess;
@@ -67,7 +70,7 @@ class MemberController extends Controller
     public function edit(Request $request)
     {
         $this->member->setTable(Auth::User()->prefix.'_members');
-        $member = $this->member->get()->where('id',$request->id);
+        $member = $this->member->get()->where('user_id',Auth::user()->id);
         return response()->json([
             'message' => 'Success, found data!','data' => $member], 201);  
     }
@@ -79,6 +82,25 @@ class MemberController extends Controller
         $this->member->where('user_id',Auth::User()->id)->update($request->validated());
 
         return response()->json(['message' => 'Success, data updated!'], 201);
+    }
+
+
+    public function avatar(UpdateAvatar $request)
+    {   
+        $photo = $request->file('avatar');
+        if($photo){
+            $extension = $photo->getClientOriginalExtension();
+            Storage::disk('public')->put($photo->getFilename().'.'.$extension,  File::get($photo));
+            $filename = $photo->getFilename().'.'.$extension;
+    
+            $this->member->setTable(Auth::User()->prefix.'_members');
+            $this->member->where('user_id',Auth::User()->id)->update(['avatar' =>  $filename]);
+
+            return response()->json(['message' => 'Success, data updated!'], 201);
+        }else{
+            return response()->json(['message' => 'Success but your input file is NULL'], 200);
+        }
+        
     }
 
 

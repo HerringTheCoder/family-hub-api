@@ -8,8 +8,9 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Foundation\Http\FormRequest as LaravelFormRequest;
+use App\User;
 
-class StoreMember extends FormRequest
+class UpdateUser extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -29,8 +30,8 @@ class StoreMember extends FormRequest
     public function rules()
     {
         return [
-           'email' => 'required|string|email|unique:users',
-           'first_name' => 'required|string'
+           'email' => 
+               'required|string|email|unique:users,email,'.$this->id, 
         ];
     }
 
@@ -39,9 +40,11 @@ class StoreMember extends FormRequest
     {
         return [
             'email.required' => 'Email is required!',
-            'first_name.required' => 'First name is required!'
+            'email.unique' => 'Email is already used!',
+
         ];
     }
+
 
     protected function failedValidation(Validator $validator)
     {

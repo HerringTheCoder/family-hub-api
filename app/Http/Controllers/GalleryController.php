@@ -113,7 +113,7 @@ class GalleryController extends Controller
                 'message' => 'Success, data deleted'], 201);
             }else{
                 return response()->json([
-                    'message' => 'It is not your photo!'], 403);
+                    'message' => 'You are not authorized to delete this photo!'], 403);
             }
        
         

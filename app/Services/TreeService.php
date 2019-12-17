@@ -52,7 +52,7 @@ class TreeService
                     $this->number++;
         }
 
-        TreeService::getChilds($first->id);
+        TreeService::getChildren($first->id);
         $json = $this->json;
 
 
@@ -61,13 +61,13 @@ class TreeService
     }
 
 
-    public function getChilds($id)
+    public function getChildren($id)
     {
-        $childs = DB::table(Auth::User()->prefix.'_relations')
+        $children = DB::table(Auth::User()->prefix.'_relations')
         ->where('parent_id','=', $id)
         ->get();
 
-        foreach ($childs as $child) {
+        foreach ($children as $child) {
 
             if($child->partner_2_id){
                 $name1 = DB::table(Auth::User()->prefix.'_members')
@@ -97,6 +97,7 @@ class TreeService
                         ];
                         $this->number++;
             }
+            TreeService::getChildren($child->id);
         }
     }
     

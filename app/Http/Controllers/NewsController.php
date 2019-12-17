@@ -57,7 +57,7 @@ class NewsController extends Controller
             ], 201);  
         }else{
             return response()->json([
-                'message' => 'It is not your news!'], 403);
+                'message' => 'You are not authorized to edit this news!'], 403);
         }
     }
 
@@ -74,7 +74,7 @@ class NewsController extends Controller
 
           }else{
             return response()->json([
-                'message' => 'It is not your news!'], 403);
+                'message' => 'You are not authorized to update this news!'], 403);
           }
     }
 
@@ -89,7 +89,7 @@ class NewsController extends Controller
                 'message' => 'Success, data deleted'], 201);
         }else{
             return response()->json([
-                'message' => 'It is not your news!'], 403);
+                'message' => 'You are not authorized to delete this news!'], 403);
         }
     }
 }

@@ -98,7 +98,7 @@ class MemberController extends Controller
 
             return response()->json(['message' => 'Success, data updated!'], 201);
         }else{
-            return response()->json(['message' => 'Success but your input file is NULL'], 200);
+            return response()->json(['message' => 'Success but your input file was empty'], 200);
         }
         
     }

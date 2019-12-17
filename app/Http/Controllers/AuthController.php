@@ -11,10 +11,10 @@ use App\Member;
 use App\Notifications\SignupActivate;
 use App\Http\Requests\StoreUser;
 use App\Http\Requests\LoginUser;
-use App\Services\TableService;
 use App\Services\SpamChecker;
 use App\Services\SignupService;
 use App\Services\SigninService;
+use App\Jobs\AfterActivateAccount;
 
 
 class AuthController extends Controller
@@ -32,7 +32,7 @@ class AuthController extends Controller
     {
         $singup->register($request);
         return response()->json([
-            'message' => 'Successfully created user and family!'
+            'message' => 'Successfully created user and now active your account at mail!'
         ], 201);
     }
 
@@ -95,6 +95,7 @@ class AuthController extends Controller
         $user->active = true;
         $user->activation_token = '';
         $user->save();
+        AfterActivateAccount::dispatch($user);
         return response()->json(['message' => 'Activated!','data' => $user], 201);
     }
 }

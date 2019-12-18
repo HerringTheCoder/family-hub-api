@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use App\User;
 use App\Member;
 use Carbon\Carbon;
+use App\services\StoreRelationAfterMemberCreateService;
 
 
 class StoreMemberDeceasedService
@@ -38,6 +39,13 @@ class StoreMemberDeceasedService
         ]);
         $member->setTable(Auth::User()->prefix.'_members');
         $member->save();
+
+        if($request->partner_id || $request->parent_id){
+            $relation = new StoreRelationAfterMemberCreateService();
+            $data = $relation->store($request,$member);
+        }
+        
+        return $data;
     }
 
 }

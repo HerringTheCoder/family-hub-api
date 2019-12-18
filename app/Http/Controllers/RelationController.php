@@ -46,7 +46,7 @@ class RelationController extends Controller
     public function store(StoreRelationsService $storeRelation, StoreRelation $request)
     {
        
-        $storeRelation = $storeRelation->store($request);
+        $storeRelation = $storeRelation->store($request->partner_1_id, $request->partner_2_id, $request->parent_id);
 
         return $storeRelation;
         

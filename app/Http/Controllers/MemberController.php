@@ -41,17 +41,19 @@ class MemberController extends Controller
 
     public function store(StoreMember $request,StoreMemberService $storeMember)
     {
-        $storeMember->store($request);
+        $data = $storeMember->store($request);
 
-        return response()->json(['message' => 'Success, member added'], 201);
+        return response()->json(['message' => 'Success, member added',
+                                 'relation' => $data], 201);
     }
 
 
     public function storeDeceased(StoreDeceased $request,StoreMemberDeceasedService $storeMember)
     {
-        $storeMember->store($request);
+       $data = $storeMember->store($request);
         
-        return response()->json(['message' => 'Success'], 201);
+       return response()->json(['message' => 'Success, member added',
+                                'relation' => $data], 201);
     }
 
 

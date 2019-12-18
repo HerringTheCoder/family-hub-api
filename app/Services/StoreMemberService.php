@@ -10,6 +10,7 @@ use App\Member;
 use Carbon\Carbon;
 use App\Notifications\UserInvite;
 use App\PasswordReset;
+use App\services\StoreRelationAfterMemberCreateService;
 
 
 
@@ -36,8 +37,14 @@ class StoreMemberService
         ]);
         $member->setTable(Auth::User()->prefix.'_members');
         $member->save();
-       
+
         $user->notify(new UserInvite($user));
+        
+        if($request->partner_id || $request->parent_id){
+            $relation = new StoreRelationAfterMemberCreateService();
+            $data = $relation->store($request,$member);
+        }
+        return $data;
     }
 
 }

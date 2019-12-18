@@ -35,7 +35,7 @@ Route::group([
 
         Route::get('relation/all', 'RelationController@index');
         Route::get('tree', 'RelationController@tree');
-        Route::post('relation/add', 'RelationController@store');
+        Route::post('relation/add', 'RelationController@store')->middleware('isExistMember');
         Route::get('relation/edit', 'RelationController@edit');
         Route::put('relation/update', 'RelationController@update');
         Route::delete('relation/delete', 'RelationController@delete');

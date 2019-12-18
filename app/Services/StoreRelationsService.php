@@ -12,46 +12,55 @@ use DB;
 
 class StoreRelationsService
 {
-    public function store($request)
+    public function store($partner_1_id, $partner_2_id = null, $parent_id = null)
     {
         //check partner id 1 is already used in other record
         $first = DB::table(Auth::User()->prefix.'_relations')
-        ->where('partner_1_id','=', $request->partner_1_id)
+        ->where('partner_1_id','=', $partner_1_id)
+        ->get();
+
+        $firstCheckOnSecond = DB::table(Auth::User()->prefix.'_relations')
+        ->where('partner_2_id','=', $partner_1_id)
         ->get();
 
         //check partner id 2 is already used in other record
         $second = DB::table(Auth::User()->prefix.'_relations')
-        ->where('partner_2_id','=', $request->partner_2_id)
+        ->where('partner_2_id','=', $partner_2_id)
         ->get();
 
-        if(!$first->isEmpty()){
-            
-            return response()->json([
-                'message' => 'Your partner id 1 already used in other pair!'
-            ], 200);  
+        $secondCheckOnFirst = DB::table(Auth::User()->prefix.'_relations')
+        ->where('partner_1_id','=', $partner_2_id)
+        ->get();
+        if(checkUser($partner_1_id) && checkUser($partner_2_id))
+            if(!$first->isEmpty() && $firstCheckOnSecond->isEmpty()){
+                
+                return response()->json([
+                    'message' => 'Your partner id 1 already used in other pair!'
+                ], 200);  
 
-        }elseif(!$second->isEmpty() && $request->partner_2_id){
+            }elseif(($partner_2_id && (!$second->isEmpty() || !$secondCheckOnFirst->isEmpty()))){
 
-            return response()->json([
-                'message' => 'Your partner id 2 already used in other pair!'
-            ], 200);  
+                return response()->json([
+                    'message' => 'Your partner id 2 already used in other pair!'
+                ], 200);  
 
-        }else{
+            }else{
 
-            $relation = new Relation([
-                'partner_1_id' => $request->partner_1_id,
-                'partner_2_id' => $request->partner_2_id,
-                'parent_id' => $request->parent_id
-            ]);
-            $relation->setTable(Auth::User()->prefix.'_relations');
-            $relation->save();
+                $relation = new Relation([
+                    'partner_1_id' => $partner_1_id,
+                    'partner_2_id' => $partner_2_id,
+                    'parent_id' => $parent_id
+                ]);
+                $relation->setTable(Auth::User()->prefix.'_relations');
+                $relation->save();
 
-            return response()->json([
-                'message' => 'Success, data inserted!'
-            ], 201);  
-        }
+                return response()->json([
+                    'message' => 'Success, data inserted!'
+                ], 201);  
+            }
 
        
     }
+
 
 }

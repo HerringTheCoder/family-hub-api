@@ -29,10 +29,9 @@ class StoreMemberService
         ]);
         $user->save();
 
-        $founderUser = Auth::User();
         $member = new Member([
             'user_id' => $user->id,
-            'family_id' => $founderUser->family->id,
+            'family_id' => $request->family_id,
             'first_name' => $request->first_name
         ]);
         $member->setTable(Auth::User()->prefix.'_members');
@@ -43,8 +42,8 @@ class StoreMemberService
         if($request->partner_id || $request->parent_id){
             $relation = new StoreRelationAfterMemberCreateService();
             $data = $relation->store($request,$member);
+            return $data;
         }
-        return $data;
     }
 
 }

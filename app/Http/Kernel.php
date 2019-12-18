@@ -68,6 +68,8 @@ class Kernel extends HttpKernel
         'prefix' => \App\Http\Middleware\PrefixForAdmin::class,
         'check_prefix' => \App\Http\Middleware\CheckPrefix::class,
         'isExistMember' => \App\Http\Middleware\isExistMember::class,
+        'isFounder' => \App\Http\Middleware\isFounder::class,
+        'familyID' => \App\Http\Middleware\familyID::class,
     ];
 
     /**

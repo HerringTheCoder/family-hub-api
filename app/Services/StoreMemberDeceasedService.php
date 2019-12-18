@@ -30,7 +30,7 @@ class StoreMemberDeceasedService
         $founderUser = Auth::User();
         $member = new Member([
             'user_id' => $user->id,
-            'family_id' => $founderUser->family->id,
+            'family_id' => $request->family_id,
             'first_name' => $request->first_name,
             'middle_name' => $request->middle_name,
             'last_name' => $request->last_name,

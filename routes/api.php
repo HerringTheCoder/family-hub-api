@@ -14,8 +14,8 @@ Route::group([
     ], function() {
 
 
-        Route::post('member/add', 'MemberController@store');
-        Route::post('member/add/deceased', 'MemberController@storeDeceased');
+        Route::post('member/add', 'MemberController@store')->middleware('familyID','isFounder');
+        Route::post('member/add/deceased', 'MemberController@storeDeceased')->middleware('familyID','isFounder');
         Route::get('member/edit', 'MemberController@edit');
         Route::put('member/update', 'MemberController@update');
         Route::post('member/update/avatar', 'MemberController@avatar');
@@ -35,7 +35,7 @@ Route::group([
 
         Route::get('relation/all', 'RelationController@index');
         Route::get('tree', 'RelationController@tree');
-        Route::post('relation/add', 'RelationController@store')->middleware('isExistMember');
+        Route::post('relation/add', 'RelationController@store')->middleware('familyID','isFounder','isExistMember');
         Route::get('relation/edit', 'RelationController@edit');
         Route::put('relation/update', 'RelationController@update');
         Route::delete('relation/delete', 'RelationController@delete');

@@ -103,18 +103,10 @@ class GalleryController extends Controller
     public function delete(Request $request)
     {
 
-        $photo = DB::table(Auth::User()->prefix.'_gallery')->where('id', $request->id)->first();
-        //$this->authorize('update',Auth::user(), $request);
-        if (Gate::allows('delete-photo', $photo)) {
-
             $this->gallery->setTable(Auth::User()->prefix.'_gallery');
             $this->gallery->where('id',$request->id)->delete();
             return response()->json([
                 'message' => 'Success, data deleted'], 201);
-            }else{
-                return response()->json([
-                    'message' => 'You are not authorized to delete this photo!'], 403);
-            }
        
         
     }

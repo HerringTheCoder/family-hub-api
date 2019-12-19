@@ -50,46 +50,26 @@ class NewsController extends Controller
         $this->news->setTable(Auth::User()->prefix.'_news');
         $news = $this->news->get()->where('id',$request->id);
 
-        if (Gate::allows('edit-news', $news)) {
             return response()->json([
                 'message' => 'Success, found data!',
                 'data' => $news
             ], 201);  
-        }else{
-            return response()->json([
-                'message' => 'You are not authorized to edit this news!'], 403);
-        }
     }
 
     public function update(UpdateNews $request)
     {   
-        $news = DB::table(Auth::User()->prefix.'_news')->where('id', $request->id)->first();
-        //$this->authorize('update',Auth::user(), $request);
-        if (Gate::allows('update-news', $news)) {
 
-            $this->news->setTable(Auth::User()->prefix.'_news');
-            $this->news->where('id',$request->id)->update($request->validated());
-            return response()->json([
-                'message' => 'Success, data updated!'], 201);
-
-          }else{
-            return response()->json([
-                'message' => 'You are not authorized to update this news!'], 403);
-          }
+        $this->news->setTable(Auth::User()->prefix.'_news');
+        $this->news->where('id',$request->id)->update($request->validated());
+        return response()->json([
+            'message' => 'Success, data updated!'], 201);
     }
 
     public function delete(Request $request)
     {
-        $news = DB::table(Auth::User()->prefix.'_news')->where('id', $request->id)->first();
-        
-        if (Gate::allows('delete-news', $news)) {
             $this->news->setTable(Auth::User()->prefix.'_news');
             $this->news->where('id',$request->id)->delete();
             return response()->json([
                 'message' => 'Success, data deleted'], 201);
-        }else{
-            return response()->json([
-                'message' => 'You are not authorized to delete this news!'], 403);
-        }
     }
 }

@@ -4,6 +4,7 @@ namespace App\Providers;
 
 
 use Laravel\Passport\Passport;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Auth\Access\Response;
@@ -18,7 +19,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        \App\News::class => \App\Policies\NewsPolicy::class,
+        //\App\Model::class => \App\Policies\ModelPolicy::class,
     ];
 
     /**
@@ -37,40 +38,52 @@ class AuthServiceProvider extends ServiceProvider
      */
 
      //NEWS
-        Gate::define('edit-news', function ($user, $news) {
-            if($user->isAdmin()){
-                return true;
-            }
+        // Gate::define('edit-news', function ($news) {
+        //     if(Auth::user()->isAdmin()){
+        //         return true;
+        //     }
+        //     return Auth::user()->id == $news->author_id;
+        //     });
+
+        // Gate::define('update-news', function ($user, $news) {
+        //     if($user->isAdmin()){
+        //         return true;
+        //     }
+
+        //     return $user->id == $news->author_id;
+        //     });
+
+        // Gate::define('delete-news', function ($user, $news) {
+        //     if($user->isAdmin()){
+        //         return true;
+        //     }
             
-            return $user->id == $news->author_id;
-            });
+        //     return $user->id == $news->author_id;
+        //     });
 
-        Gate::define('update-news', function ($user, $news) {
-            if($user->isAdmin()){
-                return true;
-            }
 
-            return $user->id == $news->author_id;
-            });
-
-        Gate::define('delete-news', function ($user, $news) {
-            if($user->isAdmin()){
-                return true;
-            }
+        // //Gallery
+        // Gate::define('delete-photo', function ($user, $photo) {
+        //     if($user->isAdmin()){
+        //         return true;
+        //     }
             
-            return $user->id == $news->author_id;
-            });
+        //     return $user->id == $photo->author_id;
+        //     });
 
 
-        //Gallery
-        Gate::define('delete-photo', function ($user, $photo) {
-            if($user->isAdmin()){
-                return true;
-            }
-            
-            return $user->id == $photo->author_id;
-            });
 
-        Passport::routes();
+        // //Relations
+        // Gate::define('edit-relation', function ($user, $relation) {
+           
+        //     if(($user->id == $relation->partner_1_id) || ($user->id == $relation->partner_2_id) || ($user->id == $relation->parent_id)){
+        //         return true;
+        //     }else{
+        //         return false;
+        //     }
+
+        //     });
+
+        // Passport::routes();
     }
 }

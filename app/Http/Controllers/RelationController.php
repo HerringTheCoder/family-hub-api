@@ -7,6 +7,7 @@ use Illuminate\Support\Str;
 use App\Relation;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\StoreRelation;
 use App\Services\StoreRelationsService;
 use App\Services\TreeService;
@@ -54,7 +55,12 @@ class RelationController extends Controller
 
     public function edit(Request $request)
     {
-       
+        $this->relation->setTable(Auth::User()->prefix.'_relations');
+        $relation = $this->relation->get()->where('id',$request->id);
+            return response()->json([
+                'message' => 'Success',
+                'data' => $relation
+            ], 201);  
     }
 
     public function update(Request $request)

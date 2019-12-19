@@ -70,6 +70,9 @@ class Kernel extends HttpKernel
         'isExistMember' => \App\Http\Middleware\isExistMember::class,
         'isFounder' => \App\Http\Middleware\isFounder::class,
         'familyID' => \App\Http\Middleware\familyID::class,
+        'news' => \App\Http\Middleware\NewsCheck::class,
+        'gallery' => \App\Http\Middleware\GalleryCheck::class,
+        'relation' => \App\Http\Middleware\RelationCheck::class,
     ];
 
     /**

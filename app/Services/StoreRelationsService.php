@@ -31,9 +31,11 @@ class StoreRelationsService
         $secondCheckOnFirst = DB::table(Auth::User()->prefix.'_relations')
         ->where('partner_1_id','=', $partner_2_id)
         ->get();
-        
-        if(checkUser($partner_1_id) && checkUser($partner_2_id))
-            if(!$first->isEmpty() && $firstCheckOnSecond->isEmpty()){
+            if($partner_1_id == $partner_2_id){
+                return response()->json([
+                    'message' => 'Your partner id 1 and 2 is the same!'
+                ], 200);  
+            }elseif(!$first->isEmpty() && $firstCheckOnSecond->isEmpty()){
                 
                 return response()->json([
                     'message' => 'Your partner id 1 already used in other pair!'

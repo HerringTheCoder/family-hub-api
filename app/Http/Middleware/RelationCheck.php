@@ -19,10 +19,12 @@ class RelationCheck
      */
     public function handle($request, Closure $next)
     {   
+        $parent = '';
         
         $first = DB::table(Auth::User()->prefix.'_relations')
         ->where('partner_1_id', Auth::user()->id)
         ->first();
+
         if($first){
             $parent = DB::table(Auth::User()->prefix.'_relations')
             ->where('id',$request->id)
@@ -33,6 +35,7 @@ class RelationCheck
         $second = DB::table(Auth::User()->prefix.'_relations')
         ->where('partner_2_id', Auth::user()->id)
         ->first();
+
         if($second){
             $parent = DB::table(Auth::User()->prefix.'_relations')
             ->where('id',$request->id)

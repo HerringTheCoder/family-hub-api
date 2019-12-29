@@ -80,7 +80,7 @@ class RelationController extends Controller
         return response()->json([
             'message' => 'Success',
             'data' => $tree
-        ], 201); 
+        ], 200); 
         
     }
 

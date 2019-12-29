@@ -35,8 +35,16 @@ class MemberController extends Controller
         $this->member->setTable(Auth::User()->prefix.'_members');
         $member = $this->member->get();
 
-        return response()->json(['message' => 'Success','data' => $member], 201); 
+        return response()->json(['message' => 'Success','data' => $member], 200); 
         
+    }
+
+    public function info()
+    {
+        $this->member->setTable(Auth::User()->prefix.'_members');
+        $member = $this->member->get()->where('user_id',Auth::user()->id);
+
+        return response()->json(['message' => 'Success','data' => $member], 200); 
     }
 
     public function store(StoreMember $request,StoreMemberService $storeMember)

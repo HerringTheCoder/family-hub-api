@@ -20,6 +20,7 @@ Route::group([
         Route::put('member/update', 'MemberController@update');
         Route::post('member/update/avatar', 'MemberController@avatar');
         Route::get('member/all', 'MemberController@index');
+        Route::get('member/info', 'MemberController@info');
 
         Route::get('news/all', 'NewsController@index');
         Route::post('news/add', 'NewsController@store');

@@ -44,6 +44,8 @@ class StoreMemberService
             $data = $relation->store($request,$member);
             return $data;
         }
+
+        Log::channel()->notice("User created - id : ".$user->id." and member in family ".$prefix);
     }
 
 }

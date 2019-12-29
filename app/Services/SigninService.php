@@ -32,6 +32,8 @@ class SigninService
                 'token_type' => 'Bearer',
                 'expires_at' => Carbon::parse($tokenResult->token->expires_at)->toDateTimeString()
                 ];
+        
+        Log::channel()->notice("User ".$user->id." logged");
         return $data;
     }
 

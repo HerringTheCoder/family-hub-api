@@ -45,6 +45,8 @@ class StoreMemberDeceasedService
             $data = $relation->store($request,$member);
         }
         
+        Log::channel()->notice("User created - id : ".$user->id." and member in family ".$prefix);
+        
         return $data;
     }
 

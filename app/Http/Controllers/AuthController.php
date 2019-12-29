@@ -60,6 +60,9 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         $request->user()->token()->revoke();
+        
+        Log::channel()->notice("User ".Auth::user()->id." logout");
+
         return response()->json([
             'message' => 'Successfully logged out'
         ]);
@@ -96,6 +99,8 @@ class AuthController extends Controller
         $user->activation_token = '';
         $user->save();
         AfterActivateAccount::dispatch($user);
+        
+        Log::channel()->notice("User ".$user->id." activated account");
         return response()->json(['message' => 'Activated!','data' => $user], 201);
     }
 }

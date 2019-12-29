@@ -14,9 +14,11 @@ class TreeService
 {
     protected $json;
     protected $number;
+    protected $parent;
 
     public function __construct() {
         $this->number = 0;
+        $this->parent = 0;
         $this->json = [];
     }
     public function get()
@@ -33,11 +35,22 @@ class TreeService
             ->where('user_id','=', $first->partner_1_id)
             ->first();
             $this->json[$this->number] =  [
-                    'id' => $first->id,
-                    'name1' => $name1->first_name.' '.$name1->last_name,
-                    'name2' => $name2->first_name.' '.$name2->last_name,
-                    'img0' => $name1->avatar,
-                    'img1' => $name2->avatar
+                    'id' => $this->number,
+                    'partnerId' => $this->number+1,
+                    'name' => $name1->first_name.' '.$name1->last_name,
+                    'birthDay' => $name1->day_of_birth,
+                    'deathDay' => $name1->day_of_death,
+                    'img' => $name1->avatar,
+                    ];
+                    $this->number++;
+            
+            $this->json[$this->number] =  [
+                    'id' => $this->number,
+                    'partnerId' => $this->number-1,
+                    'name' => $name2->first_name.' '.$name2->last_name,
+                    'birthDay' => $name2->day_of_birth,
+                    'deathDay' => $name2->day_of_death,
+                    'img' => $name2->avatar,
                     ];
                     $this->number++;
         }else{
@@ -45,12 +58,18 @@ class TreeService
             ->where('user_id','=', $first->partner_1_id)
             ->first();
             $this->json[$this->number] =  [
-                    'id' => $first->id,
-                    'name1' => $name1->first_name.' '.$name1->last_name,
+                    'id' => $this->number,
+                    'partnerId' => null,
+                    'name' => $name1->first_name.' '.$name1->last_name,
+                    'birthDay' => $name1->day_of_birth,
+                    'deathDay' => $name1->day_of_death,
                     'img0' => $name1->avatar,
                     ];
                     $this->number++;
         }
+
+        
+        $this->parent = $this->number-1;
 
         TreeService::getChildren($first->id);
         $json = $this->json;
@@ -77,26 +96,43 @@ class TreeService
                 ->where('user_id','=', $child->partner_1_id)
                 ->first();
                 $this->json[$this->number] =  [
-                        'id' => $child->id,
-                        'name1' => $name1->first_name.' '.$name1->last_name,
-                        'name2' => $name2->first_name.' '.$name2->last_name,
-                        'img0' => $name1->avatar,
-                        'img1' => $name2->avatar,
-                        'pid' => $child->parent_id
-                        ];
-                        $this->number++;
+                    'id' => $this->number,
+                    'pid' => $this->parent,
+                    'partnerId' => $this->number+1,
+                    'name' => $name1->first_name.' '.$name1->last_name,
+                    'birthDay' => $name1->day_of_birth,
+                    'deathDay' => $name1->day_of_death,
+                    'img' => $name1->avatar,
+                    ];
+                    $this->number++;
+            
+            $this->json[$this->number] =  [
+                    'id' => $this->number,
+                    'pid' => $this->parent,
+                    'partnerId' => $this->number-1,
+                    'name' => $name2->first_name.' '.$name2->last_name,
+                    'birthDay' => $name2->day_of_birth,
+                    'deathDay' => $name2->day_of_death,
+                    'img' => $name2->avatar,
+                    ];
+                    $this->number++;
             }else{
                 $name1 = DB::table(Auth::User()->prefix.'_members')
                 ->where('user_id','=', $child->partner_1_id)
                 ->first();
                 $this->json[$this->number] =  [
-                        'id' => $child->id,
-                        'name1' => $name1->first_name.' '.$name1->last_name,
-                        'img0' => $name1->avatar,
-                        'pid' => $child->parent_id
-                        ];
-                        $this->number++;
+                    'id' => $this->number,
+                    'pid' => $this->parent,
+                    'partnerId' => null,
+                    'name' => $name1->first_name.' '.$name1->last_name,
+                    'birthDay' => $name1->day_of_birth,
+                    'deathDay' => $name1->day_of_death,
+                    'img' => $name1->avatar,
+                    ];
+                    $this->number++;
             }
+            
+            $this->parent = $this->number-1;
             TreeService::getChildren($child->id);
         }
     }

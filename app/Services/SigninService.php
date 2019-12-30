@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 use App\User;
 use Carbon\Carbon;
 
@@ -32,6 +33,8 @@ class SigninService
                 'token_type' => 'Bearer',
                 'expires_at' => Carbon::parse($tokenResult->token->expires_at)->toDateTimeString()
                 ];
+        
+        Log::channel()->notice("User ".$user->id." logged");
         return $data;
     }
 

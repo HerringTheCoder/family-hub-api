@@ -10,7 +10,7 @@ use App\User;
 use App\Family;
 use App\Member;
 use Carbon\Carbon;
-use App\Notifications\SignupActivate;
+use App\Jobs\SendActivateLink;
 
 
 
@@ -26,27 +26,11 @@ class SignupService
             'type' => User::DEFAULT_TYPE,    
         ]);
         $user->save();
-        $user->notify(new SignupActivate($user));
-            
-        $family = new Family([
-            'name' => $request->name,
-            'founder_id' => $user->id
-        ]);
-        $family->save();
 
-        $service = new TableService();
-        $service->addTables($request->name);
         
-        $member = new Member([
-            'user_id' => $user->id,
-            'family_id' => $family->id
-        ]);
-        $member->setTable($request->name.'_members');
-        $member->save();
+        SendActivateLink::dispatch($user);
         
         Log::channel()->notice("User created - id : ".$user->id);
-        Log::channel()->notice("Member created - id : ".$member->id);
-        Log::channel()->notice("Family created - id : ".$family->id);
 
 
     }

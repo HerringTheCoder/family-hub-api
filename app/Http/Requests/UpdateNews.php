@@ -41,7 +41,7 @@ class UpdateNews extends FormRequest
     {
         return [
             'title.required' => 'Title is required!',
-            'description.required' => 'Title is required!',
+            'description.required' => 'Description is required!',
             'title.string' => 'Title must be a string!',
             'description.string' => 'Description must be a string!'
         ];

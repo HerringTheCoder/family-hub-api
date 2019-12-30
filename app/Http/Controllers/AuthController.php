@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use App\User;
 use App\Family;
@@ -11,10 +12,10 @@ use App\Member;
 use App\Notifications\SignupActivate;
 use App\Http\Requests\StoreUser;
 use App\Http\Requests\LoginUser;
-use App\Services\TableService;
 use App\Services\SpamChecker;
 use App\Services\SignupService;
 use App\Services\SigninService;
+use App\Jobs\AfterActivateAccount;
 
 
 class AuthController extends Controller
@@ -32,7 +33,7 @@ class AuthController extends Controller
     {
         $singup->register($request);
         return response()->json([
-            'message' => 'Successfully created user and family!'
+            'message' => 'Successfully created user and now active your account at mail!'
         ], 201);
     }
 
@@ -60,6 +61,9 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         $request->user()->token()->revoke();
+        
+        Log::channel()->notice("User ".Auth::user()->id." logout");
+
         return response()->json([
             'message' => 'Successfully logged out'
         ]);
@@ -95,6 +99,9 @@ class AuthController extends Controller
         $user->active = true;
         $user->activation_token = '';
         $user->save();
+        AfterActivateAccount::dispatch($user);
+        
+        Log::channel()->notice("User ".$user->id." activated account");
         return response()->json(['message' => 'Activated!','data' => $user], 201);
     }
 }

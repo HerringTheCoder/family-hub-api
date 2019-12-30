@@ -35,23 +35,33 @@ class MemberController extends Controller
         $this->member->setTable(Auth::User()->prefix.'_members');
         $member = $this->member->get();
 
-        return response()->json(['message' => 'Success','data' => $member], 201); 
+        return response()->json(['message' => 'Success','data' => $member], 200); 
         
+    }
+
+    public function info()
+    {
+        $this->member->setTable(Auth::User()->prefix.'_members');
+        $member = $this->member->get()->where('user_id',Auth::user()->id);
+
+        return response()->json(['message' => 'Success','data' => $member], 200); 
     }
 
     public function store(StoreMember $request,StoreMemberService $storeMember)
     {
-        $storeMember->store($request);
+        $data = $storeMember->store($request);
 
-        return response()->json(['message' => 'Success, member added'], 201);
+        return response()->json(['message' => 'Success, member added',
+                                 'relation' => $data], 201);
     }
 
 
     public function storeDeceased(StoreDeceased $request,StoreMemberDeceasedService $storeMember)
     {
-        $storeMember->store($request);
+       $data = $storeMember->store($request);
         
-        return response()->json(['message' => 'Success'], 201);
+       return response()->json(['message' => 'Success, member added',
+                                'relation' => $data], 201);
     }
 
 
@@ -98,7 +108,7 @@ class MemberController extends Controller
 
             return response()->json(['message' => 'Success, data updated!'], 201);
         }else{
-            return response()->json(['message' => 'Success but your input file is NULL'], 200);
+            return response()->json(['message' => 'Success but your input file was empty'], 200);
         }
         
     }

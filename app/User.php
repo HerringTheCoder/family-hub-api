@@ -57,6 +57,10 @@ class User extends Authenticatable
         return $this->type === self::ADMIN_TYPE;    
     }
 
+    public function isFounder() {
+        return $this->hasOne('App\Family', 'founder_id', 'id');
+    }
+
 
     public function prefix()
     {

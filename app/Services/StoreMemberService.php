@@ -9,7 +9,9 @@ use App\User;
 use App\Member;
 use Carbon\Carbon;
 use App\Notifications\UserInvite;
+use Illuminate\Support\Facades\Log;
 use App\PasswordReset;
+use App\services\StoreRelationAfterMemberCreateService;
 
 
 
@@ -28,16 +30,23 @@ class StoreMemberService
         ]);
         $user->save();
 
-        $founderUser = Auth::User();
         $member = new Member([
             'user_id' => $user->id,
-            'family_id' => $founderUser->family->id,
+            'family_id' => $request->family_id,
             'first_name' => $request->first_name
         ]);
         $member->setTable(Auth::User()->prefix.'_members');
         $member->save();
-       
+
         $user->notify(new UserInvite($user));
+        
+        if($request->partner_id || $request->parent_id){
+            $relation = new StoreRelationAfterMemberCreateService();
+            $data = $relation->store($request,$member);
+            return $data;
+        }
+
+        Log::channel()->notice("User created - id : ".$user->id." and member in family ".$prefix);
     }
 
 }

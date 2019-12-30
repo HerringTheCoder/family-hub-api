@@ -14,30 +14,32 @@ Route::group([
     ], function() {
 
 
-        Route::post('member/add', 'MemberController@store');
-        Route::post('member/add/deceased', 'MemberController@storeDeceased');
+        Route::post('member/add', 'MemberController@store')->middleware('familyID','isFounder');
+        Route::post('member/add/deceased', 'MemberController@storeDeceased')->middleware('familyID','isFounder');
         Route::get('member/edit', 'MemberController@edit');
         Route::put('member/update', 'MemberController@update');
         Route::post('member/update/avatar', 'MemberController@avatar');
         Route::get('member/all', 'MemberController@index');
+        Route::get('member/info', 'MemberController@info');
 
         Route::get('news/all', 'NewsController@index');
         Route::post('news/add', 'NewsController@store');
-        Route::get('news/edit', 'NewsController@edit');
-        Route::put('news/update', 'NewsController@update');
-        Route::delete('news/delete', 'NewsController@delete');
+        Route::get('news/edit', 'NewsController@edit')->middleware('news');
+        Route::put('news/update', 'NewsController@update')->middleware('news');
+        Route::delete('news/delete', 'NewsController@delete')->middleware('news');
 
         Route::get('gallery/all', 'GalleryController@index');
         Route::post('gallery/add', 'GalleryController@store');
         // Route::get('gallery/edit/{id}', 'GalleryController@edit');
         // Route::post('gallery/update/{id}', 'GalleryController@update');
-        Route::delete('gallery/delete', 'GalleryController@delete');
+        Route::delete('gallery/delete', 'GalleryController@delete')->middleware('gallery');;
 
         Route::get('relation/all', 'RelationController@index');
         Route::get('tree', 'RelationController@tree');
-        Route::post('relation/add', 'RelationController@store');
-        Route::get('relation/edit', 'RelationController@edit');
-        Route::put('relation/update', 'RelationController@update');
+        Route::get('relation/single', 'RelationController@getSingle');
+        Route::post('relation/add', 'RelationController@store')->middleware('familyID','isFounder','isExistMember');
+        Route::get('relation/edit', 'RelationController@edit')->middleware('relation');
+        Route::put('relation/update', 'RelationController@update')->middleware('relation');
         Route::delete('relation/delete', 'RelationController@delete');
 
         Route::get('pivot/get', 'PivotController@index');

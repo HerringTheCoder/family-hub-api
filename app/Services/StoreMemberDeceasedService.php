@@ -5,9 +5,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 use App\User;
 use App\Member;
 use Carbon\Carbon;
+use App\services\StoreRelationAfterMemberCreateService;
 
 
 class StoreMemberDeceasedService
@@ -29,7 +31,7 @@ class StoreMemberDeceasedService
         $founderUser = Auth::User();
         $member = new Member([
             'user_id' => $user->id,
-            'family_id' => $founderUser->family->id,
+            'family_id' => $request->family_id,
             'first_name' => $request->first_name,
             'middle_name' => $request->middle_name,
             'last_name' => $request->last_name,
@@ -38,6 +40,15 @@ class StoreMemberDeceasedService
         ]);
         $member->setTable(Auth::User()->prefix.'_members');
         $member->save();
+
+        if($request->partner_id || $request->parent_id){
+            $relation = new StoreRelationAfterMemberCreateService();
+            $data = $relation->store($request,$member);
+        }
+        
+        Log::channel()->notice("User created - id : ".$user->id." and member in family ".$prefix);
+        
+        return $data;
     }
 
 }

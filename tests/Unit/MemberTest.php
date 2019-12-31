@@ -32,6 +32,7 @@ class MemberTest extends TestCase
 
         
         factory(\App\Family::class)->create([
+            'name' => $prefix,
            'founder_id' => $founderUser->id
         ]);                     //creating family, we need to symulate registration that give us needed information
 
@@ -41,11 +42,11 @@ class MemberTest extends TestCase
         
         $service = new \App\Services\TableService();
         $service->addTables('Kolwaski'); //we need to have a table, which is normally creating while registration
-                                        //so I creaded it here
+                                        //so I created it here
 
 
         $credentials =[
-            'first_name' => 'Kolwaski',
+            'first_name' => 'Anna',
             'email' => 'email@email.com',
             'password' => bcrypt($password),
             'activation_token' => 'acb',
@@ -56,7 +57,8 @@ class MemberTest extends TestCase
         $response = $this->json('POST', '/api/auth/member/add', $credentials);
         $response->assertStatus(201)
           ->assertJsonStructure([
-              'message'
+              'message',
+              'relation'
           ]);
           dump($response->getContent());
 
@@ -78,6 +80,7 @@ class MemberTest extends TestCase
 
         
         factory(\App\Family::class)->create([
+            'name' => $prefix,
            'founder_id' => $founderUser->id
         ]);                     //creating family, we need to symulate registration that give us needed information
 
@@ -107,7 +110,8 @@ class MemberTest extends TestCase
         $response = $this->json('POST', '/api/auth/member/add/deceased', $credentials);
         $response->assertStatus(201)
           ->assertJsonStructure([
-              'message'
+              'message',
+              'relation'
           ]);
           dump($response->getContent());
 
@@ -273,12 +277,15 @@ class MemberTest extends TestCase
         $user = factory(\App\User::class)->create([
             'prefix' => $prefix         //creating user 
         ]);
+
         $founderUser = factory(\App\User::class)->create([
             'prefix' => $prefix             //creating founder of family
         ]);
+
         $family = factory(\App\Family::class)->create([
             'founder_id' => $founderUser->id       //creating family
         ]);
+
         $member = factory(\App\Member::class)->create([
             'user_id'=> $user->id,
             'family_id'=>$family->id,
@@ -294,7 +301,7 @@ class MemberTest extends TestCase
 
         $response = $this->get('/api/auth/member/all');
 
-        $response->assertStatus(201)
+        $response->assertStatus(200)
         ->assertJsonStructure([
             'message',
             'data'
@@ -302,5 +309,42 @@ class MemberTest extends TestCase
         dump($response->getContent());
     }
 
+    public function test_getting_info_about_user()
+    {
+        $prefix= 'Sobieski';
+        $user = factory(\App\User::class)->create([
+            'prefix' => $prefix         //creating user 
+        ]);
+
+        $founderUser = factory(\App\User::class)->create([
+            'prefix' => $prefix             //creating founder of family
+        ]);
+
+        $family = factory(\App\Family::class)->create([
+            'founder_id' => $founderUser->id       //creating family
+        ]);
+
+        $member = factory(\App\Member::class)->create([
+            'user_id'=> $user->id,
+            'family_id'=>$family->id,
+            'avatar' => ''
+            ]);   
+
+        $service = new \App\Services\TableService();
+        $service->addTables($prefix);  //creating table of this family
+
+
+        $this->actingAs($user, 'api');
+
+        $response = $this->get('/api/auth/member/info');
+
+        $response->assertStatus(200)
+        ->assertJsonStructure([
+            'message',
+            'data'
+        ]);
+        dump($response->getContent());
+
+    }
 
 }

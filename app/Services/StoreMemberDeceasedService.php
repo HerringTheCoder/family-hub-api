@@ -44,11 +44,16 @@ class StoreMemberDeceasedService
         if($request->partner_id || $request->parent_id){
             $relation = new StoreRelationAfterMemberCreateService();
             $data = $relation->store($request,$member);
+        return $data;
         }
         
         Log::channel()->notice("User created - id : ".$user->id." and member in family ".$prefix);
         
-        return $data;
+        //return $data; //moved above because of error
+                        // "Undefined variable: data"
+                        //now it is like in StoreMemberService
+                        //correct me if I'm wrong
+                        //anyway in this way I cant pass the test
     }
 
 }

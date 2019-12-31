@@ -8,7 +8,6 @@ use Tests\TestCase;
 use App\User;
 use App\Member;
 use App\Family;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 
 use Laravel\Passport\PassportServiceProvider;
@@ -22,7 +21,7 @@ class MemberTest extends TestCase
 
     public function test_founderuser_can_add_member()
     {
-        Notification::fake();
+        \Notification::fake();
 
         $password = 'pashfhghfs';
         $prefix = 'Kolwaski';
@@ -46,6 +45,7 @@ class MemberTest extends TestCase
 
 
         $credentials =[
+            'first_name' => 'Kolwaski',
             'email' => 'email@email.com',
             'password' => bcrypt($password),
             'activation_token' => 'acb',
@@ -116,6 +116,7 @@ class MemberTest extends TestCase
     public function test_edit_member()
     {
         $prefix= 'Adamowicz';
+
         $user = factory(\App\User::class)->create([
             'prefix' => $prefix
         ]);
@@ -129,6 +130,7 @@ class MemberTest extends TestCase
             'user_id'=> $user->id,
             'family_id'=>$family->id,
             'day_of_birth' => '1970-10-10',
+            'avatar'=> ''
         ]);
 
                 
@@ -165,6 +167,7 @@ class MemberTest extends TestCase
         $member = factory(\App\Member::class)->create([
             'user_id'=> $user->id,
             'family_id'=>$family->id,
+            'avatar' => ''
             ]);                     //creating member to update
 
                
@@ -203,6 +206,7 @@ class MemberTest extends TestCase
         $member = factory(\App\Member::class)->create([
             'user_id'=> $user->id,
             'family_id'=>$family->id,
+            'avatar' => ''
             ]);                     //creating member to update
 
                
@@ -241,6 +245,7 @@ class MemberTest extends TestCase
         $member = factory(\App\Member::class)->create([
             'user_id'=> $user->id,
             'family_id'=>$family->id,
+            'avatar' => ''
             ]);                     //creating member to update
 
                
@@ -252,9 +257,11 @@ class MemberTest extends TestCase
 
 
         $response = $this->json('PUT','/api/auth/member/update');
-        $response//->assertStatus(422)
-        ->assertJsonStructure([
-            'message'
+        $response->assertStatus(422)
+        ->assertJsonFragment([
+            "first_name" => ["First name is required!"],
+            "last_name"=> ["Last name is required!"],
+            "day_of_birth" =>["Day of birth is required!"]
         ]);
         dump($response->getContent());
     }
@@ -270,16 +277,17 @@ class MemberTest extends TestCase
             'prefix' => $prefix             //creating founder of family
         ]);
         $family = factory(\App\Family::class)->create([
-            'founder_id' => $founderUser->id        //creating family
+            'founder_id' => $founderUser->id       //creating family
         ]);
         $member = factory(\App\Member::class)->create([
             'user_id'=> $user->id,
             'family_id'=>$family->id,
+            'avatar' => ''
             ]);                     //creating member to update
 
                
         $service = new \App\Services\TableService();
-        $service->addTables('Wokulski');  //creating table of this family
+        $service->addTables($prefix);  //creating table of this family
 
 
         $this->actingAs($founderUser, 'api');

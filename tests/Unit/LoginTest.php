@@ -38,9 +38,9 @@ public function test_login_with_proper_credentials()
    ]);
    
    $response->assertSuccessful();
-      $response->assertJson([[
+      $response->assertJson([
          'token_type' => 'Bearer',
-         ]] //cheking only 'token_type' because it doesn't change, when others do
+         ] //cheking only 'token_type' because it doesn't change, when others do
          //but when we see this it means its ok... trust me
   );
    dump($response->getContent()); //it shows me, that json returns [$data], which is what we expexted
@@ -103,9 +103,9 @@ public function test_login_with_wrong_email(){
     
     
        $response->assertStatus(401) 
-       ->assertJsonFragment([[
+       ->assertJsonFragment([
          'message' => 'Unauthorized'
-       ]]);
+       ]);
     
   dump($response->getContent());
     }
@@ -136,9 +136,9 @@ public function test_login_with_wrong_email(){
         
         
            $response->assertStatus(401)
-           ->assertJsonFragment([[
+           ->assertJsonFragment([
             'message' => 'Unauthorized'
-          ]]);
+          ]);
 
            dump($response->getContent());
         

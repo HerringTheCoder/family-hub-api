@@ -17,4 +17,10 @@ class Gallery extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+
+    //public $table ="gallery";
+    // added because of error: Illuminate\Database\QueryException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'family-hub.galleries' doesn't exist 
+    //without it I cant pass the test
 }
+
+

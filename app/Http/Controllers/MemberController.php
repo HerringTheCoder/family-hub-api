@@ -42,7 +42,7 @@ class MemberController extends Controller
     public function info()
     {
         $this->member->setTable(Auth::User()->prefix.'_members');
-        $member = $this->member->get()->where('user_id',Auth::user()->id);
+        $member = $this->member->where('user_id',Auth::user()->id)->get();
 
         return response()->json(['message' => 'Success','data' => $member], 200); 
     }

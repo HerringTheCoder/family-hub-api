@@ -57,7 +57,7 @@ class UpdateRelationsService
         ->where('id',$parent_id)
         ->get();
 
-            if(($firstIsExist == null) || ($secondIsExist == null)){
+            if(($firstIsExist == null) || ($firstIsExist == null && $secondIsExist == null)){
                 return response()->json([
                     'message' => 'Your partner id 1 or 2 is not exist!'
                 ], 200);

@@ -33,7 +33,10 @@ class StoreMemberService
         $member = new Member([
             'user_id' => $user->id,
             'family_id' => $request->family_id,
-            'first_name' => $request->first_name
+            'first_name' => $request->first_name,
+            'middle_name' => $request->middle_name,
+            'last_name' => $request->last_name,
+            'day_of_birth' => $request->day_of_birth
         ]);
         $member->setTable(Auth::User()->prefix.'_members');
         $member->save();

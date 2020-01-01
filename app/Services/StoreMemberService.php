@@ -11,7 +11,7 @@ use Carbon\Carbon;
 use App\Notifications\UserInvite;
 use Illuminate\Support\Facades\Log;
 use App\PasswordReset;
-use App\services\StoreRelationAfterMemberCreateService;
+use App\Services\StoreRelationAfterMemberCreateService;
 
 
 

@@ -23,7 +23,7 @@ class StoreRelationAfterMemberCreateService
             ->where('partner_2_id','=', null)
             ->where('partner_1_id','=', $request->partner_id)
             ->first();
-
+            
             if($isExist){
                 DB::table(Auth::User()->prefix.'_relations')
                 ->updateOrInsert(

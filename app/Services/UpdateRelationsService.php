@@ -53,11 +53,21 @@ class UpdateRelationsService
         ->get();
 
         //parent id exist
-        $parent = DB::table(Auth::User()->prefix.'_relations')
-        ->where('id',$parent_id)
-        ->get();
+        if(($record->parent_id == null) && ($parent_id == null)){
+            $parent = true;
+        }else{
+            $parent = DB::table(Auth::User()->prefix.'_relations')
+            ->where('id',$parent_id)
+            ->get();
 
-            if(($firstIsExist == null) || ($secondIsExist == null)){
+            if($parent->isEmpty()){
+                $parent = false; 
+            }else{
+                $parent = true;
+            }
+        }
+
+            if(($firstIsExist == null) || ($firstIsExist == null && $secondIsExist == null)){
                 return response()->json([
                     'message' => 'Your partner id 1 or 2 is not exist!'
                 ], 200);
@@ -65,7 +75,7 @@ class UpdateRelationsService
                 return response()->json([
                     'message' => 'Your partner id 1 and 2 is the same!'
                 ], 200);  
-            }elseif($parent->isEmpty()){
+            }elseif(!$parent){
                 return response()->json([
                     'message' => 'Your parent id is not exist!'
                 ], 200);  

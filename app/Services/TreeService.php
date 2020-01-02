@@ -41,6 +41,7 @@ class TreeService
                         'name' => $name1->first_name.' '.$name1->last_name,
                         'birthDay' => $name1->day_of_birth,
                         'deathDay' => $name1->day_of_death,
+                        'relation_id' => $first->id,
                         'img' => $name1->avatar,
                         ];
                         $this->number++;
@@ -51,6 +52,7 @@ class TreeService
                         'name' => $name2->first_name.' '.$name2->last_name,
                         'birthDay' => $name2->day_of_birth,
                         'deathDay' => $name2->day_of_death,
+                        'relation_id' => $first->id,
                         'img' => $name2->avatar,
                         ];
                         $this->number++;
@@ -64,6 +66,7 @@ class TreeService
                         'name' => $name1->first_name.' '.$name1->last_name,
                         'birthDay' => $name1->day_of_birth,
                         'deathDay' => $name1->day_of_death,
+                        'relation_id' => $first->id,
                         'img0' => $name1->avatar,
                         ];
                         $this->number++;
@@ -105,6 +108,7 @@ class TreeService
                     'name' => $name1->first_name.' '.$name1->last_name,
                     'birthDay' => $name1->day_of_birth,
                     'deathDay' => $name1->day_of_death,
+                    'relation_id' => $child->id,
                     'img' => $name1->avatar,
                     ];
                     $this->number++;
@@ -116,6 +120,7 @@ class TreeService
                     'name' => $name2->first_name.' '.$name2->last_name,
                     'birthDay' => $name2->day_of_birth,
                     'deathDay' => $name2->day_of_death,
+                    'relation_id' => $child->id,
                     'img' => $name2->avatar,
                     ];
                     $this->number++;
@@ -130,6 +135,7 @@ class TreeService
                     'name' => $name1->first_name.' '.$name1->last_name,
                     'birthDay' => $name1->day_of_birth,
                     'deathDay' => $name1->day_of_death,
+                    'relation_id' => $child->id,
                     'img' => $name1->avatar,
                     ];
                     $this->number++;

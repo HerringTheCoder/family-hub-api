@@ -31,19 +31,10 @@ class MemberTest extends TestCase
        ]);                      //creating founderUser, which will be adding a family member
 
         
-        factory(\App\Family::class)->create([
-            'name' => $prefix,
-           'founder_id' => $founderUser->id
-        ]);                     //creating family, we need to symulate registration that give us needed information
-
+        $service = new \App\Services\SignupActiveService();
+        $service->active($founderUser);         //creating family and adding user to the family
 
         $this->actingAs($founderUser, 'api'); //"login" founderUser
-
-        
-        $service = new \App\Services\TableService();
-        $service->addTables('Kolwaski'); //we need to have a table, which is normally creating while registration
-                                        //so I created it here
-
 
         $credentials =[
             'first_name' => 'Anna',
@@ -79,19 +70,10 @@ class MemberTest extends TestCase
        ]);                      //creating founderUser, which will be adding a family member
 
         
-        factory(\App\Family::class)->create([
-            'name' => $prefix,
-           'founder_id' => $founderUser->id
-        ]);                     //creating family, we need to symulate registration that give us needed information
-
+        $service = new \App\Services\SignupActiveService();
+        $service->active($founderUser);
 
         $this->actingAs($founderUser, 'api'); //"login" founderUser
-
-        
-        $service = new \App\Services\TableService();
-        $service->addTables('Nowak'); //we need to have a table, which is normally creating while registration
-                                        //so I creaded it here
-
 
         $credentials =[
             'email' => 'email@email.com',
@@ -121,29 +103,31 @@ class MemberTest extends TestCase
     {
         $prefix= 'Adamowicz';
 
-        $user = factory(\App\User::class)->create([
-            'prefix' => $prefix
-        ]);
         $founderUser = factory(\App\User::class)->create([
             'prefix' => $prefix
         ]);
-        $family = factory(\App\Family::class)->create([
-            'founder_id' => $founderUser->id
-        ]);
-        $member = factory(\App\Member::class)->create([
-            'user_id'=> $user->id,
-            'family_id'=>$family->id,
-            'day_of_birth' => '1970-10-10',
-            'avatar'=> ''
-        ]);
 
-                
-        $service = new \App\Services\TableService();
-        $service->addTables('Adamowicz');
-        
+        $service = new \App\Services\SignupActiveService();
+        $service->active($founderUser);
 
         $this->actingAs($founderUser, 'api'); //"login" founderUser
 
+        $credentials =[
+            'first_name' => 'Anna',
+            'email' => 'email@email.com',
+            'password' => bcrypt('lol'),
+            'activation_token' => 'acb',
+            'prefix' => $prefix,
+            'type' => 'default',
+        ];                              
+        
+        $responses = $this->json('POST', '/api/auth/member/add', $credentials);
+
+        //we needed user in family, so Im symulating adding one to the family
+             
+        $user = \App\User::where('email','email@email.com') -> first();
+
+        $this->actingAs($user, 'api');      //"login" user, which will be editing
 
         $response = $this->get('/api/auth/member/edit');
         $response->assertStatus(201)
@@ -159,27 +143,34 @@ class MemberTest extends TestCase
     {
 
         $prefix= 'Wikidajlo';
-        $user = factory(\App\User::class)->create([
-            'prefix' => $prefix         //creating user 
-        ]);
+
         $founderUser = factory(\App\User::class)->create([
-            'prefix' => $prefix             //creating founder of family
+            'prefix' => $prefix
         ]);
-        $family = factory(\App\Family::class)->create([
-            'founder_id' => $founderUser->id        //creating family
-        ]);
-        $member = factory(\App\Member::class)->create([
-            'user_id'=> $user->id,
-            'family_id'=>$family->id,
-            'avatar' => ''
-            ]);                     //creating member to update
 
-               
-        $service = new \App\Services\TableService();
-        $service->addTables('Wikidajlo');  //creating table of this family
-
+        $service = new \App\Services\SignupActiveService();
+        $service->active($founderUser);
 
         $this->actingAs($founderUser, 'api'); //"login" founderUser
+
+        $credentials =[
+            'first_name' => 'Anna',
+            'email' => 'mail@email.com',
+            'password' => bcrypt('lol'),
+            'activation_token' => 'acb',
+            'prefix' => $prefix,
+            'type' => 'default',
+        ];                             
+        
+        $responses = $this->json('POST', '/api/auth/member/add', $credentials);
+
+        //above we created member to edit
+
+        
+        $user = \App\User::where('email','mail@email.com') -> first();
+        $this->actingAs($user, 'api');
+       
+         //here we authenticate us as user, which will be editing his data
 
 
         $response = $this->json('PUT','/api/auth/member/update', [
@@ -192,72 +183,42 @@ class MemberTest extends TestCase
             'message'
         ]);        
         dump($response->getContent());
-    }
 
-    public function test_updated_member()
-    {
+        $response = $this->assertDatabaseHas($prefix.'_members', ['user_id'=>$user['id'], 'first_name'=>'Ally']);
+
         
-        $prefix= 'Szczesny';
-        $user = factory(\App\User::class)->create([
-            'prefix' => $prefix         //creating user 
-        ]);
-        $founderUser = factory(\App\User::class)->create([
-            'prefix' => $prefix             //creating founder of family
-        ]);
-        $family = factory(\App\Family::class)->create([
-            'founder_id' => $founderUser->id        //creating family
-        ]);
-        $member = factory(\App\Member::class)->create([
-            'user_id'=> $user->id,
-            'family_id'=>$family->id,
-            'avatar' => ''
-            ]);                     //creating member to update
-
-               
-        $service = new \App\Services\TableService();
-        $service->addTables('Szczesny');  //creating table of this family
-
-
-        $this->actingAs($founderUser, 'api'); //"login" founderUser
-
-
-        $response = $this->json('PUT','/api/auth/member/update', [
-            'first_name' => 'Ally',
-            'last_name' => 'Bundy',
-            'day_of_birth' => '1970-10-10',
-        ]);
-        $response->assertStatus(201)
-        ->assertJsonStructure([
-            'message'
-        ]);
-        dump($response->getContent());
     }
+
 
     public function test_cant_updated_member_whith_wrong_credentials()
     {
         
         $prefix= 'Lewandowski';
-        $user = factory(\App\User::class)->create([
-            'prefix' => $prefix         //creating user 
-        ]);
         $founderUser = factory(\App\User::class)->create([
-            'prefix' => $prefix             //creating founder of family
+            'prefix' => $prefix
         ]);
-        $family = factory(\App\Family::class)->create([
-            'founder_id' => $founderUser->id        //creating family
-        ]);
-        $member = factory(\App\Member::class)->create([
-            'user_id'=> $user->id,
-            'family_id'=>$family->id,
-            'avatar' => ''
-            ]);                     //creating member to update
 
-               
-        $service = new \App\Services\TableService();
-        $service->addTables('Lewandowski');  //creating table of this family
-
+        $service = new \App\Services\SignupActiveService();
+        $service->active($founderUser);
 
         $this->actingAs($founderUser, 'api'); //"login" founderUser
+
+        $credentials =[
+            'first_name' => 'Anna',
+            'email' => 'email@email.com',
+            'password' => bcrypt('lol'),
+            'activation_token' => 'acb',
+            'prefix' => $prefix,
+            'type' => 'default',
+        ];                              
+        
+        $responses = $this->json('POST', '/api/auth/member/add', $credentials);
+
+        //above we created member to edit
+             
+        $user = \App\User::where('email','email@email.com') -> first();
+
+        $this->actingAs($user, 'api'); //here we authenticate us as user, which will be editing his data
 
 
         $response = $this->json('PUT','/api/auth/member/update');
@@ -274,30 +235,31 @@ class MemberTest extends TestCase
     public function test_getting_all_users()
     {
         $prefix= 'Wokulski';
-        $user = factory(\App\User::class)->create([
-            'prefix' => $prefix         //creating user 
-        ]);
-
         $founderUser = factory(\App\User::class)->create([
-            'prefix' => $prefix             //creating founder of family
+            'prefix' => $prefix
         ]);
 
-        $family = factory(\App\Family::class)->create([
-            'founder_id' => $founderUser->id       //creating family
-        ]);
+        $service = new \App\Services\SignupActiveService();
+        $service->active($founderUser);
 
-        $member = factory(\App\Member::class)->create([
-            'user_id'=> $user->id,
-            'family_id'=>$family->id,
-            'avatar' => ''
-            ]);                     //creating member to update
+        $this->actingAs($founderUser, 'api'); //"login" founderUser
 
-               
-        $service = new \App\Services\TableService();
-        $service->addTables($prefix);  //creating table of this family
+        $credentials =[
+            'first_name' => 'Anna',
+            'email' => 'email@email.com',
+            'password' => bcrypt('lol'),
+            'activation_token' => 'acb',
+            'prefix' => $prefix,
+            'type' => 'default',
+        ];                              
+        
+        $responses = $this->json('POST', '/api/auth/member/add', $credentials);
 
+             
+        $user = \App\User::where('email','email@email.com') -> first();
 
-        $this->actingAs($founderUser, 'api');
+        $this->actingAs($user, 'api'); //here we authenticate us as user
+        
 
         $response = $this->get('/api/auth/member/all');
 
@@ -312,29 +274,17 @@ class MemberTest extends TestCase
     public function test_getting_info_about_user()
     {
         $prefix= 'Sobieski';
+
+
         $user = factory(\App\User::class)->create([
             'prefix' => $prefix         //creating user 
         ]);
 
-        $founderUser = factory(\App\User::class)->create([
-            'prefix' => $prefix             //creating founder of family
-        ]);
-
-        $family = factory(\App\Family::class)->create([
-            'founder_id' => $founderUser->id       //creating family
-        ]);
-
-        $member = factory(\App\Member::class)->create([
-            'user_id'=> $user->id,
-            'family_id'=>$family->id,
-            'avatar' => ''
-            ]);   
-
-        $service = new \App\Services\TableService();
-        $service->addTables($prefix);  //creating table of this family
-
+        $service = new \App\Services\SignupActiveService();
+        $service->active($user);
 
         $this->actingAs($user, 'api');
+        
 
         $response = $this->get('/api/auth/member/info');
 
@@ -343,7 +293,14 @@ class MemberTest extends TestCase
             'message',
             'data'
         ]);
+
         dump($response->getContent());
+
+        $response = $this->assertDatabaseHas('families', ['name' => $prefix])
+                          ->assertDatabaseHas($prefix.'_members', ['user_id' => $user['id']]);
+
+
+        
 
     }
 

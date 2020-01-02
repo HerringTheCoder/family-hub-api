@@ -134,4 +134,39 @@ class SignupTest extends TestCase
 
               
       }
+
+      public function test_member_can_activate_his_account()
+      {
+        $user=factory(User::class)->create([
+          'activation_token' => 'abc',
+        ]);
+
+
+
+        $response = $this->call('GET', "/api/auth/signup/activate/member/abc")
+              ->assertStatus(201)
+              ->assertJsonStructure([
+                'email',
+                'message',
+                'token'
+              ]);
+              dump($response->getContent());
+      }
+
+
+      public function test_member_cant_activate_his_account_with_wrong_token()
+      {
+        $user=factory(User::class)->create([
+          'activation_token' => 'abc',
+        ]);
+
+
+
+        $response = $this->call('GET', "/api/auth/signup/activate/member/abce")
+              ->assertStatus(404)
+              ->assertJsonStructure([
+                'message',
+              ]);
+              dump($response->getContent());
+      }
 }

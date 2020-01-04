@@ -38,6 +38,8 @@ class MemberTest extends TestCase
 
         $credentials =[
             'first_name' => 'Anna',
+            'middle_name' => 'Ella',
+            'last_name' => $prefix,
             'email' => 'email@email.com',
             'password' => bcrypt($password),
             'activation_token' => 'acb',
@@ -114,18 +116,21 @@ class MemberTest extends TestCase
 
         $credentials =[
             'first_name' => 'Anna',
-            'email' => 'email@email.com',
+            'last_name' => 'Henr',
+            'email' => 'email@mail.com',
             'password' => bcrypt('lol'),
             'activation_token' => 'acb',
             'prefix' => $prefix,
             'type' => 'default',
         ];                              
         
-        $responses = $this->json('POST', '/api/auth/member/add', $credentials);
-
+        $response = $this->json('POST', '/api/auth/member/add', $credentials);
+        $response->assertStatus(201);
+            
         //we needed user in family, so Im symulating adding one to the family
+        
              
-        $user = \App\User::where('email','email@email.com') -> first();
+        $user = \App\User::where('email','email@mail.com') -> first();
 
         $this->actingAs($user, 'api');      //"login" user, which will be editing
 
@@ -134,7 +139,7 @@ class MemberTest extends TestCase
         ->assertJsonStructure([
             'message',
             'data'
-        ]);
+        ]);         
         
         dump($response->getContent());
     }
@@ -155,6 +160,8 @@ class MemberTest extends TestCase
 
         $credentials =[
             'first_name' => 'Anna',
+            'middle_name' => 'Ewa',
+            'last_name' => $prefix,
             'email' => 'mail@email.com',
             'password' => bcrypt('lol'),
             'activation_token' => 'acb',

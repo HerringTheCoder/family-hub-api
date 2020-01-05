@@ -30,8 +30,10 @@ class StoreDeceased extends FormRequest
     {
         return [
             'first_name' => 'string|required',
-            'last_name' => 'string|required',
-            'day_of_death' => 'required|date_format:Y-m-d'
+            'middle_name' => 'string|nullable',
+            'last_name' => 'string|nullable',
+            'day_of_birth' => 'date_format:Y-m-d|nullable',
+            'day_of_death' => 'date_format:Y-m-d|nullable'
         ];
     }
 

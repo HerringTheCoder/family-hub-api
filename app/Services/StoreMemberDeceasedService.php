@@ -41,14 +41,15 @@ class StoreMemberDeceasedService
         $member->setTable(Auth::User()->prefix.'_members');
         $member->save();
 
+        Log::channel()->notice("User created - id : ".$user->id." and member in family ".$prefix);
         if($request->partner_id || $request->parent_id){
             $relation = new StoreRelationAfterMemberCreateService();
             $data = $relation->store($request,$member);
+            
+            return $data;
         }
         
-        Log::channel()->notice("User created - id : ".$user->id." and member in family ".$prefix);
         
-        return $data;
     }
 
 }

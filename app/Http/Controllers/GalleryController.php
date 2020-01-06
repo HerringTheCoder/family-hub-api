@@ -106,7 +106,7 @@ class GalleryController extends Controller
             $this->gallery->setTable(Auth::User()->prefix.'_gallery');
             $this->gallery->where('id',$request->id)->delete();
             return response()->json([
-                'message' => 'Success, data deleted'], 201);
+                'message' => 'Success, data deleted'], 200 );
        
         
     }

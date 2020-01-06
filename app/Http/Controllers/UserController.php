@@ -23,7 +23,7 @@ class UserController extends Controller
         return response()->json([
             'message' => 'Success',
             'data' => $users
-        ], 201); 
+        ], 200 ); 
     }
 
     public function edit(Request $request)
@@ -31,7 +31,7 @@ class UserController extends Controller
         $user = $this->user->where('id',$request->id)->get();
 
         return response()->json([
-            'message' => 'Success, user activated!'], 201);
+            'message' => 'Success, user activated!'], 200 );
     }
 
     public function update(UpdateUser $request)
@@ -39,7 +39,7 @@ class UserController extends Controller
         $user = $this->user->where('id',$request->id)->update(['email' => $request->email]);
 
         return response()->json([
-            'message' => 'Success, user updated!'], 201);
+            'message' => 'Success, user updated!'], 200 );
     }
 
     public function delete(Request $request)
@@ -47,7 +47,7 @@ class UserController extends Controller
         $this->user->where('id',$request->id)->update(['active' => 0]);
 
         return response()->json([
-            'message' => 'Success, user deactivated!'], 201);
+            'message' => 'Success, user deactivated!'], 200 );
     }
 
     public function active(Request $request)
@@ -55,7 +55,7 @@ class UserController extends Controller
         $this->user->where('id',$request->id)->update(['active' => 1]);
 
         return response()->json([
-            'message' => 'Success, user activated!'], 201);
+            'message' => 'Success, user activated!'], 200 );
     }
     
 

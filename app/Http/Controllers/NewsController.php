@@ -70,6 +70,6 @@ class NewsController extends Controller
             $this->news->setTable(Auth::User()->prefix.'_news');
             $this->news->where('id',$request->id)->delete();
             return response()->json([
-                'message' => 'Success, data deleted'], 201);
+                'message' => 'Success, data deleted'], 200);
     }
 }

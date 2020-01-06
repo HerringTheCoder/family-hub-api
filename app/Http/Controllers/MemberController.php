@@ -118,7 +118,7 @@ class MemberController extends Controller
     {
         $this->member->setTable(Auth::User()->prefix.'_members');
         $this->member->where('id',$request->id)->delete();
-        return response()->json(['message' => 'Success, data deleted'], 200);
+        return response()->json(['message' => 'Success, data deleted'], 201);
     }
 
 }

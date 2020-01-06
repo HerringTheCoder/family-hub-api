@@ -43,6 +43,7 @@ class TreeService
                         'birthDay' => $name1->day_of_birth,
                         'deathDay' => $name1->day_of_death,
                         'relation_id' => $first->id,
+                        'user_id' => $first->partner_1_id,
                         'img' => $name1->avatar,
                         ];
                         $this->number++;
@@ -54,6 +55,7 @@ class TreeService
                         'birthDay' => $name2->day_of_birth,
                         'deathDay' => $name2->day_of_death,
                         'relation_id' => $first->id,
+                        'user_id' => $first->partner_2_id,
                         'img' => $name2->avatar,
                         ];
                         $this->number++;
@@ -68,6 +70,7 @@ class TreeService
                         'birthDay' => $name1->day_of_birth,
                         'deathDay' => $name1->day_of_death,
                         'relation_id' => $first->id,
+                        'user_id' => $first->partner_1_id,
                         'img0' => $name1->avatar,
                         ];
                         $this->number++;
@@ -110,6 +113,7 @@ class TreeService
                     'birthDay' => $name1->day_of_birth,
                     'deathDay' => $name1->day_of_death,
                     'relation_id' => $child->id,
+                    'user_id' => $child->partner_1_id,
                     'img' => $name1->avatar,
                     ];
                     $this->number++;
@@ -122,6 +126,7 @@ class TreeService
                     'birthDay' => $name2->day_of_birth,
                     'deathDay' => $name2->day_of_death,
                     'relation_id' => $child->id,
+                    'user_id' => $child->partner_2_id,
                     'img' => $name2->avatar,
                     ];
                     $this->number++;
@@ -140,6 +145,7 @@ class TreeService
                     'birthDay' => $name1->day_of_birth,
                     'deathDay' => $name1->day_of_death,
                     'relation_id' => $child->id,
+                    'user_id' => $child->partner_1_id,
                     'img' => $name1->avatar,
                     ];
                     $this->number++;

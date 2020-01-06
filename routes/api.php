@@ -72,6 +72,8 @@ Route::group([
         //Route::post('family/add', 'FamilyController@store');
         Route::get('family/edit', 'FamilyController@edit');
         Route::put('family/update', 'FamilyController@update');
+        
+        Route::get('admin/logs/all', 'LogController@index');
     });
 
     Route::group([    

@@ -40,12 +40,17 @@ Route::group([
         Route::post('relation/add', 'RelationController@store')->middleware('familyID','isFounder','isExistMember');
         Route::get('relation/edit', 'RelationController@edit')->middleware('relation');
         Route::put('relation/update', 'RelationController@update')->middleware('relation');
-        Route::delete('relation/delete', 'RelationController@delete');
 
         Route::get('pivot/get', 'PivotController@index');
 
         Route::get('logout', 'AuthController@logout');
         Route::get('user', 'AuthController@user');
+    });
+
+    Route::group([
+        'middleware' => ['auth:api']
+    ], function() {
+       Route::delete('relation/delete/all', 'RelationController@delete')->middleware('checkFounder');
     });
 
      Route::group([

@@ -26,6 +26,6 @@ class PivotController extends Controller
         return response()->json([
             'message' => 'Success',
             'count' => $pivot->count()
-        ], 201); 
+        ], 200 ); 
     }
 }

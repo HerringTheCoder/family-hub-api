@@ -23,7 +23,7 @@ class FamilyController extends Controller
         return response()->json([
             'message' => 'Success',
             'data' => $family
-        ], 201); 
+        ], 200 ); 
     }
 
     public function edit(Request $request)
@@ -47,7 +47,7 @@ class FamilyController extends Controller
             $this->family->where('id',$request->id)->update(['founder_id' => $request->founder_id]);
     
             return response()->json([
-                'message' => 'Success, data updated!'], 201);
+                'message' => 'Success, data updated!'], 200 );
         }else{
             return response()->json([
                 'message' => 'This founder ID is already used in other family!'], 401);

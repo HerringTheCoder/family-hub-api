@@ -31,7 +31,7 @@ class RelationController extends Controller
         return response()->json([
             'message' => 'Success',
             'data' => $relations
-        ], 201); 
+        ], 200 ); 
         
 
     }
@@ -52,7 +52,7 @@ class RelationController extends Controller
             return response()->json([
                 'message' => 'Success',
                 'data' => $relation
-            ], 201);  
+            ], 200 );  
     }
 
     public function update(Request $request, UpdateRelationsService $updateRelation)
@@ -95,7 +95,7 @@ class RelationController extends Controller
         return response()->json([
             'message' => 'Success',
             'data' => $data
-        ], 201); 
+        ], 200); 
         
     }
 }

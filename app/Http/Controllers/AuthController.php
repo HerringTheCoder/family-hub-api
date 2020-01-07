@@ -66,7 +66,7 @@ class AuthController extends Controller
 
         return response()->json([
             'message' => 'Successfully logged out'
-        ]);
+        ],200);
     }
 
     /**
@@ -85,7 +85,7 @@ class AuthController extends Controller
 
         return response()->json([
             'message' => 'Scan done, '.$service.' users deleted!',
-        ], 201);
+        ], 200 );
     }
 
     public function signupActivate($token)
@@ -102,6 +102,6 @@ class AuthController extends Controller
         AfterActivateAccount::dispatch($user);
         
         Log::channel()->notice("User ".$user->id." activated account");
-        return response()->json(['message' => 'Activated!','data' => $user], 201);
+        return response()->json(['message' => 'Activated!','data' => $user], 200 );
     }
 }

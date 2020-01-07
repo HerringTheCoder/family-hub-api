@@ -25,8 +25,8 @@ class TableService
             $table->foreign('family_id')->references('id')->on('families'); 
             $table->string('first_name')->default('');
             $table->string('middle_name')->nullable()->default(null);
-            $table->string('last_name')->default('');
-            $table->string('avatar')->default('');
+            $table->string('last_name')->default('')->default(null);
+            $table->string('avatar')->default('')->default(null);
             $table->date('day_of_birth')->nullable()->default(null);
             $table->date('day_of_death')->nullable()->default(null);
             $table->timestamps();

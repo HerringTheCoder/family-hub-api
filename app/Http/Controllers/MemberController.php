@@ -34,8 +34,10 @@ class MemberController extends Controller
     {
         $this->member->setTable(Auth::User()->prefix.'_members');
         $member = $this->member->get();
-
-        return response()->json(['message' => 'Success','data' => $member], 200); 
+        $founder = DB::table('families')
+        ->where('founder_id','=', Auth::User()->id)
+        ->exists();
+        return response()->json(['message' => 'Success','data' => $member,'founder' => $founder], 200); 
         
     }
 
@@ -73,7 +75,7 @@ class MemberController extends Controller
         }
         $data = $activateMember->active($user);
 
-        return response()->json($data, 201);
+        return response()->json($data, 200 );
     }
 
 
@@ -82,7 +84,7 @@ class MemberController extends Controller
         $this->member->setTable(Auth::User()->prefix.'_members');
         $member = $this->member->get()->where('user_id',Auth::user()->id);
         return response()->json([
-            'message' => 'Success, found data!','data' => $member], 201);  
+            'message' => 'Success, found data!','data' => $member], 200 );  
     }
 
 
@@ -91,7 +93,7 @@ class MemberController extends Controller
         $this->member->setTable(Auth::User()->prefix.'_members');
         $this->member->where('user_id',Auth::User()->id)->update($request->validated());
 
-        return response()->json(['message' => 'Success, data updated!'], 201);
+        return response()->json(['message' => 'Success, data updated!'], 200 );
     }
 
 
@@ -106,7 +108,7 @@ class MemberController extends Controller
             $this->member->setTable(Auth::User()->prefix.'_members');
             $this->member->where('user_id',Auth::User()->id)->update(['avatar' =>  $filename]);
 
-            return response()->json(['message' => 'Success, data updated!'], 201);
+            return response()->json(['message' => 'Success, data updated!'], 200 );
         }else{
             return response()->json(['message' => 'Success but your input file was empty'], 200);
         }
@@ -118,7 +120,7 @@ class MemberController extends Controller
     {
         $this->member->setTable(Auth::User()->prefix.'_members');
         $this->member->where('id',$request->id)->delete();
-        return response()->json(['message' => 'Success, data deleted'], 201);
+        return response()->json(['message' => 'Success, data deleted'], 200);
     }
 
 }

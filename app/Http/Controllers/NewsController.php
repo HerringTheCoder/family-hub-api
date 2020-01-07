@@ -30,7 +30,7 @@ class NewsController extends Controller
         return response()->json([
             'message' => 'Success',
             'data' => $news
-        ], 201); 
+        ], 200); 
     }
 
     public function store(StoreNews $request, PivotService $pivot)
@@ -53,7 +53,7 @@ class NewsController extends Controller
             return response()->json([
                 'message' => 'Success, found data!',
                 'data' => $news
-            ], 201);  
+            ], 200);  
     }
 
     public function update(UpdateNews $request)
@@ -62,7 +62,7 @@ class NewsController extends Controller
         $this->news->setTable(Auth::User()->prefix.'_news');
         $this->news->where('id',$request->id)->update($request->validated());
         return response()->json([
-            'message' => 'Success, data updated!'], 201);
+            'message' => 'Success, data updated!'], 200);
     }
 
     public function delete(Request $request)
@@ -70,6 +70,6 @@ class NewsController extends Controller
             $this->news->setTable(Auth::User()->prefix.'_news');
             $this->news->where('id',$request->id)->delete();
             return response()->json([
-                'message' => 'Success, data deleted'], 201);
+                'message' => 'Success, data deleted'], 200);
     }
 }

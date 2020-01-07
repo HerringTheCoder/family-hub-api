@@ -20,12 +20,13 @@ class NewsTest extends TestCase
     protected $admin;
     protected $news;
     protected $service;
+    protected $services;
 
     public function setUp() :void
     {
         parent::setUp();
 
-        $this->prefix =Str::random(5); //random, because it create new one after every test, and id could be duplicate and there will be an error
+        $this->prefix =Str::random(5); //random, because it create new one after every test, an id could be duplicate and there will be an error
         $this->user= factory(\App\User::class)->create([
             'prefix' => $this->prefix
         ]);

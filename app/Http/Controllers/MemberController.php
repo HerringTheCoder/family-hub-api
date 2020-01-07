@@ -34,10 +34,8 @@ class MemberController extends Controller
     {
         $this->member->setTable(Auth::User()->prefix.'_members');
         $member = $this->member->get();
-        $founder = DB::table('families')
-        ->where('founder_id','=', Auth::User()->id)
-        ->exists();
-        return response()->json(['message' => 'Success','data' => $member,'founder' => $founder], 200); 
+        
+        return response()->json(['message' => 'Success','data' => $member], 200); 
         
     }
 
@@ -45,8 +43,11 @@ class MemberController extends Controller
     {
         $this->member->setTable(Auth::User()->prefix.'_members');
         $member = $this->member->where('user_id',Auth::user()->id)->get();
+        $founder = DB::table('families')
+        ->where('founder_id','=', Auth::User()->id)
+        ->exists();
 
-        return response()->json(['message' => 'Success','data' => $member], 200); 
+        return response()->json(['message' => 'Success','data' => $member,'founder' => $founder], 200); 
     }
 
     public function store(StoreMember $request,StoreMemberService $storeMember)

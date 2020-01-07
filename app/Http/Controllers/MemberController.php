@@ -55,7 +55,7 @@ class MemberController extends Controller
         $data = $storeMember->store($request);
 
         return response()->json(['message' => 'Success, member added',
-                                 'relation' => $data], 201);
+                                 'data' => $data], 201);
     }
 
 
@@ -64,7 +64,7 @@ class MemberController extends Controller
        $data = $storeMember->store($request);
         
        return response()->json(['message' => 'Success, member added',
-                                'relation' => $data], 201);
+                                'data' => $data], 201);
     }
 
 

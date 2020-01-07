@@ -45,9 +45,9 @@ class StoreMemberDeceasedService
         if($request->partner_id || $request->parent_id){
             $relation = new StoreRelationAfterMemberCreateService();
             $data = $relation->store($request,$member);
-            
-            return $data;
+            return response()->json(['relation' => $data,'member' => $member]);
         }
+        return response()->json(['member' => $member]);
         
         
     }

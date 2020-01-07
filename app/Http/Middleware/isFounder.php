@@ -29,12 +29,17 @@ class isFounder
                 $partner = DB::table(Auth::User()->prefix.'_relations')
                 ->where('partner_1_id','=', $request->partner_id)
                 ->first();
-                
+
                 $authRelationId = DB::table(Auth::User()->prefix.'_relations')
                 ->where('partner_1_id', '=', Auth::User()->id)
+                ->first();
+                
+                $authRelationIdExist = DB::table(Auth::User()->prefix.'_relations')
+                ->where('partner_1_id', '=', $request->partner_id)
+                ->where('parent_id', '=', $authRelationId->id)
                 ->exists();
                 
-                if(($partner != null) && $authRelationId && ($partner->partner_2_id == null)){
+                if((($partner != null) && ($partner->partner_2_id == null) && $authRelationIdExist) || (($partner != null) && ($authRelationId->partner_2_id == null))){
                     return $next($request);
                 }else{
                     $request->merge(['parent_id' => null]);

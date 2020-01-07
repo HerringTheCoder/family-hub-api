@@ -32,9 +32,9 @@ class isFounder
                 
                 $authRelationId = DB::table(Auth::User()->prefix.'_relations')
                 ->where('partner_1_id', '=', Auth::User()->id)
-                ->first();
+                ->exists();
                 
-                if($partner && (($partner->parent_id == $authRelationId->id) && ($partner->partner_2_id == null))){
+                if(($partner != null) && $authRelationId && ($partner->partner_2_id == null)){
                     return $next($request);
                 }else{
                     $request->merge(['parent_id' => null]);

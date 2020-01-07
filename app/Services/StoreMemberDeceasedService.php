@@ -1,5 +1,6 @@
 <?php
 namespace App\Services;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
@@ -9,6 +10,8 @@ use App\User;
 use App\Member;
 use Carbon\Carbon;
 use App\services\StoreRelationAfterMemberCreateService;
+
+
 class StoreMemberDeceasedService
 {
     public function store($request)
@@ -24,6 +27,7 @@ class StoreMemberDeceasedService
             'type' => User::DEFAULT_TYPE
         ]);
         $user->save();
+
         $founderUser = Auth::User();
         $member = new Member([
             'user_id' => $user->id,
@@ -36,14 +40,20 @@ class StoreMemberDeceasedService
         ]);
         $member->setTable(Auth::User()->prefix.'_members');
         $member->save();
-        Log::channel()->notice("User created - id : ".$user->id." and member in family ".$prefix);
+
         if($request->partner_id || $request->parent_id){
             $relation = new StoreRelationAfterMemberCreateService();
             $data = $relation->store($request,$member);
-            
-            return $data;
+        return $data;
         }
         
+        Log::channel()->notice("User created - id : ".$user->id." and member in family ".$prefix);
         
+        //return $data; //moved above because of error
+                        // "Undefined variable: data"
+                        //now it is like in StoreMemberService
+                        //correct me if I'm wrong
+                        //anyway in this way I cant pass the test
     }
+
 }

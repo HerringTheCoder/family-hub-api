@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use App\User;
 use App\Family;
 use App\Member;
+use DB;
 use App\Notifications\UserInvite;
 use App\Http\Requests\StoreMember;
 use App\Http\Requests\UpdateMember;

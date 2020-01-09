@@ -1,7 +1,9 @@
 <?php
+
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
-use App\User;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+
 class UsersTableSeeder extends Seeder
 {
     /**
@@ -11,27 +13,28 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(User::class, 20)->create();
-        $data =
-            [
-                [
-                    'id' => 1,
-                    'login' => 'admin',
-                    'password' => Hash::make('secret'),
-                    'email' => 'admin@example.com',
-                    'email_verified_at' => \Carbon\Carbon::createFromDate(2000,01,01)->toDateTimeString(),
-                ]
-            ];
-        foreach ($data as $row) {
-            $model = User::firstOrNew(["id" => $row["id"]]);
-            if($model->id!==1) {
-                Bouncer::assign('user')->to($model);
-            }
-            else {
-                Bouncer::assign('admin')->to($model);
-            }
-            $model->fill($row);
-            $model->save();
-        }
+        DB::table('users')->insert([
+            'email' => 'admin@example.com',
+            'password' => bcrypt('password'),
+            'active' => 1,
+            'activation_token' => "",
+            'prefix' => "",
+            'type' => "admin",
+            'email_verified_at' => \Carbon\Carbon::createFromDate(2000,01,01)->toDateTimeString(),
+            'created_at' => \Carbon\Carbon::createFromDate(2000,01,01)->toDateTimeString(),
+            'updated_at' => \Carbon\Carbon::createFromDate(2000,01,01)->toDateTimeString()
+        ]);
+
+        DB::table('users')->insert([
+            'email' => 'kowalski@gmail.com',
+            'password' => bcrypt('password'),
+            'active' => 1,
+            'activation_token' => "",
+            'prefix' => "family_k",
+            'type' => "user",
+            'email_verified_at' => \Carbon\Carbon::createFromDate(2000,01,01)->toDateTimeString(),
+            'created_at' => \Carbon\Carbon::createFromDate(2000,01,01)->toDateTimeString(),
+            'updated_at' => \Carbon\Carbon::createFromDate(2000,01,01)->toDateTimeString()
+        ]);
     }
 }

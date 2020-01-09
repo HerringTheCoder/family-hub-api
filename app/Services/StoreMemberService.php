@@ -43,13 +43,13 @@ class StoreMemberService
 
         $user->notify(new UserInvite($user));
         
+        Log::channel()->notice("User created - id : ".$user->id." and member in family ".$prefix);
         if($request->partner_id || $request->parent_id){
             $relation = new StoreRelationAfterMemberCreateService();
             $data = $relation->store($request,$member);
-            return $data;
+            return (['relation' => $data,'member' => $member]);
         }
-
-        Log::channel()->notice("User created - id : ".$user->id." and member in family ".$prefix);
+        return (['relation' => null,'member' => $member]);
     }
 
 }

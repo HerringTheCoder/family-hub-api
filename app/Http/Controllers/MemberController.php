@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use App\User;
 use App\Family;
 use App\Member;
+use DB;
 use App\Notifications\UserInvite;
 use App\Http\Requests\StoreMember;
 use App\Http\Requests\UpdateMember;
@@ -34,10 +35,8 @@ class MemberController extends Controller
     {
         $this->member->setTable(Auth::User()->prefix.'_members');
         $member = $this->member->get();
-        $founder = DB::table('families')
-        ->where('founder_id','=', Auth::User()->id)
-        ->exists();
-        return response()->json(['message' => 'Success','data' => $member,'founder' => $founder], 200); 
+        
+        return response()->json(['message' => 'Success','data' => $member], 200); 
         
     }
 
@@ -45,8 +44,11 @@ class MemberController extends Controller
     {
         $this->member->setTable(Auth::User()->prefix.'_members');
         $member = $this->member->where('user_id',Auth::user()->id)->get();
+        $founder = DB::table('families')
+        ->where('founder_id','=', Auth::User()->id)
+        ->exists();
 
-        return response()->json(['message' => 'Success','data' => $member], 200); 
+        return response()->json(['message' => 'Success','data' => $member,'founder' => $founder], 200); 
     }
 
     public function store(StoreMember $request,StoreMemberService $storeMember)
@@ -54,7 +56,7 @@ class MemberController extends Controller
         $data = $storeMember->store($request);
 
         return response()->json(['message' => 'Success, member added',
-                                 'relation' => $data], 201);
+                                 'data' => $data], 201);
     }
 
 
@@ -63,7 +65,7 @@ class MemberController extends Controller
        $data = $storeMember->store($request);
         
        return response()->json(['message' => 'Success, member added',
-                                'relation' => $data], 201);
+                                'data' => $data], 201);
     }
 
 

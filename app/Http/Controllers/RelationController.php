@@ -8,6 +8,7 @@ use App\Relation;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Schema;
 use App\Http\Requests\StoreRelation;
 use App\Http\Requests\UpdateRelation;
 use App\Services\StoreRelationsService;
@@ -64,11 +65,17 @@ class RelationController extends Controller
         
     }
 
-    // public function delete(Request $request)
-    // {
+     public function delete(Request $request)
+     {
+        Schema::disableForeignKeyConstraints();
+        $this->relation->setTable(Auth::User()->prefix.'_relations');
+        $this->relation->get()->each->delete();
+        Schema::enableForeignKeyConstraints();
         
-        
-    // }
+        return response()->json([
+            'message' => 'Success, data deleted!'
+        ], 200); 
+     }
 
 
     

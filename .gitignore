@@ -4,6 +4,7 @@
 /storage/*.key
 /storage/framework/cache
 /vendor
+.vs
 .env
 .env_backup
 .env.local

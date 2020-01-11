@@ -17,7 +17,9 @@ class CreateGalleryTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('author_id')->unsigned();
             $table->foreign('author_id')->references('id')->on('users');
-            $table->string('photo');
+            $table->string('filename');
+            $table->string('mime');
+            $table->string('original_filename');
             $table->string('description');
             $table->timestamps();
         });

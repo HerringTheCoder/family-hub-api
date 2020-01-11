@@ -3,6 +3,8 @@
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Faker\Factory;
+use Carbon\Carbon;
 
 class UsersTableSeeder extends Seeder
 {
@@ -13,28 +15,19 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
+        
+        $faker = Faker\Factory::create();
         DB::table('users')->insert([
-            'email' => 'admin@example.com',
+            'email' => 'asda3ewrdfasdasd@exaasdmple.com',
             'password' => bcrypt('password'),
             'active' => 1,
             'activation_token' => "",
             'prefix' => "",
             'type' => "admin",
-            'email_verified_at' => \Carbon\Carbon::createFromDate(2000,01,01)->toDateTimeString(),
-            'created_at' => \Carbon\Carbon::createFromDate(2000,01,01)->toDateTimeString(),
-            'updated_at' => \Carbon\Carbon::createFromDate(2000,01,01)->toDateTimeString()
+            'email_verified_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
         ]);
 
-        DB::table('users')->insert([
-            'email' => 'kowalski@gmail.com',
-            'password' => bcrypt('password'),
-            'active' => 1,
-            'activation_token' => "",
-            'prefix' => "family_k",
-            'type' => "user",
-            'email_verified_at' => \Carbon\Carbon::createFromDate(2000,01,01)->toDateTimeString(),
-            'created_at' => \Carbon\Carbon::createFromDate(2000,01,01)->toDateTimeString(),
-            'updated_at' => \Carbon\Carbon::createFromDate(2000,01,01)->toDateTimeString()
-        ]);
     }
 }

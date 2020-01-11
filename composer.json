@@ -12,6 +12,7 @@
         "barryvdh/laravel-cors": "^0.11.4",
         "danielme85/laravel-log-to-db": "^2.0",
         "fideloper/proxy": "^4.0",
+        "fzaninotto/faker": "^1.9",
         "guzzlehttp/guzzle": "^6.4",
         "laravel/framework": "^6.0",
         "laravel/passport": "^7.5",
@@ -20,7 +21,6 @@
     },
     "require-dev": {
         "facade/ignition": "^1.4",
-        "fzaninotto/faker": "^1.4",
         "mockery/mockery": "^1.0",
         "nunomaduro/collision": "^3.0",
         "phpunit/phpunit": "^8.0"

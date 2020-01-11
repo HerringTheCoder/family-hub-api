@@ -15,11 +15,18 @@ class CreateRelationsTable extends Migration
     {
         Schema::create('relations', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('parent_id')->nullable()->unsigned();
-            $table->foreign('parent_id')->references('id')->on('users');
-            $table->bigInteger('partner_id')->nullable()->unsigned();
-            $table->foreign('partner_id')->references('id')->on('users');
+            $table->bigInteger('partner_1_id')->unsigned()->nullable();
+            $table->foreign('partner_1_id')->references('id')->on('users');
+            $table->bigInteger('partner_2_id')->unsigned()->nullable();
+            $table->foreign('partner_2_id')->references('id')->on('users');
+            $table->bigInteger('parent_id')->unsigned()->nullable();
             $table->timestamps();
+        });
+
+        
+        
+        Schema::table($name.'_relations', function (Blueprint $table) use ($name) {
+            $table->foreign('parent_id')->references('id')->on('relations');
         });
     }
 

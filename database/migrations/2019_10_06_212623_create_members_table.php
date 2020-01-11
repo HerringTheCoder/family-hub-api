@@ -17,13 +17,13 @@ class CreateMembersTable extends Migration
             $table->bigInteger('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');
             $table->bigInteger('family_id')->unsigned();
-            $table->foreign('family_id')->references('id')->on('families'); 
-            $table->string('first_name');
-            $table->string('middle_name');
-            $table->string('last_name');
-            $table->string('avatar');
-            $table->date('day_of_birth');
-            $table->date('day_of_death')->nullable(); //nullable added because of the error General error: 1364 Field 'day_of_death' doesn't have a default value
+            $table->foreign('family_id')->references('id')->on('families');
+            $table->string('first_name')->default('');
+            $table->string('middle_name')->nullable()->default(null);
+            $table->string('last_name')->default('')->default(null);
+            $table->string('avatar')->default('')->default(null);
+            $table->date('day_of_birth')->nullable()->default(null);
+            $table->date('day_of_death')->nullable()->default(null);
             $table->timestamps();
         });
     }

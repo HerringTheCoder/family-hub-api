@@ -24,9 +24,9 @@ class TableService
             $table->bigInteger('family_id')->unsigned();
             $table->foreign('family_id')->references('id')->on('families'); 
             $table->string('first_name')->nullable();
-            $table->string('middle_name')->nullable()->default(null);
-            $table->string('last_name')->nullable()->default(null);
-            $table->string('avatar')->nullable()->default(null);
+            $table->string('middle_name')->nullable();
+            $table->string('last_name')->nullable()->;
+            $table->string('avatar')->nullable()->;
             $table->date('day_of_birth')->nullable()->default(null);
             $table->date('day_of_death')->nullable()->default(null);
             $table->timestamps();

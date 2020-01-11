@@ -11,7 +11,8 @@ $factory->define(Member::class, function (Faker $faker) {
         'family_id' => rand(1,50),
         'first_name' => $faker->name, 
         'middle_name' => $faker->name, 
-        'last_name' =>$faker->name, 
+        'last_name' =>$faker->name,
         'day_of_birth' => date("Y-m-d"),
+        'avatar' =>''
     ];
 });

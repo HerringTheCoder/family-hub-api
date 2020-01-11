@@ -102,7 +102,7 @@ class SignupTest extends TestCase
         ]);
 
         $response = $this->call('GET', "/api/auth/signup/activate/abc")
-              ->assertStatus(201)
+              ->assertStatus(200)
               ->assertJsonStructure([
                   'message',
                   'data'
@@ -144,7 +144,7 @@ class SignupTest extends TestCase
 
 
         $response = $this->call('GET', "/api/auth/signup/activate/member/abc")
-              ->assertStatus(201)
+              ->assertStatus(200)
               ->assertJsonStructure([
                 'email',
                 'message',

@@ -53,7 +53,7 @@ class FamilyTest extends TestCase
 
         $response = $this->get('/api/auth/family/all');
 
-          $response->assertStatus(201)
+          $response->assertStatus(200)
           ->assertJsonStructure([
               'message',
               'data'
@@ -83,7 +83,7 @@ class FamilyTest extends TestCase
             'name'=>$this->prefix,
             'founder_id'=>$this->user->id,
         ]);
-        $response->assertStatus(201)
+        $response->assertStatus(200)
           ->assertJsonStructure([
               'message'
           ]);

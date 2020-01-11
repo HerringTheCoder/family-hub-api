@@ -84,7 +84,7 @@ class GalleryTest extends TestCase
             'id'=>'1',  //I created new table, so it allways will be 1
          ]); 
          
-         $response->assertStatus(201)
+         $response->assertStatus(200)
           ->assertJsonStructure([
               'message',
           ]);  

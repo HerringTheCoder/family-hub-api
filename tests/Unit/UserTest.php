@@ -6,6 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
+
 class UserTest extends TestCase
 {
     use RefreshDatabase, WithFaker;
@@ -33,7 +34,7 @@ class UserTest extends TestCase
         $this->actingAs($this->admin, 'api');
 
         $response = $this->get('/api/auth/user/all');
-        $response->assertStatus(201)
+        $response->assertStatus(200)
           ->assertJsonStructure([
               'message',
               'data'
@@ -51,7 +52,7 @@ class UserTest extends TestCase
             'id'=>$user->id,
             'email'=>'abc@mail.com'
         ]);
-        $response->assertStatus(201)
+        $response->assertStatus(200)
           ->assertJsonStructure([
               'message'
           ]);
@@ -70,7 +71,7 @@ class UserTest extends TestCase
         $response = $this->json('POST', '/api/auth/user/active' , [
             'id'=>$user->id,
         ] );
-        $response->assertStatus(201)
+        $response->assertStatus(200)
           ->assertJsonStructure([
               'message'
           ]);
@@ -87,7 +88,7 @@ class UserTest extends TestCase
         $response = $this->json('POST', '/api/auth/user/deactive' , [
             'id'=>$user->id,
         ] );
-        $response->assertStatus(201)
+        $response->assertStatus(200)
           ->assertJsonStructure([
               'message'
           ]);

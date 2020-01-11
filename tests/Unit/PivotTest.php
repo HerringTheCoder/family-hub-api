@@ -30,7 +30,7 @@ class PivotTest extends TestCase
 
         $response = $this->get('/api/auth/pivot/get');
 
-        $response->assertStatus(201)
+        $response->assertStatus(200)
         ->assertJsonStructure([
             'message',
             'count'

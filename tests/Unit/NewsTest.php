@@ -78,7 +78,7 @@ class NewsTest extends TestCase
 
           $response = $this->get('/api/auth/news/all');
 
-          $response->assertStatus(201)
+          $response->assertStatus(200)
           ->assertJsonStructure([
               'message',
               'data'
@@ -98,7 +98,7 @@ class NewsTest extends TestCase
 
         $response = $this->get('/api/auth/news/all');
 
-        $response->assertStatus(201)
+        $response->assertStatus(200)
         ->assertJsonStructure([
             'message',
             'data'
@@ -127,7 +127,7 @@ class NewsTest extends TestCase
         $response = $this->call('GET','/api/auth/news/edit',[
             'id'=>'1'
         ]);
-        $response->assertStatus(201)
+        $response->assertStatus(200)
           ->assertJsonStructure([
               'message',
               'data'
@@ -140,7 +140,7 @@ class NewsTest extends TestCase
             'description' => 'somethingelse'
         ]);
 
-        $response->assertStatus(201)
+        $response->assertStatus(200)
           ->assertJsonStructure([
               'message',
           ]);           //updating news
@@ -171,7 +171,7 @@ class NewsTest extends TestCase
             'id'=>'1',  //I created new news table, so it allways will be 1
          ]); 
          
-         $response->assertStatus(201)
+         $response->assertStatus(200)
           ->assertJsonStructure([
               'message',
           ]);  

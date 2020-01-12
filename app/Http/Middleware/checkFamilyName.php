@@ -18,7 +18,7 @@ class CheckFamilyName
     {
         $family = DB::table('families')->where('name', '=', $request->name )->first();
         if($family){
-            $family = DB::table('families')->where('name', '=', $request->name )->latest('id')->first();
+            $family = DB::table('families')->where('name', '=', $request->name )->orderBy('id', 'desc')
             $request->merge(['name' => $request->name.'_'.$family->id]);
             return $next($request);
         }else{

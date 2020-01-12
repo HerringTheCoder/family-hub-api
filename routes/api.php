@@ -8,13 +8,12 @@ Route::group([
     Route::get('signup/activate/{token}', 'AuthController@signupActivate');
     Route::get('signup/activate/member/{token}', 'MemberController@activate');
     Route::get('spam/check', 'AuthController@spamChecker');
-    Route::group([    
-        'namespace' => 'Auth',    
+    Route::group([     
         'prefix' => 'password'
     ], function () {    
-        Route::post('create', 'PasswordResetController@create');
-        Route::get('find/{token}', 'PasswordResetController@find');
-        Route::post('reset', 'PasswordResetController@reset');
+        Route::post('create', 'Auth\PasswordResetController@create');
+        Route::get('find/{token}', 'Auth\PasswordResetController@find');
+        Route::post('reset', 'Auth\PasswordResetController@reset');
     });
 
     Route::group([

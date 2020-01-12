@@ -39,6 +39,7 @@ class isFounder
                 ->where('parent_id', '=', $authRelationId->id)
                 ->exists();
                 
+                
                 if((($partner != null) && ($partner->partner_2_id == null) && $authRelationIdExist) || (($partner != null) && ($authRelationId->partner_2_id == null))){
                     return $next($request);
                 }else{
@@ -48,7 +49,13 @@ class isFounder
                 }
             }else{
                 $parent = DB::table(Auth::User()->prefix.'_relations')->where('partner_1_id',Auth::User()->id)->first();
-                $request->merge(['parent_id' => $parent->id]);
+                if($parent){
+                    $request->merge(['parent_id' => $parent->id]);
+                    $parent = DB::table(Auth::User()->prefix.'_relations')->where('partner_2_id',Auth::User()->id)->first();
+                }elseif($parent){
+                    $parent = DB::table(Auth::User()->prefix.'_relations')->where('partner_2_id',Auth::User()->id)->first();
+                    $request->merge(['parent_id' => $parent->id]);
+                }
                 return $next($request);
             }
         }

@@ -51,27 +51,6 @@ class FamiliesTableSeeder extends Seeder
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
             ]);
 
-            
-            for ($z=0; $z < 3; $z++) { 
-                DB::table($prefix.'_news')->insert([
-                    'author_id' => $user_id,
-                    'title' => $faker->word,
-                    'description' => $faker->text($maxNbChars = 200),
-                    'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
-                    'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
-                ]);
-                
-                DB::table($prefix.'_gallery')->insert([
-                    'author_id' => $user_id,
-                    'description' => $faker->text($maxNbChars = 200),
-                    'filename' => "x",
-                    'original_filename' => "x",
-                    'mime' => "x",
-                    'filename' => "x",
-                    'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
-                    'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
-                ]);
-            }
 
 
 
@@ -141,6 +120,39 @@ class FamiliesTableSeeder extends Seeder
                     ]);
                     continue;
                 }
+        }
+
+        foreach ($member as $key) {
+            for ($z=0; $z < 3; $z++) { 
+                DB::table($prefix.'_news')->insert([
+                    'author_id' => $key->user_id,
+                    'title' => $faker->word,
+                    'description' => $faker->text($maxNbChars = 200),
+                    'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                    'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+                ]);
+                foreach ($member as $v) {
+                    if($key->id != $v->id){
+                        DB::table($prefix.'_pivot')->insert([
+                            'user_id' => $key->user_id,
+                            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                            'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+                        ]);
+                    }
+                }
+                
+                
+                DB::table($prefix.'_gallery')->insert([
+                    'author_id' => $key->user_id,
+                    'description' => $faker->text($maxNbChars = 200),
+                    'filename' => "x",
+                    'original_filename' => "x",
+                    'mime' => "x",
+                    'filename' => "x",
+                    'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                    'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+                ]);
+            }
         }
 
     }

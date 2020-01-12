@@ -99,6 +99,7 @@ class AuthController extends Controller
         $user->active = true;
         $user->activation_token = '';
         $user->save();
+        
         AfterActivateAccount::dispatch($user);
         
         Log::channel()->notice("User ".$user->id." activated account");

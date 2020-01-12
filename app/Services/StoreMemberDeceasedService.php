@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\Log;
 use App\User;
 use App\Member;
 use Carbon\Carbon;
-use App\services\StoreRelationAfterMemberCreateService;
+use App\Services\StoreRelationAfterMemberCreateService;
+
+
 class StoreMemberDeceasedService
 {
     public function store($request)
@@ -20,7 +22,7 @@ class StoreMemberDeceasedService
             'password' => bcrypt($password),
             'activation_token' => "",
             'active' => 1,
-            'prefix' => $prefix,           
+            'prefix' => $prefix,
             'type' => User::DEFAULT_TYPE
         ]);
         $user->save();
@@ -40,10 +42,10 @@ class StoreMemberDeceasedService
         if($request->partner_id || $request->parent_id){
             $relation = new StoreRelationAfterMemberCreateService();
             $data = $relation->store($request,$member);
-            return (['relation' => null,'member' => $member]);
+            return (['relation' => $data,'member' => $member]);
         }
         return (['relation' => null,'member' => $member]);
-        
-        
+
+
     }
 }

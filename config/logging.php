@@ -50,7 +50,7 @@ return [
             'connection' => 'default',
             'collection' => 'logs',
             'detailed' => true,
-            'queue' => true,
+            'queue' => false,
             'queue_name' => '',
             'queue_connection' => '',
             'processors' => [

@@ -9,7 +9,6 @@ use App\Relation;
 use DB;
 
 
-
 class TreeService
 {
     protected $json;
@@ -17,14 +16,12 @@ class TreeService
     protected $parent;
 
     public function __construct() {
-        $this->parent;
+        $this->parent = null;
         $this->number = 0;
         $this->json = [];
-        $this->licz = 0;
     }
     public function get()
     {
-        
         $first = DB::table(Auth::User()->prefix.'_relations')
         ->where('parent_id','=', null)
         ->first();
@@ -71,7 +68,7 @@ class TreeService
                         'deathDay' => $name1->day_of_death,
                         'relation_id' => $first->id,
                         'user_id' => $first->partner_1_id,
-                        'img0' => $name1->avatar,
+                        'img' => $name1->avatar,
                         ];
                         $this->number++;
             }
@@ -80,12 +77,10 @@ class TreeService
         }
         
         $this->parent =  $this->number-1;
-        TreeService::getChildren($first->id, $this->number-1);
+        $this->getChildren($first->id, $this->number-1);
         $json = $this->json;
 
-
         return $json;
-        
     }
 
 
@@ -131,8 +126,6 @@ class TreeService
                     ];
                     $this->number++;
                     $this->parent =  $this->number-2;
-
-                  
             }else{
                 $name1 = DB::table(Auth::User()->prefix.'_members')
                 ->where('user_id','=', $child->partner_1_id)
@@ -152,7 +145,7 @@ class TreeService
                     $this->parent =  $this->number-1;
             }
             
-            TreeService::getChildren($child->id, $this->parent);
+            $this->getChildren($child->id, $this->parent);
 
         }
     }

@@ -1,5 +1,14 @@
 <?php
 use Illuminate\Http\Request;
+
+Route::group([     
+    'prefix' => 'password'
+], function () {    
+    Route::post('create', 'Auth\PasswordResetController@create');
+    Route::get('find/{token}', 'Auth\PasswordResetController@find');
+    Route::post('reset', 'Auth\PasswordResetController@reset');
+});
+
 Route::group([
     'prefix' => 'auth'
 ], function () {
@@ -8,7 +17,13 @@ Route::group([
     Route::get('signup/activate/{token}', 'AuthController@signupActivate');
     Route::get('signup/activate/member/{token}', 'MemberController@activate');
     Route::get('spam/check', 'AuthController@spamChecker');
-  
+    // Route::group([     
+    //     'prefix' => 'password'
+    // ], function () {    
+    //     Route::get('find/{token}', 'Auth\PasswordResetController@find');
+    //     Route::post('reset', 'Auth\PasswordResetController@reset');
+    // });
+
     Route::group([
         'middleware' => 'auth:api'
     ], function() {
@@ -21,6 +36,7 @@ Route::group([
         Route::post('member/update/avatar', 'MemberController@avatar');
         Route::get('member/all', 'MemberController@index');
         Route::get('member/info', 'MemberController@info');
+        Route::get('member/info/one/{id}', 'MemberController@infoOne');
 
         Route::get('news/all', 'NewsController@index');
         Route::post('news/add', 'NewsController@store');
@@ -81,15 +97,7 @@ Route::group([
         Route::get('admin/logs/all', 'LogController@index');
     });
 
-    Route::group([    
-        'namespace' => 'Auth',    
-        'middleware' => 'api',    
-        'prefix' => 'password'
-    ], function () {    
-        Route::post('create', 'PasswordResetController@create');
-        Route::get('find/{token}', 'PasswordResetController@find');
-        Route::post('reset', 'PasswordResetController@reset');
-    });
+ 
 
     Route::fallback(function(){
         return response()->json([

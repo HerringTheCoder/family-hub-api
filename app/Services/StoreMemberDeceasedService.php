@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Log;
 use App\User;
 use App\Member;
 use Carbon\Carbon;
-use App\services\StoreRelationAfterMemberCreateService;
+use App\Services\StoreRelationAfterMemberCreateService;
 
 
 class StoreMemberDeceasedService

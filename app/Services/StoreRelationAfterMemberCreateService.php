@@ -47,7 +47,7 @@ class StoreRelationAfterMemberCreateService
                 $data = "Added to relation";
                 return $data;
             }else{
-                dd($request->parent_id);
+                
                 $data = "No added to relation";
                 return $data;
             }

@@ -51,6 +51,17 @@ class MemberController extends Controller
         return response()->json(['message' => 'Success','data' => $member,'founder' => $founder], 200); 
     }
 
+    public function infoOne($id)
+    {
+        $this->member->setTable(Auth::User()->prefix.'_members');
+        $member = $this->member->where('user_id',$id)->get();
+        $founder = DB::table('families')
+        ->where('founder_id','=', Auth::User()->id)
+        ->exists();
+
+        return response()->json(['message' => 'Success','data' => $member,'founder' => $founder], 200); 
+    }
+
     public function store(StoreMember $request,StoreMemberService $storeMember)
     {
         $data = $storeMember->store($request);

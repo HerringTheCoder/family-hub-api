@@ -21,6 +21,7 @@ Route::group([
         Route::post('member/update/avatar', 'MemberController@avatar');
         Route::get('member/all', 'MemberController@index');
         Route::get('member/info', 'MemberController@info');
+        Route::get('member/info/one/{id}', 'MemberController@infoOne');
 
         Route::get('news/all', 'NewsController@index');
         Route::post('news/add', 'NewsController@store');

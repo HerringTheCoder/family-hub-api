@@ -68,7 +68,7 @@ class TreeService
                         'deathDay' => $name1->day_of_death,
                         'relation_id' => $first->id,
                         'user_id' => $first->partner_1_id,
-                        'img0' => $name1->avatar,
+                        'img' => $name1->avatar,
                         ];
                         $this->number++;
             }

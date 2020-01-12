@@ -13,7 +13,7 @@ Route::group([
     'prefix' => 'auth'
 ], function () {
     Route::post('login', 'AuthController@login');
-    Route::post('signup', 'AuthController@signup')->middleware('checkFamilyName');
+    Route::post('signup', 'AuthController@signup')->middleware('checkName');
     Route::get('signup/activate/{token}', 'AuthController@signupActivate');
     Route::get('signup/activate/member/{token}', 'MemberController@activate');
     Route::get('spam/check', 'AuthController@spamChecker');

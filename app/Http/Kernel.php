@@ -74,7 +74,7 @@ class Kernel extends HttpKernel
         'news' => \App\Http\Middleware\NewsCheck::class,
         'gallery' => \App\Http\Middleware\GalleryCheck::class,
         'relation' => \App\Http\Middleware\RelationCheck::class,
-        'checkFamilyName' => \App\Http\Middleware\CheckFamilyName::class,
+        'checkName' => \App\Http\Middleware\CheckFamilyName::class,
     ];
 
     /**

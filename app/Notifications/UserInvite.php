@@ -40,11 +40,11 @@ class UserInvite extends Notification
      */
     public function toMail($notifiable)
     {
-        $url = url('/api/auth/signup/activate/member/'.$notifiable->activation_token);
+        $url = 'localhost:8080/family-hub/verify/member'.$notifiable->activation_token;
         return (new MailMessage)
             ->subject('Confirm your account')
             ->line('Welcome in family hub! Please before you begin, you must confirm your account.')
-            ->action('Confirm Account', url($url))
+            ->action('Confirm Account', $url)
             ->line('Start using our application!');
     }
 

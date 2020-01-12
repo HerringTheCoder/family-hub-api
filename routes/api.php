@@ -1,5 +1,14 @@
 <?php
 use Illuminate\Http\Request;
+
+Route::group([     
+    'prefix' => 'password'
+], function () {    
+    Route::post('create', 'Auth\PasswordResetController@create');
+    Route::get('find/{token}', 'Auth\PasswordResetController@find');
+    Route::post('reset', 'Auth\PasswordResetController@reset');
+});
+
 Route::group([
     'prefix' => 'auth'
 ], function () {
@@ -8,13 +17,12 @@ Route::group([
     Route::get('signup/activate/{token}', 'AuthController@signupActivate');
     Route::get('signup/activate/member/{token}', 'MemberController@activate');
     Route::get('spam/check', 'AuthController@spamChecker');
-    Route::group([     
-        'prefix' => 'password'
-    ], function () {    
-        Route::post('create', 'Auth\PasswordResetController@create');
-        Route::get('find/{token}', 'Auth\PasswordResetController@find');
-        Route::post('reset', 'Auth\PasswordResetController@reset');
-    });
+    // Route::group([     
+    //     'prefix' => 'password'
+    // ], function () {    
+    //     Route::get('find/{token}', 'Auth\PasswordResetController@find');
+    //     Route::post('reset', 'Auth\PasswordResetController@reset');
+    // });
 
     Route::group([
         'middleware' => 'auth:api'

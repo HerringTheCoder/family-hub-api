@@ -19,6 +19,6 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-            'http://family.przedprojekt.com/api/auth/password/create'
+            'api/auth/password/create'
     ];
 }

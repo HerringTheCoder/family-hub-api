@@ -51,7 +51,8 @@ class isFounder
                 $parent = DB::table(Auth::User()->prefix.'_relations')->where('partner_1_id',Auth::User()->id)->first();
                 if($parent){
                     $request->merge(['parent_id' => $parent->id]);
-                }else{
+                    $parent = DB::table(Auth::User()->prefix.'_relations')->where('partner_2_id',Auth::User()->id)->first();
+                }elseif($parent){
                     $parent = DB::table(Auth::User()->prefix.'_relations')->where('partner_2_id',Auth::User()->id)->first();
                     $request->merge(['parent_id' => $parent->id]);
                 }

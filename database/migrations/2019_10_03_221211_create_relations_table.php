@@ -25,7 +25,7 @@ class CreateRelationsTable extends Migration
 
         
         
-        Schema::table($name.'_relations', function (Blueprint $table) use ($name) {
+        Schema::table('relations', function (Blueprint $table){
             $table->foreign('parent_id')->references('id')->on('relations');
         });
     }

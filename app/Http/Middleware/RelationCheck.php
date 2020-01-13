@@ -54,7 +54,10 @@ class RelationCheck
             ->first();
             
 
-            if($first || $second || $parent ||Auth::user()->isFounder){
+            if($request->id == $request->parent_id){
+                return response()->json([
+                    'message' => 'Sorry, parent id can not be the same like relation id!'], 403);
+            }elseif($first || $second || $parent ||Auth::user()->isFounder){
                 return $next($request);
             }else{
                 return response()->json([

@@ -10,7 +10,7 @@ Route::group([
 });
 
 Route::group([
-    'prefix' => 'auth'
+    'prefix' => 'auth',
 ], function () {
     Route::post('login', 'AuthController@login');
     Route::post('signup', 'AuthController@signup')->middleware('checkName');
@@ -28,7 +28,7 @@ Route::group([
         'middleware' => 'auth:api'
     ], function() {
 
-
+        //'throttle:6,1',
         Route::post('member/add', 'MemberController@store')->middleware('familyID','isFounder');
         Route::post('member/add/deceased', 'MemberController@storeDeceased')->middleware('familyID','isFounder');
         Route::get('member/edit', 'MemberController@edit');

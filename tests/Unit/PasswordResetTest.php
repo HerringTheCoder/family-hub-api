@@ -22,7 +22,7 @@ class PasswordResetTest extends TestCase
             'email' => 'email@example.com',
         ]);
 
-        $response = $this->json('POST', '/api/auth/password/create', [
+        $response = $this->json('POST', '/api/password/create', [
             'email' => 'email@example.com'
         ])
         ->assertJsonStructure([
@@ -47,7 +47,7 @@ class PasswordResetTest extends TestCase
             'email' => 'email@example.com',
         ]);
 
-        $response = $this->json('POST', '/api/auth/password/create', [
+        $response = $this->json('POST', '/api/password/create', [
             'email' => 'mail@example.com'
         ])
         ->assertJsonStructure([
@@ -72,7 +72,7 @@ class PasswordResetTest extends TestCase
             'token'=>'abc'
         ]);
 
-        $response = $this->call('GET', "/api/auth/password/find/abc")
+        $response = $this->call('GET', "/api/password/find/abc")
         ->assertJsonStructure([
             'email',
             'token'
@@ -89,7 +89,7 @@ class PasswordResetTest extends TestCase
             'token'=>'abc'
         ]);
 
-        $response = $this->call('GET', "/api/auth/password/find/abcd")
+        $response = $this->call('GET', "/api/password/find/abcd")
         ->assertJsonStructure([
             'message'
         ])
@@ -112,7 +112,7 @@ class PasswordResetTest extends TestCase
             'token'=>'abc'
         ]);
 
-        $response=$this->json('POST', '/api/auth/password/reset', [
+        $response=$this->json('POST', '/api/password/reset', [
             'token' => 'abc',
             'email'=> 'email@email.pl',
             'password' => 'newPassword',
@@ -144,7 +144,7 @@ class PasswordResetTest extends TestCase
             'token'=>'abc'
         ]);
 
-        $response=$this->json('POST', '/api/auth/password/reset', [
+        $response=$this->json('POST', '/api/password/reset', [
             'token' => 'abc',
             'email'=> 'email@email.pl',
             'password' => 'newPassword',
@@ -174,7 +174,7 @@ class PasswordResetTest extends TestCase
             'token'=>'abc'
         ]);
 
-        $response=$this->json('POST', '/api/auth/password/reset', [
+        $response=$this->json('POST', '/api/password/reset', [
             'token' => 'abcf',
             'email'=> 'email@email.pl',
             'password' => 'newPassword',

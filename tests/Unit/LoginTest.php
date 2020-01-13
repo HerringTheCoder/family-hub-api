@@ -22,7 +22,7 @@ public function test_login_with_proper_credentials()
    \Artisan::call('passport:install'); //creating personal access client
                                         //needed to create token in AuthController line 68
    
-    factory(\App\User::class)->create([
+   $user = factory(\App\User::class)->create([
      'email' => 'email@example.com',
      'password' => \Hash::make('secret'),
      'active' => 1,
@@ -156,7 +156,6 @@ public function test_login_with_wrong_email(){
             
           ]);
 
-         
          $this->be($user); //symulating login
 
          $token = \Auth::user()->createToken('abc')->accessToken; //creating personal access token
@@ -170,9 +169,7 @@ public function test_login_with_wrong_email(){
 
            dump($response->getContent());
 
-           
-        }
-        
+        }        
     
 }
    

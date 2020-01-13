@@ -39,10 +39,10 @@ class NewsTest extends TestCase
         $this->news = factory(\App\News::class)->create([
             'author_id' => $this->user->id,
         ]);
-
+/*
         $this->news = factory(\App\News::class)->create([
             'author_id' => $this->admin->id,
-        ]);
+        ]);*/
 
         
         $this->service = new \App\Services\TableService();
@@ -58,12 +58,10 @@ class NewsTest extends TestCase
         $this->service = null;
       }
 
-      public function test_we_can_add_news_and_get_them_all()
+      public function test_user_can_add_news_and_get_them_all()
     {
-
         $this->actingAs($this->user, 'api');
         
-
         $credentials =([
             'title' => 'abc',
             'description' => 'asdsczxfd'
@@ -90,29 +88,10 @@ class NewsTest extends TestCase
           //If I would do "get all news" separately, like below, it give me an empty data, and I wanna be sure, that its work
     }
 
-
-    public function test_get_all_news()
+    public function test_user_can_edit_and_update_news()
     {
-        
-        $this->actingAs($this->user, 'api');
-
-        $response = $this->get('/api/auth/news/all');
-
-        $response->assertStatus(200)
-        ->assertJsonStructure([
-            'message',
-            'data'
-        ]);
-        dump($response->getContent());
-    }
-
-
-    public function test_we_can_edit_and_update_news()
-    {
-
         $this->actingAs($this->admin, 'api');
         
-
         $credentials =([
             'author_id'=>$this->admin->id,
             'title' => 'abcdfe',
@@ -152,6 +131,67 @@ class NewsTest extends TestCase
     }
 
 
+    public function test_user_cant_edit_someone_elses_news()
+    {
+        $this->actingAs($this->admin, 'api');
+        
+        $credentials =([
+            'author_id'=>$this->admin->id,
+            'title' => 'abcdfe',
+            'description' => 'asdsczxfddh'
+        ]);
+
+        $response = $this->json('POST', '/api/auth/news/add' , $credentials );
+                                            //so here I created news which will be editing below
+
+        $response->assertStatus(201);
+
+        $this->actingAs($this->user, 'api');
+
+        $response = $this->call('GET','/api/auth/news/edit',[
+            'id'=>'1'
+        ]);
+        $response->assertStatus(403)
+          ->assertJsonStructure([
+              'message',
+          ]);
+
+        dump($response->getContent());
+    }
+
+    public function test_user_cant_update_someone_elses_news()
+    {
+        $this->actingAs($this->admin, 'api');
+        
+        $credentials =([
+            'author_id'=>$this->admin->id,
+            'title' => 'abcdfe',
+            'description' => 'asdsczxfddh'
+        ]);
+
+        $response = $this->json('POST', '/api/auth/news/add' , $credentials );
+                                            //so here I created news which will be editing below
+
+        $response->assertStatus(201);
+
+        $this->actingAs($this->user, 'api');
+
+        $response = $this->json('PUT', '/api/auth/news/update', [
+            'id'=>'1',
+            'title'=>'otherone',
+            'description' => 'somethingelse'
+        ]);
+
+        $response->assertStatus(403)
+          ->assertJsonStructure([
+              'message',
+          ]);          
+
+          
+        dump($response->getContent());
+    }
+
+
     public function test_delete_news()
     {
 
@@ -179,6 +219,35 @@ class NewsTest extends TestCase
         dump($response->getContent());
 
         $response = $this->assertDatabaseMissing($this->prefix.'_news', ['title' => 'abcde']); 
+
+    }
+
+    public function test_user_cant_delete_someone_elses_news()
+    {
+
+        $this->actingAs($this->admin, 'api');
+        
+
+        $credentials =([
+            'title' => 'abcde',
+            'description' => 'asdsczxfd'
+        ]);
+
+        $response = $this->json('POST', '/api/auth/news/add' , $credentials );
+                                            //so here I created news which will be deleted below
+
+            $this->actingAs($this->user, 'api');
+
+         $response = $this->json('DELETE', '/api/auth/news/delete',[
+            'id'=>'1',  //I created new news table, so it allways will be 1
+         ]); 
+         
+         $response->assertStatus(403)
+          ->assertJsonStructure([
+              'message',
+          ]);  
+          
+        dump($response->getContent());
 
     }
 

@@ -29,25 +29,13 @@ class FamilyTest extends TestCase
             'prefix' => $this->prefix,
             'type' => 'admin'
         ]);
-
-        /*$this->family=factory(\App\Family::class)->create([
-            'founder_id'=>$this->user->id,
-        ]);
-        /*factory(\App\Member::class)->create([
-            'family_id'=>$this->family->id,
-            'user_id'=>$this->family->founder_id,
-            'avatar'=>''
-        ]);*/
-
-        //$this->service = new \App\Services\TableService();
-        //$this->service->addTables($this->prefix);
         $this->service = new \App\Services\SignupActiveService();
         $this->service->active($this->user);
         $this->family = \App\Family::where('founder_id',$this->user->id) -> first();
         
     }
 
-    public function test_we_cen_get_family_table()
+    public function test_admin_can_get_all_families_tables()
     {
         $this->actingAs($this->admin, 'api');
 
@@ -63,7 +51,22 @@ class FamilyTest extends TestCase
 
     }
 
-    public function test_admin_can_edit_family()
+    public function test_user_cant_get_all_families_tables_if_we_are_not_admin()
+    {
+        $this->actingAs($this->user, 'api');
+
+        $response = $this->get('/api/auth/family/all');
+
+          $response->assertStatus(401)
+          ->assertJsonStructure([
+              'message'
+          ]);
+
+          dump($response->getContent());
+
+    }
+
+    public function test_admin_can_edit_and_update_family()
     {
         $this->actingAs($this->admin, 'api');
 
@@ -76,8 +79,6 @@ class FamilyTest extends TestCase
               'data'
           ]); //getting family to edit
 
-
-
           $response = $this->json('PUT', '/api/auth/family/update', [       //editing family
             'id'=>$this->family->id,
             'name'=>$this->prefix,
@@ -87,8 +88,15 @@ class FamilyTest extends TestCase
           ->assertJsonStructure([
               'message'
           ]);
+          dump($response->getContent());
 
-          $response = $this->call('GET','/api/auth/family/edit',[
+    }
+
+    public function test_edit_if_family_doesnt_exist()
+    {
+        $this->actingAs($this->admin, 'api');
+
+        $response = $this->call('GET','/api/auth/family/edit',[
             'id'=>''      
         ]);
         $response->assertStatus(200)
@@ -97,6 +105,36 @@ class FamilyTest extends TestCase
           ]);
           dump($response->getContent());
 
+    }
+
+    public function test_user_cant_edit_family_if_we_are_not_admin()
+    {
+        $this->actingAs($this->user, 'api');
+
+        $response = $this->call('GET','/api/auth/family/edit',[ //getting family to edit
+            'id'=>$this->family->id      
+        ]);
+        $response->assertStatus(401)
+          ->assertJsonStructure([
+              'message'
+          ]); 
+          dump($response->getContent());
+    }
+
+    public function test_user_cant_update_family_if_we_are_not_admin()
+    {
+        $this->actingAs($this->user, 'api');
+
+        $response = $this->json('PUT', '/api/auth/family/update', [       //editing family
+            'id'=>$this->family->id,
+            'name'=>$this->prefix,
+            'founder_id'=>$this->user->id,
+        ]);
+        $response->assertStatus(401)
+          ->assertJsonStructure([
+              'message'
+          ]); 
+          dump($response->getContent());
     }
 
     public function test_cant_update_when_founder_is_declared_in_other_family()

@@ -27,6 +27,8 @@ class UserTest extends TestCase
         $this->admin= factory(\App\User::class)->create([
             'type' => 'admin'
         ]);
+
+        $this->user= factory(\App\User::class)->create();
     }
 
     public function test_admin_can_get_all_users()
@@ -38,6 +40,18 @@ class UserTest extends TestCase
           ->assertJsonStructure([
               'message',
               'data'
+          ]);
+          dump($response->getContent());
+    }
+
+    public function test_user_cant_get_all_users()
+    {
+        $this->actingAs($this->user, 'api');
+
+        $response = $this->get('/api/auth/user/all');
+        $response->assertStatus(401)
+          ->assertJsonStructure([
+              'message',
           ]);
           dump($response->getContent());
     }
@@ -59,6 +73,24 @@ class UserTest extends TestCase
           dump($response->getContent());
 
           $response = $this->assertDatabaseHas('users', ['email' => 'abc@mail.com']);
+
+    }
+
+    public function test_user_cant_update_user()
+    {
+        $this->actingAs($this->user, 'api');
+
+        $user=\App\User::where('email','lol@lol.pl') -> first();
+
+        $response = $this->json('PUT', '/api/auth/user/update', [       //editing family
+            'id'=>$user->id,
+            'email'=>'abc@mail.com'
+        ]);
+        $response->assertStatus(401)
+          ->assertJsonStructure([
+              'message'
+          ]);
+          dump($response->getContent());
 
     }
 

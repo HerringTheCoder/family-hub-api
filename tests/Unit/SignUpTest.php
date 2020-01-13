@@ -7,40 +7,51 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Support\Facades\Notification;
 use App\User;
+use Faker\Factory;
 
 class SignupTest extends TestCase
 {
     use RefreshDatabase, WithFaker;
+
+    protected $credentials;
+
+    public function setUp() :void
+    {
+        parent::setUp();
+
+        $faker = \Faker\Factory::create();
+
+        $this->credentials = [
+          'email' => $faker->email(),
+          'password' => 'secret',
+          'password_confirmation' => 'secret',
+          'activation_token' => 'dsfdsgfdsfsfsdfsd',
+          'prefix' => $faker->name(),
+          'name' => $faker->name(),
+
+        ];
+
+    }
     
     public function test_registration_create_user_family_and_member()
     {
         
        Notification::fake();
         
-        $credentials = [
-            'email' => 'email@example.com',
-            'password' => 'secret',
-            'password_confirmation' => 'secret',
-            'activation_token' => 'dsfdsgfdsfsfsdfsd',
-            'prefix' => 'Lol',      //above - user credentials
-            'name' => 'Kowalscy' //name of family
-
-          ];
-
-
-          $response = $this->json('POST', '/api/auth/signup', $credentials );
+          $response = $this->json('POST', '/api/auth/signup', $this->credentials );
           //dump($response->getContent()); //showing a message for my use
-          $response->assertSuccessful()
-                    ->assertStatus(201)
+          $response->assertStatus(201)
                     ->assertJsonStructure([
                           'message'
                       ]);
 
           dump($response->getContent());
 
-        $response = $this->assertDatabaseHas('users', ['email' => 'email@example.com']);          
+          $user = \App\User::where('email',$this->credentials['email']) -> first();
+
+        $response = $this->assertDatabaseHas('users', ['email' => $user['email']]);          
         
-        Notification::assertSentTo(\App\User::where('email','email@example.com') -> first(), \App\Notifications\SignupActivate::class);      
+        Notification::assertSentTo(\App\User::where('email' , $user['email']) -> first(), \App\Notifications\SignupActivate::class);      
                 
     }
   
@@ -71,20 +82,11 @@ class SignupTest extends TestCase
       public function test_user_cant_signup_with_email_taken()
       {
         factory(User::class)->create([
-          'email' => 'emails@example.com',
+          'email' => $this->credentials['email'],
         ]);
         
-        $credentials = [
-          'email' => 'emails@example.com',
-          'password' => 'secret',
-          'password_confirmation' => 'secret',
-          'activation_token' => 'dsfdsgfdsfsfsdfsd',
-          'prefix' => 'Lol',      
-          'name' => 'Kowalscy'
-          
-        ];
 
-        $response = $this->json('POST', '/api/auth/signup', $credentials)
+        $response = $this->json('POST', '/api/auth/signup', $this->credentials)
           ->assertJsonFragment([
             'email' => ['The email has already been taken.']
           ])
@@ -96,8 +98,6 @@ class SignupTest extends TestCase
       public function test_user_can_activate_his_account_via_email_with_proper_token()
       {
         $user = factory(User::class)->create([
-          'email' =>'maill@example.com',
-          'prefix' => 'Kosty',
           'activation_token' => 'abc',
         ]);
 
@@ -113,8 +113,8 @@ class SignupTest extends TestCase
 
         //$user = \App\User::where('email','maill@example.com') -> first();
 
-        $response = $this->assertDatabaseHas('families', ['name' => 'Kosty'])
-                          ->assertDatabaseHas('Kosty_members', ['user_id' => $user['id']]);    
+        $response = $this->assertDatabaseHas('families', ['name' => $user['prefix']])
+                          ->assertDatabaseHas($user->prefix.'_members', ['user_id' => $user['id']]);    
         
       }
 

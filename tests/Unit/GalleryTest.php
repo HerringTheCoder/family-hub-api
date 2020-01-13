@@ -26,6 +26,7 @@ class GalleryTest extends TestCase
 
     protected $prefix;
     protected $user;
+    protected $userOther;
     protected $service;
     protected $photo;
 
@@ -47,7 +48,7 @@ class GalleryTest extends TestCase
 
     }
 
-    public function test_we_can_add_and_get_all()
+    public function test_user_can_add_and_get_all_photos()
     {
     
         $this->actingAs($this->user, 'api');
@@ -70,6 +71,18 @@ class GalleryTest extends TestCase
 
         $response = $this->assertDatabaseHas($this->prefix.'_gallery', ['author_id' => $this->user->id]);
 
+    }
+
+    public function test_user_cant_add_photo_if_we_are_unauthenticated()
+    {
+
+        $response= $this->json('POST', '/api/auth/gallery/add', $this->photo->toArray());
+        $response->assertStatus(401)
+        ->assertJsonStructure([
+            'message',
+        ]);
+        
+        dump($response->getContent());
     }
 
     public function test_delete_gallery()

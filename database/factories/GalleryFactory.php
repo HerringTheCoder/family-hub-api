@@ -11,7 +11,7 @@ $factory->define(Gallery::class, function (Faker $faker) {
     $filepath = storage_path('images');
 
     if(!File::exists($filepath)){
-        File::makeDirectory($filepath);  //follow the declaration to see the complete signature
+        File::makeDirectory($filepath); 
     }
     return [
         'author_id' => rand(1,50), 

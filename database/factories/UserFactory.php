@@ -27,6 +27,7 @@ $factory->define(User::class, function () {
         'type' => "user",
         'email_verified_at' => $faker->dateTime(),
         'created_at' => $faker->dateTime(),
-        'updated_at' => $faker->dateTime()
+        'updated_at' => $faker->dateTime(),
+        'prefix' => Str::random(10),
     ];
 });

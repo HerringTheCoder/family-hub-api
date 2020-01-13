@@ -19,6 +19,10 @@ class UpdateRelationsService
         ->where('id', $id)
         ->first();
 
+        if(!$record){
+            return response()->json([
+                'message' => 'This record not exist!'], 200);
+        }
         //check partner id 1 is exist in memebrs table
         $firstIsExist = DB::table(Auth::User()->prefix.'_members')
         ->where('user_id', $partner_1_id)
@@ -67,19 +71,23 @@ class UpdateRelationsService
             }
         }
             if(($partner_1_id == null) && ($partner_2_id == null) && ($id != null)){
-
-                DB::table(Auth::User()->prefix.'_relations')
-                    ->where('parent_id', $record->id) 
-                    ->update(['parent_id' =>  $record->parent_id]);
+                if($record->parent_id != null){
+                    DB::table(Auth::User()->prefix.'_relations')
+                        ->where('parent_id', $record->id) 
+                        ->update(['parent_id' =>  $record->parent_id]);
                         
-                DB::table(Auth::User()->prefix.'_relations')
-                    ->where('id', $record->id) 
-                    ->delete();
+                    DB::table(Auth::User()->prefix.'_relations')
+                        ->where('id', $record->id) 
+                        ->delete();
 
-                return response()->json([
-                'message' => 'Succes data UDPATED!'
-            ], 200);
-             }elseif(($firstIsExist == null) || ($secondIsExist == null)){
+                    return response()->json([
+                    'message' => 'Succes data updated!'], 200);
+                }else{
+                    return response()->json([
+                        'message' => 'You can not delete head of family!'], 200);
+                }
+                
+             }elseif((($firstIsExist == null) && ($partner_1_id != null)) || (($secondIsExist == null) && ($partner_2_id != null))){
                 return response()->json([
                     'message' => 'Your partner id 1 or 2 is not exist!'
                 ], 200);
@@ -141,19 +149,17 @@ class UpdateRelationsService
 
                 }else{
 
-                    if($record->partner_1_id != $partner_1_id && $record->partner_1_id != $partner_2_id){
-
-                        $relation = new Relation([
-                            'partner_1_id' => $record->partner_1_id,
-                            'partner_2_id' => null,
-                            'parent_id' => $record->parent_id
-                        ]);
-                        $relation->setTable(Auth::User()->prefix.'_relations');
-                        $relation->save();
+                    if($record->partner_1_id != $partner_1_id && $record->partner_1_id != $partner_2_id && $record->partner_1_id != null){
+                        
+                        DB::table(Auth::User()->prefix.'_relations')
+                        ->where('id', $record->id) 
+                        ->update([
+                            'partner_1_id' =>  $record->partner_2_id,
+                            'partner_2_id' => null]);
                     }
 
 
-                    if($record->partner_2_id && $record->partner_2_id != $partner_1_id && $record->partner_2_id != $partner_2_id){
+                    if($record->partner_2_id && $record->partner_2_id != $partner_1_id && ($record->partner_2_id != $partner_2_id && $partner_2_id != null)){
 
                         $relation = new Relation([
                             'partner_1_id' => $record->partner_2_id,

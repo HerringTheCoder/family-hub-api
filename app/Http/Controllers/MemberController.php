@@ -56,7 +56,7 @@ class MemberController extends Controller
         $this->member->setTable(Auth::User()->prefix.'_members');
         $member = $this->member->where('user_id',$id)->get();
         $founder = DB::table('families')
-        ->where('founder_id','=', Auth::User()->id)
+        ->where('founder_id','=', $id)
         ->exists();
 
         return response()->json(['message' => 'Success','data' => $member,'founder' => $founder], 200); 

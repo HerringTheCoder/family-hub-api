@@ -24,7 +24,7 @@ $factory->define(User::class, function () {
         'password' => bcrypt('password'),
         'active' => 1,
         'activation_token' => "",
-        'type' => "user",
+        'type' => "default",
         'email_verified_at' => $faker->dateTime(),
         'created_at' => $faker->dateTime(),
         'updated_at' => $faker->dateTime(),

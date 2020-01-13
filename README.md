@@ -43,6 +43,11 @@ php artisan key:generate
 php artisan migrate
 ```
 
+Generate the passport key, if database refresh
+
+```
+php artisan passport:install
+
 
 Publish CORS config using this command:
 

@@ -23,9 +23,9 @@ class CreateRelationsTable extends Migration
             $table->timestamps();
         });
 
-        
-        
-       Schema::table('relations', function (Blueprint $table) {
+
+
+        Schema::table('relations', function (Blueprint $table){
             $table->foreign('parent_id')->references('id')->on('relations');
         });
     }

@@ -95,10 +95,10 @@ class TreeService
             
             if($child->partner_2_id){
                 $name1 = DB::table(Auth::User()->prefix.'_members')
-                ->where('user_id','=', $child->partner_2_id)
+                ->where('user_id','=', $child->partner_1_id)
                 ->first();
                 $name2 = DB::table(Auth::User()->prefix.'_members')
-                ->where('user_id','=', $child->partner_1_id)
+                ->where('user_id','=', $child->partner_2_id)
                 ->first();
                 $this->json[$this->number] =  [
                     'id' => $this->number,

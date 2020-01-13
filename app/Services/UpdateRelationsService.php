@@ -12,7 +12,7 @@ use DB;
 
 class UpdateRelationsService
 {
-    public function update($id, $partner_1_id, $partner_2_id = null, $parent_id = null)
+    public function update($id, $partner_1_id = null, $partner_2_id = null, $parent_id = null)
     {
         //record to compare data
         $record = DB::table(Auth::User()->prefix.'_relations')
@@ -66,8 +66,20 @@ class UpdateRelationsService
                 $parent = true;
             }
         }
+            if(($partner_1_id == null) && ($partner_2_id == null) && ($id != null)){
 
-            if(($firstIsExist == null) || ($firstIsExist == null && $secondIsExist == null)){
+                DB::table(Auth::User()->prefix.'_relations')
+                    ->where('parent_id', $record->id) 
+                    ->update(['parent_id' =>  $record->parent_id]);
+                        
+                DB::table(Auth::User()->prefix.'_relations')
+                    ->where('id', $record->id) 
+                    ->delete();
+
+                return response()->json([
+                'message' => 'Succes data UDPATED!'
+            ], 200);
+             }elseif(($firstIsExist == null) || ($secondIsExist == null)){
                 return response()->json([
                     'message' => 'Your partner id 1 or 2 is not exist!'
                 ], 200);

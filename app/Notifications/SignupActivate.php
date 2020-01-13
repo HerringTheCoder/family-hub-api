@@ -44,7 +44,7 @@ class SignupActivate extends Notification
         return (new MailMessage)
             ->subject('Confirm your account')
             ->line('Thanks for signup! Please before you begin, you must confirm your account.')
-            ->action('Confirm Account', url($url))
+            ->action('Confirm Account', $url)
             ->line('Thank you for using our application!');
     }
 

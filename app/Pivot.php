@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Pivot extends Model
 {
+    protected $table = [
+        'pivot',
+    ];
+
     protected $fillable = [
         'user_id',
     ];

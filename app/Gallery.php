@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Gallery extends Model
 {
+    protected $table = [
+        'gallery',
+    ];
+
     protected $fillable = [
         'author_id', 'filename','description','mime','original_filename',
     ];

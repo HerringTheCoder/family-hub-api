@@ -19,6 +19,8 @@ class Gallery extends Model
     ];
 
     protected $table ="gallery";
+
+    
     // added because of error: Illuminate\Database\QueryException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'family-hub.galleries' doesn't exist 
     
 }

@@ -55,13 +55,6 @@ class RelationTest extends TestCase
         $this->partner2M->save();
                                     //created 2nd partner to relation and adding him to table        
 
-                                    $this->partner3M=factory(\App\Member::class)->make([
-            'user_id'=>factory(\App\User::class)->create()->id,
-            'family_id'=>$family->id
-        ]);
-        $this->partner3M->setTable($this->parent->prefix.'_members');
-        $this->partner3M->save();
-
     }
 
     public function test_add_and_get_all_relations()
@@ -87,7 +80,6 @@ class RelationTest extends TestCase
               'data'
           ]);
 
-          dump($response->getContent());
     }
 
 /*
@@ -171,10 +163,6 @@ public function test_get_tree()
               'message',
               'data'
           ]);
-
-
-    dump($response->getContent());
-
 }
 
 public function test_get_single_users()
@@ -194,8 +182,6 @@ public function test_get_single_users()
               'data'
           ]);
 
-
-    dump($response->getContent());
 }
     
 

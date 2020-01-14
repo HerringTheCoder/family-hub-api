@@ -70,7 +70,6 @@ class MemberTest extends TestCase
               'message',
               'data'
           ]);
-          dump($response->getContent());
 
           $user = \App\User::where('email',$this->credentials['email']) -> first();
 
@@ -93,7 +92,6 @@ class MemberTest extends TestCase
               'message',
               'data'
           ]);
-          dump($response->getContent());
 
     }
 
@@ -126,8 +124,6 @@ class MemberTest extends TestCase
             'message',
             'data'
         ]);         
-        dump($response->getContent());
-        
     }
 
     public function test_update_member()
@@ -153,7 +149,6 @@ class MemberTest extends TestCase
         ->assertJsonStructure([
             'message'
         ]);        
-        dump($response->getContent());
 
         $response = $this->assertDatabaseHas($this->prefix.'_members', ['user_id'=>$user['id'], 'first_name'=>'Ally']);
 
@@ -181,7 +176,6 @@ class MemberTest extends TestCase
         ->assertJsonFragment([
             "first_name" => ["The first name field is required."],
         ]);
-        dump($response->getContent());
     }
     
 
@@ -203,7 +197,6 @@ class MemberTest extends TestCase
             'message',
             'data'
         ]);
-        dump($response->getContent());
     }
 
     public function test_getting_info_about_user()
@@ -225,7 +218,6 @@ class MemberTest extends TestCase
             'data'
         ]);
 
-        dump($response->getContent());
 
         $response = $this->assertDatabaseHas('families', ['name' => $this->prefix])
                           ->assertDatabaseHas($user->prefix.'_members', ['user_id' => $user['id']]);

@@ -41,7 +41,6 @@ class UserTest extends TestCase
               'message',
               'data'
           ]);
-          dump($response->getContent());
     }
 
     public function test_user_cant_get_all_users()
@@ -53,7 +52,6 @@ class UserTest extends TestCase
           ->assertJsonStructure([
               'message',
           ]);
-          dump($response->getContent());
     }
 
     public function test_admin_can_update_user()
@@ -62,7 +60,7 @@ class UserTest extends TestCase
 
         $user=\App\User::where('email','lol@lol.pl') -> first();
 
-        $response = $this->json('PUT', '/api/auth/user/update', [       //editing family
+        $response = $this->json('PUT', '/api/auth/user/update', [       
             'id'=>$user->id,
             'email'=>'abc@mail.com'
         ]);
@@ -70,7 +68,6 @@ class UserTest extends TestCase
           ->assertJsonStructure([
               'message'
           ]);
-          dump($response->getContent());
 
           $response = $this->assertDatabaseHas('users', ['email' => 'abc@mail.com']);
 
@@ -82,7 +79,7 @@ class UserTest extends TestCase
 
         $user=\App\User::where('email','lol@lol.pl') -> first();
 
-        $response = $this->json('PUT', '/api/auth/user/update', [       //editing family
+        $response = $this->json('PUT', '/api/auth/user/update', [     
             'id'=>$user->id,
             'email'=>'abc@mail.com'
         ]);
@@ -90,7 +87,6 @@ class UserTest extends TestCase
           ->assertJsonStructure([
               'message'
           ]);
-          dump($response->getContent());
 
     }
 
@@ -107,7 +103,6 @@ class UserTest extends TestCase
           ->assertJsonStructure([
               'message'
           ]);
-          dump($response->getContent());
 
     }
 
@@ -124,7 +119,6 @@ class UserTest extends TestCase
           ->assertJsonStructure([
               'message'
           ]);
-          dump($response->getContent());
     }
 
 

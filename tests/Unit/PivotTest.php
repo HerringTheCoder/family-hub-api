@@ -18,10 +18,6 @@ class PivotTest extends TestCase
             'prefix' => $prefix             //creating founder of family
         ]);
 
-        $pivot = factory(\App\Pivot::class)->create([
-            'user_id'=>$user->id
-        ]);
-
         $service = new \App\Services\TableService();
         $service->addTables($prefix);  //creating table pivot
 
@@ -35,7 +31,6 @@ class PivotTest extends TestCase
             'message',
             'count'
         ]);
-        dump($response->getContent());
 
     }
 }

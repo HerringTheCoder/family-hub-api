@@ -82,8 +82,6 @@ class NewsTest extends TestCase
               'data'
           ]);
 
-          dump($response->getContent());
-
           //I combined two methods, add and get all, because I needed filled dabase of news
           //If I would do "get all news" separately, like below, it give me an empty data, and I wanna be sure, that its work
     }
@@ -124,9 +122,6 @@ class NewsTest extends TestCase
               'message',
           ]);           //updating news
 
-          
-        dump($response->getContent());
-
         $response = $this->assertDatabaseHas($this->prefix.'_news', ['title' => 'otherone']);
     }
 
@@ -156,7 +151,6 @@ class NewsTest extends TestCase
               'message',
           ]);
 
-        dump($response->getContent());
     }
 
     public function test_user_cant_update_someone_elses_news()
@@ -187,8 +181,6 @@ class NewsTest extends TestCase
               'message',
           ]);          
 
-          
-        dump($response->getContent());
     }
 
 
@@ -215,8 +207,6 @@ class NewsTest extends TestCase
           ->assertJsonStructure([
               'message',
           ]);  
-          
-        dump($response->getContent());
 
         $response = $this->assertDatabaseMissing($this->prefix.'_news', ['title' => 'abcde']); 
 
@@ -247,7 +237,6 @@ class NewsTest extends TestCase
               'message',
           ]);  
           
-        dump($response->getContent());
 
     }
 

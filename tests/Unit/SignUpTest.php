@@ -45,9 +45,8 @@ class SignupTest extends TestCase
                           'message'
                       ]);
 
-          dump($response->getContent());
 
-          $user = \App\User::where('email',$this->credentials['email']) -> first();
+        $user = \App\User::where('email',$this->credentials['email']) -> first();
 
         $response = $this->assertDatabaseHas('users', ['email' => $user['email']]);          
         
@@ -74,7 +73,6 @@ class SignupTest extends TestCase
           'name' => ['Name of family is required!']
         ])
         ->assertStatus(422);
-        dump($response->getContent());
 
     }
 
@@ -91,7 +89,6 @@ class SignupTest extends TestCase
             'email' => ['The email has already been taken.']
           ])
           ->assertStatus(422);
-          dump($response->getContent());
           
       }
 
@@ -108,8 +105,6 @@ class SignupTest extends TestCase
                   'data'
               ]);
               
-                
-        dump($response->getContent());
 
         //$user = \App\User::where('email','maill@example.com') -> first();
 
@@ -130,7 +125,6 @@ class SignupTest extends TestCase
                   'message'
               ]);
                 
-              dump($response->getContent());
 
               
       }
@@ -150,7 +144,6 @@ class SignupTest extends TestCase
                 'message',
                 'token'
               ]);
-              dump($response->getContent());
       }
 
 
@@ -167,6 +160,5 @@ class SignupTest extends TestCase
               ->assertJsonStructure([
                 'message',
               ]);
-              dump($response->getContent());
       }
 }

@@ -67,8 +67,6 @@ class GalleryTest extends TestCase
             'message',
             'data'
         ]);
-        dump($response->getContent());
-
         $response = $this->assertDatabaseHas($this->prefix.'_gallery', ['author_id' => $this->user->id]);
 
     }
@@ -82,7 +80,6 @@ class GalleryTest extends TestCase
             'message',
         ]);
         
-        dump($response->getContent());
     }
 
     public function test_delete_gallery()
@@ -101,8 +98,6 @@ class GalleryTest extends TestCase
           ->assertJsonStructure([
               'message',
           ]);  
-          
-        dump($response->getContent());
 
         $response = $this->assertDatabaseMissing($this->prefix.'_gallery', ['description' => $this->photo->description]); 
 

@@ -47,8 +47,6 @@ class FamilyTest extends TestCase
               'data'
           ]);
 
-          dump($response->getContent());
-
     }
 
     public function test_user_cant_get_all_families_tables_if_we_are_not_admin()
@@ -61,8 +59,6 @@ class FamilyTest extends TestCase
           ->assertJsonStructure([
               'message'
           ]);
-
-          dump($response->getContent());
 
     }
 
@@ -88,7 +84,6 @@ class FamilyTest extends TestCase
           ->assertJsonStructure([
               'message'
           ]);
-          dump($response->getContent());
 
     }
 
@@ -103,7 +98,6 @@ class FamilyTest extends TestCase
           ->assertJsonStructure([
               'message',            //when family dont exist
           ]);
-          dump($response->getContent());
 
     }
 
@@ -118,7 +112,6 @@ class FamilyTest extends TestCase
           ->assertJsonStructure([
               'message'
           ]); 
-          dump($response->getContent());
     }
 
     public function test_user_cant_update_family_if_we_are_not_admin()
@@ -134,7 +127,6 @@ class FamilyTest extends TestCase
           ->assertJsonStructure([
               'message'
           ]); 
-          dump($response->getContent());
     }
 
     public function test_cant_update_when_founder_is_declared_in_other_family()
@@ -162,9 +154,6 @@ class FamilyTest extends TestCase
           ->assertJsonStructure([
               'message'
           ]);
-          dump($response->getContent());
-
-
     }
 
 

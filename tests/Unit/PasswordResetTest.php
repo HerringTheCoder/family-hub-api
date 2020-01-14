@@ -30,8 +30,6 @@ class PasswordResetTest extends TestCase
         ])
         ->assertSuccessful();
 
-        dump($response->getContent());
-
         Notification::assertSentTo(
             [$user],
             \App\Notifications\PasswordResetRequest::class);
@@ -55,8 +53,6 @@ class PasswordResetTest extends TestCase
         ])
         ->assertStatus(404);
 
-        dump($response->getContent());
-
         Notification::assertNotSentTo(
             [$user],
             \App\Notifications\PasswordResetRequest::class);
@@ -78,7 +74,6 @@ class PasswordResetTest extends TestCase
             'token'
         ]); //In reference to 'return response()->json($passwordReset);'
 
-        dump($response->getContent());
     }
 
     public function test_token_find_if_its_not_proper()
@@ -94,7 +89,6 @@ class PasswordResetTest extends TestCase
             'message'
         ])
         ->assertStatus(404);
-        dump($response->getContent());
 
     }
 
@@ -126,7 +120,6 @@ class PasswordResetTest extends TestCase
             'email',
         ]);
         
-        dump($response->getContent());
 
         Notification::assertSentTo(
             [$user],
@@ -155,8 +148,6 @@ class PasswordResetTest extends TestCase
         ->assertJsonStructure([
             'message',
         ]);
-        
-        dump($response->getContent());
 
     }
 
@@ -188,7 +179,6 @@ class PasswordResetTest extends TestCase
             'message',
         ]);
         
-        dump($response->getContent());
 
     }
 

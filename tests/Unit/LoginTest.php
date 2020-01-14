@@ -43,7 +43,7 @@ public function test_login_with_proper_credentials()
          ] //cheking only 'token_type' because it doesn't change, when others do
          //but when we see this it means its ok... trust me
   );
-   dump($response->getContent()); //it shows me, that json returns [$data], which is what we expexted
+   //dump($response->getContent()); //it shows me, that json returns [$data], which is what we expexted
    
   }
 
@@ -73,8 +73,6 @@ $this->withoutExceptionHandling();
    ->assertJsonFragment([
       'message' => 'Unauthorized'
    ]);
-   
-  dump($response->getContent());
 }
 
 public function test_login_with_wrong_email(){
@@ -107,7 +105,6 @@ public function test_login_with_wrong_email(){
          'message' => 'Unauthorized'
        ]);
     
-  dump($response->getContent());
     }
 
     public function test_login_with_unactivated_account(){
@@ -139,8 +136,6 @@ public function test_login_with_wrong_email(){
            ->assertJsonFragment([
             'message' => 'Unauthorized'
           ]);
-
-           dump($response->getContent());
         
         }
 
@@ -166,8 +161,6 @@ public function test_login_with_wrong_email(){
             'message'
          ])
           ->assertStatus(200);
-
-           dump($response->getContent());
 
         }        
     

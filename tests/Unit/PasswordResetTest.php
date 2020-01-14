@@ -15,7 +15,6 @@ class PasswordResetTest extends TestCase
 
     public function test_user_can_get_reset_password_link()
     {
-        $this->withoutExceptionHandling();
         Notification::fake();
 
         $user = factory(\App\User::class)->create([
@@ -38,7 +37,6 @@ class PasswordResetTest extends TestCase
 
     public function test_user_cant_get_reset_password_link_if_he_does_not_have_account_already()
         {
-        $this->withoutExceptionHandling();
         Notification::fake();
 
         $user = factory(\App\User::class)->create([
@@ -62,7 +60,6 @@ class PasswordResetTest extends TestCase
 
     public function test_token_find()
     {
-        $this->withoutExceptionHandling();
 
         $passwordReset = factory(\App\PasswordReset::class)->create([
             'token'=>'abc'
@@ -95,7 +92,6 @@ class PasswordResetTest extends TestCase
     public function test_user_can_reset_his_password()
     {
         Notification::fake();
-        $this->withoutExceptionHandling();
 
         $user = factory(\App\User::class)->create([
             'email' => 'email@email.pl',
@@ -130,7 +126,6 @@ class PasswordResetTest extends TestCase
     public function test_user_cant_reset_his_password_with_wrong_email()
     {
         Notification::fake();
-        $this->withoutExceptionHandling();
         
         $passwordReset = factory(\App\PasswordReset::class)->create([
             'email' => 'email@email.pl',

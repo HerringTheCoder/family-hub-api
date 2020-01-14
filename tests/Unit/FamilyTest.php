@@ -96,7 +96,7 @@ class FamilyTest extends TestCase
         ]);
         $response->assertStatus(200)
           ->assertJsonStructure([
-              'message',            //when family dont exist
+              'message',            //when family doesnt exist
           ]);
 
     }

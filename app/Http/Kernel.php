@@ -64,6 +64,17 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'required' => \App\Http\Middleware\RequiredUser::class,
+        'is_admin' => \App\Http\Middleware\IsAdmin::class,
+        'prefix' => \App\Http\Middleware\PrefixForAdmin::class,
+        'check_prefix' => \App\Http\Middleware\CheckPrefix::class,
+        'isExistMember' => \App\Http\Middleware\isExistMember::class,
+        'isFounder' => \App\Http\Middleware\isFounder::class,
+        'checkFounder' => \App\Http\Middleware\CheckFounder::class,
+        'familyID' => \App\Http\Middleware\familyID::class,
+        'news' => \App\Http\Middleware\NewsCheck::class,
+        'gallery' => \App\Http\Middleware\GalleryCheck::class,
+        'relation' => \App\Http\Middleware\RelationCheck::class,
+        'checkName' => \App\Http\Middleware\CheckFamilyName::class,
     ];
 
     /**

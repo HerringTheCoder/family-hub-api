@@ -15,10 +15,18 @@ class CreateRelationsTable extends Migration
     {
         Schema::create('relations', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('type')->default('undefined');
-            $table->string('stream_direction'); /* defines graph relation from point A to B for graphical implementation : i.e.
-             non-directional horizontal(siblings, spouses),  non-d* diagonal (non-biological children), directional vertical (children), reversed directional vertical (parents)    */
+            $table->bigInteger('partner_1_id')->unsigned()->nullable();
+            $table->foreign('partner_1_id')->references('id')->on('users');
+            $table->bigInteger('partner_2_id')->unsigned()->nullable();
+            $table->foreign('partner_2_id')->references('id')->on('users');
+            $table->bigInteger('parent_id')->unsigned()->nullable();
             $table->timestamps();
+        });
+
+        
+        
+        Schema::table('relations', function (Blueprint $table){
+            $table->foreign('parent_id')->references('id')->on('relations');
         });
     }
 

@@ -1,91 +1,139 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 use Carbon\Carbon;
 use App\User;
 use App\Family;
 use App\Member;
+use DB;
 use App\Notifications\UserInvite;
 use App\Http\Requests\StoreMember;
 use App\Http\Requests\UpdateMember;
+use App\Http\Requests\UpdateAvatar;
+use App\Http\Requests\StoreDeceased;
 use App\Notifications\PasswordResetRequest;
 use App\Notifications\PasswordResetSuccess;
 use App\PasswordReset;
+use App\Services\StoreMemberService;
+use App\Services\StoreMemberDeceasedService;
+use App\Services\ActivateMemberService;
 
 class MemberController extends Controller
 {
-
-    public function store(StoreMember $request)
+    public function __construct(Member $member)
     {
-        $password = Str::random(10);
-        $prefix = Auth::User()->prefix;
-        $user = new User([
-            'email' => $request->email,
-            'password' => bcrypt($password),
-            'activation_token' => Str::random(80),
-            'prefix' => $prefix
-        ]);
-        $user->save();
+        $this->member = $member;
+    }
 
-        $founderUser = Auth::User();
-        $member = new Member([
-            'user_id' => $user->id,
-            'family_id' => $founderUser->family->id
-        ]);
-        $member->setTable(Auth::User()->prefix.'_members');
-        $member->save();
-       
-        $user->notify(new UserInvite($user));
-        return response()->json([
-            'message' => 'Success'], 201);
+    public function index()
+    {
+        $this->member->setTable(Auth::User()->prefix.'_members');
+        $member = $this->member->get();
+        
+        return response()->json(['message' => 'Success','data' => $member], 200); 
+        
+    }
+
+    public function info()
+    {
+        $this->member->setTable(Auth::User()->prefix.'_members');
+        $member = $this->member->where('user_id',Auth::user()->id)->get();
+        $founder = DB::table('families')
+        ->where('founder_id','=', Auth::User()->id)
+        ->exists();
+
+        return response()->json(['message' => 'Success','data' => $member,'founder' => $founder], 200); 
+    }
+
+    public function infoOne($id)
+    {
+        $this->member->setTable(Auth::User()->prefix.'_members');
+        $member = $this->member->where('user_id',$id)->get();
+        $founder = DB::table('families')
+        ->where('founder_id','=', $id)
+        ->exists();
+
+        return response()->json(['message' => 'Success','data' => $member,'founder' => $founder], 200); 
+    }
+
+    public function store(StoreMember $request,StoreMemberService $storeMember)
+    {
+        $data = $storeMember->store($request);
+
+        return response()->json(['message' => 'Success, member added',
+                                 'data' => $data], 201);
     }
 
 
-    public function activate($token)
+    public function storeDeceased(StoreDeceased $request,StoreMemberDeceasedService $storeMember)
+    {
+       $data = $storeMember->store($request);
+        
+       return response()->json(['message' => 'Success, member added',
+                                'data' => $data], 201);
+    }
+
+
+    public function activate($token, ActivateMemberService $activateMember)
     {
         $user = User::where('activation_token', $token)->first();
         if (!$user) {
-            return response()->json([
-                'message' => 'This activation token is invalid.'
-            ], 404);
+            return response()->json(['message' => 'This activation token is invalid.'], 404);
         }
-        $user->active = true;
-        $user->activation_token = '';
-        $user->save();
-        $passwordReset = PasswordReset::updateOrCreate(
-            ['email' => $user->email],
-            [
-                'email' => $user->email,
-                'token' => Str::random(20)
-             ]
-        );
+        $data = $activateMember->active($user);
+
+        return response()->json($data, 200 );
+    }
+
+
+    public function edit(Request $request)
+    {
+        $this->member->setTable(Auth::User()->prefix.'_members');
+        $member = $this->member->get()->where('user_id',Auth::user()->id);
         return response()->json([
-            'message' => 'Success, now u can fill your password',
-            'token' => $passwordReset->token,
-            'email' => $user->email], 201);
+            'message' => 'Success, found data!','data' => $member], 200 );  
     }
 
 
     public function update(UpdateMember $request)
     {   
-        $member = new Member();
-          
-        $member->setTable(Auth::User()->prefix.'_members');
-        $member->where('user_id',Auth::User()->id)
-                ->update([
-                'first_name' => $request->first_name,
-                'middle_name' => $request->middle_name,
-                'last_name' => $request->last_name,
-                'day_of_birth' => $request->day_of_birth,
-                'day_of_death' => $request->day_of_death]);
+        $this->member->setTable(Auth::User()->prefix.'_members');
+        $this->member->where('user_id',Auth::User()->id)->update($request->validated());
 
-        return response()->json([
-            'message' => 'Success, data updated!'], 201);
+        return response()->json(['message' => 'Success, data updated!'], 200 );
+    }
+
+
+    public function avatar(UpdateAvatar $request)
+    {   
+        $photo = $request->file('avatar');
+        if($photo){
+            $extension = $photo->getClientOriginalExtension();
+            Storage::disk('public')->put($photo->getFilename().'.'.$extension,  File::get($photo));
+            $filename = $photo->getFilename().'.'.$extension;
+    
+            $this->member->setTable(Auth::User()->prefix.'_members');
+            $this->member->where('user_id',Auth::User()->id)->update(['avatar' =>  $filename]);
+
+            return response()->json(['message' => 'Success, data updated!'], 200 );
+        }else{
+            return response()->json(['message' => 'Success but your input file was empty'], 200);
+        }
+        
+    }
+
+
+    public function delete(Request $request)
+    {
+        $this->member->setTable(Auth::User()->prefix.'_members');
+        $this->member->where('id',$request->id)->delete();
+        return response()->json(['message' => 'Success, data deleted'], 200);
     }
 
 }

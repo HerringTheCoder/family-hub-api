@@ -4,13 +4,18 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use App\User;
 use App\Family;
 use App\Member;
 use App\Notifications\SignupActivate;
 use App\Http\Requests\StoreUser;
-use App\Services\TableService;
+use App\Http\Requests\LoginUser;
+use App\Services\SpamChecker;
+use App\Services\SignupService;
+use App\Services\SigninService;
+use App\Jobs\AfterActivateAccount;
 
 
 class AuthController extends Controller
@@ -24,35 +29,11 @@ class AuthController extends Controller
      * @param  [string] password_confirmation
      * @return [string] message
      */
-    public function signup(StoreUser $request)
+    public function signup(StoreUser $request,SignupService $singup)
     {
-        $user = new User([
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
-            'activation_token' => Str::random(80),
-            'prefix' => $request->name
-        ]);
-        $user->save();
-        $user->notify(new SignupActivate($user));
-
-        $family = new Family([
-            'name' => $request->name,
-            'founder_id' => $user->id
-        ]);
-        $family->save();
-
-        $service = new TableService();
-        $service->addTables($request->name);
-        
-        $member = new Member([
-            'user_id' => $user->id,
-            'family_id' => $family->id
-        ]);
-        $member->setTable($request->name.'_members');
-        $member->save();
-        
+        $singup->register($request);
         return response()->json([
-            'message' => 'Successfully created user and family!'
+            'message' => 'Successfully created user and now active your account at mail!'
         ], 201);
     }
 
@@ -66,29 +47,10 @@ class AuthController extends Controller
      * @return [string] token_type
      * @return [string] expires_at
      */
-    public function login(Request $request)
+    public function login(LoginUser $request,SigninService $singin)
     {
-        
-        $credentials = request(['email', 'password']);
-        $credentials['active'] = 1;
-        $credentials['deleted_at'] = null;
-        if(!Auth::attempt($credentials))
-            return response()->json([
-                'message' => 'Unauthorized'
-            ], 401);
-        $user = $request->user();
-        $tokenResult = $user->createToken('Personal Access Token');
-        $token = $tokenResult->token;
-        if ($request->remember_me)
-            $token->expires_at = Carbon::now()->addWeeks(1);
-        $token->save();
-        return response()->json([
-            'access_token' => $tokenResult->accessToken,
-            'token_type' => 'Bearer',
-            'expires_at' => Carbon::parse(
-                $tokenResult->token->expires_at
-            )->toDateTimeString()
-        ]);
+        $data = $singin->login($request);
+        return $data;
     }
 
     /**
@@ -99,9 +61,12 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         $request->user()->token()->revoke();
+        
+        Log::channel()->notice("User ".Auth::user()->id." logout");
+
         return response()->json([
             'message' => 'Successfully logged out'
-        ]);
+        ],200);
     }
 
     /**
@@ -114,6 +79,14 @@ class AuthController extends Controller
         return response()->json($request->user());
     }
 
+    public function spamChecker(SpamChecker $service)
+    {   
+        $service = $service->check();
+
+        return response()->json([
+            'message' => 'Scan done, '.$service.' users deleted!',
+        ], 200 );
+    }
 
     public function signupActivate($token)
     {
@@ -126,6 +99,10 @@ class AuthController extends Controller
         $user->active = true;
         $user->activation_token = '';
         $user->save();
-        return $user;
+        
+        AfterActivateAccount::dispatch($user);
+        
+        Log::channel()->notice("User ".$user->id." activated account");
+        return response()->json(['message' => 'Activated!','data' => $user], 200 );
     }
 }

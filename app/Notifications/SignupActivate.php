@@ -29,7 +29,7 @@ class SignupActivate extends Notification
      */
     public function via($notifiable)
     {
-        return ['email'];
+        return ['mail'];
     }
 
     /**
@@ -40,11 +40,11 @@ class SignupActivate extends Notification
      */
     public function toMail($notifiable)
     {
-        $url = url('/api/auth/signup/activate/'.$notifiable->activation_token);
+        $url = env('APP_FRONT_VERIFY_ACCOUNT').$notifiable->activation_token;
         return (new MailMessage)
             ->subject('Confirm your account')
             ->line('Thanks for signup! Please before you begin, you must confirm your account.')
-            ->action('Confirm Account', url($url))
+            ->action('Confirm Account', $url)
             ->line('Thank you for using our application!');
     }
 

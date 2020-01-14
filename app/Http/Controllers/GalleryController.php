@@ -33,7 +33,7 @@ class GalleryController extends Controller
         
     }
 
-    public function store(Request $request)
+    public function store(UpdateGallery $request)
     {
         $photo = $request->file('photo_input');
         $extension = $photo->getClientOriginalExtension();

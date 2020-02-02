@@ -15,8 +15,8 @@ You can install laragon to easily meet these requirements or use Docker instead.
 Clone the repository and navigate into the source code folder
 
 ```
-git clone https://github.com/HerringTheCoder/Spinback.git
-cd Spinback
+git clone https://github.com/kamilpiech97/family-hub-api.git
+cd family-hub-api
 ```
 
 (Optional) If you are using Docker you can quickly run your local server, database, php v7.3.11 and cache service 
